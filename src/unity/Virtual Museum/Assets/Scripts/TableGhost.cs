@@ -23,7 +23,7 @@ public class TableGhost : MonoBehaviour
         if (ghost) return;
         tableInstance = Instantiate(tableGhost, cameraRig.rightControllerInHandAnchor.position, Quaternion.identity);
         tableInstance.transform.position =
-            new Vector3(tableInstance.transform.position.x, 0f, tableInstance.transform.position.z);
+            new Vector3(tableInstance.transform.position.x, 0f, tableInstance.transform.position.z + 1f);
         ghost = true;
     }
 
@@ -51,11 +51,11 @@ public class TableGhost : MonoBehaviour
 
     public Vector3 GetGhostPosition()
     {
-        return !tableInstance ? Vector3.zero : tableInstance.transform.position;
+        return !tableInstance ? Vector3.zero : new Vector3(tableInstance.transform.position.x, 0f, tableInstance.transform.position.z);
     }
 
     public Quaternion GetGhostRotation()
     {
-        return !tableInstance ? Quaternion.identity : tableInstance.transform.rotation;
+        return !tableInstance ? Quaternion.identity : Quaternion.Euler(0f, tableInstance.transform.rotation.eulerAngles.y, 0f);
     }
 }
