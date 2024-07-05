@@ -7,10 +7,9 @@ using UnityEngine;
 public class TableCoordinates : MonoBehaviour
 {
     private CSVInterpreter cSVInterpreter;
-    // Start is called before the first frame update
-    async void Start()
+    
+    public void Begin()
     {
-        await Task.Delay(10000);
         var temp = GetComponent<MeshFilter>();
         Vector3 vert1 = temp.mesh.vertices[0];
         Vector3 vert2 = temp.mesh.vertices[temp.mesh.vertices.Length - 1];

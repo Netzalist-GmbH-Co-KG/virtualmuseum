@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class TableSpawn : MonoBehaviour
 {
+    public static TableSpawn instance;
+    
     private const string PlayerPrefsKey = "GuidList";
     
     [SerializeField] private GameObject table;
@@ -15,25 +17,38 @@ public class TableSpawn : MonoBehaviour
     private Guid anchorGuid;
     [SerializeField] private string debugGuid;
     private OVRSpatialAnchor anchor;
+    private GameObject instantiatedAnchor;
     private List<OVRSpatialAnchor.UnboundAnchor> unboundAnchors;
     private TableGhost tableGhostScript;
+    private static readonly int Initiate = Animator.StringToHash("Initiate");
 
     private void Start()
     {
+        if (instance == null) instance = this;
         tableGhostScript = GetComponent<TableGhost>();
         unboundAnchors = new List<OVRSpatialAnchor.UnboundAnchor>();
+        LoadSpatialAnchor();
     }
 
     public void SpawnTableOnAnchor()
     {
-        var anchorInScene = GameObject.FindWithTag("Anchor");
+        /*var anchorInScene = GameObject.FindWithTag("Anchor");
         if (!anchorInScene)
         {
             Debug.Log("No Spatial Anchor found in the scene!");
             return;
+        }*/
+
+        // var t = Instantiate(table, new Vector3(anchor.transform.position.x, 0f, anchor.transform.position.z), Quaternion.Euler(0, anchor.transform.rotation.eulerAngles.y, 0));
+        if (instantiatedAnchor == null)
+        {
+            Debug.Log("No Spatial Anchor Table found in the scene!");
+            return;
         }
 
-        Instantiate(table, new Vector3(anchor.transform.position.x, 0f, anchor.transform.position.z), Quaternion.Euler(0, anchor.transform.rotation.eulerAngles.y, 0));
+        instantiatedAnchor.GetComponent<Animator>().SetBool(Initiate, true);
+        instantiatedAnchor.GetComponent<AudioSource>().Play();
+        instantiatedAnchor.transform.GetChild(0).gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 
@@ -47,10 +62,10 @@ public class TableSpawn : MonoBehaviour
             anchor = null;
         }
         
-        var anchorSpawn = Instantiate(anchorPrefab, tableGhostScript.GetGhostPosition(),
+        instantiatedAnchor = Instantiate(anchorPrefab, tableGhostScript.GetGhostPosition(),
             tableGhostScript.GetGhostRotation());
         Debug.Log("Initialization process started!");
-       StartCoroutine(AnchorCreation(anchorSpawn.AddComponent<OVRSpatialAnchor>()));
+       StartCoroutine(AnchorCreation(instantiatedAnchor.AddComponent<OVRSpatialAnchor>()));
     }
 
     public void LoadSpatialAnchor()
@@ -136,7 +151,8 @@ public class TableSpawn : MonoBehaviour
                     if (success)
                     {
                         // Create a new game object with an OVRSpatialAnchor component
-                        var spatialAnchor = Instantiate(anchorPrefab).AddComponent<OVRSpatialAnchor>();
+                        instantiatedAnchor = Instantiate(anchorPrefab);
+                        var spatialAnchor = instantiatedAnchor.AddComponent<OVRSpatialAnchor>();
 
                         // Step 3: Bind
                         // Because the anchor has already been localized, BindTo will set the
