@@ -54,7 +54,7 @@ public class StandardFlag : IFlag
         if(image != null) {
             SetColor(Color.blue);
         }
-        lineRenderer = transform.GetComponentInChildren<LineRenderer>();
+        lineRenderer = transform.GetComponentInChildren<LineRenderer>(true);
         lineRenderer.enabled = false;
         flags.Add(this);
         Deactivate();
