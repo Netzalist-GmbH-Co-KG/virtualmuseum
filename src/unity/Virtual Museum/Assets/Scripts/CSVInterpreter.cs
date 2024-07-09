@@ -124,6 +124,7 @@ public class CSVInterpreter : MonoBehaviour
                 {
                     gpsCoordinates.Add(new float[] { lat, lon });
                     points.Add(Instantiate(pointPrefab));
+
                 }
             }
         }

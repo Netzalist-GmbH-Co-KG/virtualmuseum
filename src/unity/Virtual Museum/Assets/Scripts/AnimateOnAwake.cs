@@ -15,7 +15,6 @@ public class AnimateOnAwake : MonoBehaviour
     private void OnEnable(){
         
         if(animateOnAwake){
-            Debug.Log("huh");
             transform.localScale = Vector3.zero;
             if(_particleSystem){
                 _particleSystem.Play();

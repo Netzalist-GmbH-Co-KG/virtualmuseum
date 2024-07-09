@@ -18,6 +18,26 @@ public class TableSpawn : MonoBehaviour
     private List<OVRSpatialAnchor.UnboundAnchor> unboundAnchors;
     private TableGhost tableGhostScript;
 
+    //testing
+    private void Update() {
+        if(Input.GetKeyDown(KeyCode.Space)){
+            TestPlacetable();
+        }
+    }
+
+    private void TestPlacetable(){
+        var anchorInScene = GameObject.FindWithTag("Anchor");
+        if (!anchorInScene)
+        {
+            Debug.Log("No Spatial Anchor found in the scene!");
+            return;
+        }
+
+        Instantiate(table, new Vector3(anchorInScene.transform.position.x, 0f, anchorInScene.transform.position.z), Quaternion.Euler(0, anchorInScene.transform.rotation.eulerAngles.y, 0));
+        gameObject.SetActive(false);
+    }
+    //testing
+
     private void Start()
     {
         tableGhostScript = GetComponent<TableGhost>();

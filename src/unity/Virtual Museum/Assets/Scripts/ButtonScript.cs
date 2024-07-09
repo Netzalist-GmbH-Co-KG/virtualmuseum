@@ -9,6 +9,7 @@ public class ButtonScript : MonoBehaviour
     private void Start() {
         counter = 0;
     }
+    /*
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             if(int.Parse(gameObject.transform.name) == 704 && counter == 0){
@@ -21,6 +22,7 @@ public class ButtonScript : MonoBehaviour
             }
         }
     }
+    */
 
     public void AdvanceTime(){
         StandardFlag.NextPeriod();
