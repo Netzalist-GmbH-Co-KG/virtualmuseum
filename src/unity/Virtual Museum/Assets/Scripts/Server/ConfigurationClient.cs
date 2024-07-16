@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Unity.VisualStudio.Editor;
 using Newtonsoft.Json;
 using Server.Data;
 using UnityEngine;
@@ -10,6 +12,7 @@ namespace Server
 {
     public class ConfigurationClient
     {
+        public delegate void ServerRequestCallBack(byte[] response);
         private readonly string apiUrl;
         private readonly string apiToken;
 
@@ -35,6 +38,11 @@ namespace Server
             return await MakeRequest<List<Room>>($"{apiUrl}rooms");
         }
 
+        public async Task GetMedia(Guid id, ServerRequestCallBack callback = null)
+        {
+            await RequestBytes($"{apiUrl}media/{id}/display", callback);
+        }
+
         private async Task<T> MakeRequest<T>(string url) where T : class
         {
             using var request = UnityWebRequest.Get(url);
@@ -52,6 +60,24 @@ namespace Server
 
             var json = request.downloadHandler.text;
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        private async Task RequestBytes(string url, ServerRequestCallBack callback = null)
+        {
+            using var request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("Authorization", $"Bearer {apiToken}");
+
+            var operation = request.SendWebRequest();
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error: {request.error}");
+                return;
+            }
+            callback?.Invoke(request.downloadHandler.data);
+
         }
     }
 }
