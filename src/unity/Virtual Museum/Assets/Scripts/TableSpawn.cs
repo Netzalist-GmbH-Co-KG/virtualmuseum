@@ -14,6 +14,7 @@ public class TableSpawn : MonoBehaviour
     [SerializeField] private GameObject table;
     [SerializeField] private GameObject anchorPrefab;
     [SerializeField] private OVRCameraRig cameraRig;
+    [SerializeField] private GameObject clusterUI;
     private Guid anchorGuid;
     [SerializeField] private string debugGuid;
     private OVRSpatialAnchor anchor;
@@ -64,6 +65,14 @@ public class TableSpawn : MonoBehaviour
         
         instantiatedAnchor = Instantiate(anchorPrefab, tableGhostScript.GetGhostPosition(),
             tableGhostScript.GetGhostRotation());
+
+        var rotation = instantiatedAnchor.transform.rotation;
+        
+        clusterUI.transform.position = instantiatedAnchor.transform.position + rotation * new Vector3(0f, 0f, -2f);
+        
+        var eulAngles = rotation.eulerAngles;
+        clusterUI.transform.rotation = Quaternion.Euler(0f, eulAngles.y, 0f);
+        
         Debug.Log("Initialization process started!");
        StartCoroutine(AnchorCreation(instantiatedAnchor.AddComponent<OVRSpatialAnchor>()));
     }
@@ -72,7 +81,23 @@ public class TableSpawn : MonoBehaviour
     {
         var g = LoadGuid()[0];
         anchorGuid = g;
-        LoadAnchorByUuid(new List<Guid>(){anchorGuid});
+        SetPositionAfterLoad();
+    }
+
+    private async void SetPositionAfterLoad()
+    {
+        await LoadAnchorByUuid(new List<Guid>{anchorGuid});
+        StartCoroutine(WaitAndThenSetPositionOfUI());
+    }
+
+    private IEnumerator WaitAndThenSetPositionOfUI()
+    {
+        yield return null;
+        var rotation = instantiatedAnchor.transform.rotation;
+        
+        clusterUI.transform.position = instantiatedAnchor.transform.position + rotation * new Vector3(0f, 0f, -2f);
+        var eulAngles = rotation.eulerAngles;
+        clusterUI.transform.rotation = Quaternion.Euler(0f, eulAngles.y, 0f);
     }
 
     private IEnumerator AnchorCreation(OVRSpatialAnchor ovrAnchor)
@@ -136,7 +161,7 @@ public class TableSpawn : MonoBehaviour
         }
     }
 
-    private async void LoadAnchorByUuid(IEnumerable<Guid> uuids)
+    private async Task LoadAnchorByUuid(IEnumerable<Guid> uuids)
     {
         var result = await OVRSpatialAnchor.LoadUnboundAnchorsAsync(uuids, unboundAnchors);
 
