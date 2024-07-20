@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Unity.VisualStudio.Editor;
 using Newtonsoft.Json;
 using Server.Data;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
@@ -39,7 +40,7 @@ namespace Server
             return await MakeRequest<List<Room>>($"{apiUrl}rooms");
         }
 
-        public async Task GetMedia(Guid id, ServerRequestCallBack callback = null)
+        public async Task GetImage(Guid id, ServerRequestCallBack callback = null)
         {
             await RequestBytes($"{apiUrl}media/{id}/display", callback);
         }
@@ -74,6 +75,7 @@ namespace Server
 
             if (request.result != UnityWebRequest.Result.Success)
             {
+                Debug.Log("Failed to get image in path: '" + url + "' Are you sure it exists?");
                 Debug.LogError($"Error: {request.error}");
                 return;
             }

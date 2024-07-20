@@ -59,7 +59,7 @@ public class TestScript : MonoBehaviour
         }
 
     async Task GetMedia(Guid id){
-        await configurationManager.ConfigurationClient.GetMedia(id, MediaCallBack);
+        await configurationManager.ConfigurationClient.GetImage(id, MediaCallBack);
     }
 
     public void MediaCallBack(byte[] data){

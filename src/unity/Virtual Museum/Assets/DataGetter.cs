@@ -5,96 +5,88 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Oculus.Platform;
 using Server;
 using Server.Data;
 using TMPro;
 using UnityEngine;
+using static Server.ConfigurationClient;
 
 [RequireComponent(typeof(ConfigurationManager))]
 public class DataGetter : MonoBehaviour
 {
-    List<Room> rooms;
-    Room firstRoom;
-    TopographicalTableConfiguration tableConfiguration;
-    InventoryPlacement tablePlacement;
-    public byte[] imageData;
 
-    public TMP_Text logText;
+    public static DataGetter Instance { get; private set; }
 
-    public Texture2D texture;
-    public Material skyboxMaterial;
-    
-    private ConfigurationManager configurationManager;
-
-
-    void Start()
-    {
-        configurationManager = GetComponent<ConfigurationManager>();
-        LoadConfiguration()
-            .ContinueWith( task=> Debug.LogError(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-    }
-    
-    async Task LoadConfiguration()
-    {
-        rooms = await configurationManager.ConfigurationClient.GetRooms();
-        Debug.Log("Rooms:");
-        Debug.Log(JsonConvert.SerializeObject(rooms, Formatting.Indented));
-        if(rooms.Count==0)
-            return;
-        firstRoom = await configurationManager.ConfigurationClient.GetRoom(rooms[0].Id);
-        Debug.Log($"First Room: {firstRoom.Label} ");
+    private void Awake() 
+    { 
+        // If there is an instance, and it's not me, delete myself.
         
-        tablePlacement = firstRoom.InventoryPlacements.FirstOrDefault( p=>p.InventoryItem?.TypeOfItem=="TOPOGRAPHICAL_TABLE");
-        Debug.Log($"Table Placement: {tablePlacement?.InventoryItem?.TypeOfItem}");
-        if(tablePlacement==null)
-            return;
-        tableConfiguration = await configurationManager.ConfigurationClient.GetTableConfiguration(tablePlacement.InventoryItem!.Id);
-        Debug.Log($"Table Configuration: {tableConfiguration.Label} {tableConfiguration.LocationTimeRows.Count} rows");
-
-        Debug.Log($"First Row: {tableConfiguration.LocationTimeRows[0].Label}");
-        List<MediaFile> mediaFile = tableConfiguration.LocationTimeRows[0].GeoEvents[0].MediaFiles;
-        Debug.Log(mediaFile.Count());
-
-        await GetMedia(tableConfiguration.LocationTimeRows[0].GeoEvents[0].MediaFiles[0].Id);
-        }
-
-    async Task GetMedia(Guid id){
-        await configurationManager.ConfigurationClient.GetMedia(id, MediaCallBack);
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+            configurationManager = GetComponent<ConfigurationManager>();
+        } 
     }
 
-    public void MediaCallBack(byte[] data){
-        texture = new Texture2D(2, 2);
+    private Guid currentID;
+    private ConfigurationManager configurationManager;
+    private bool running = false;
+
+    List<Guid> imagesToLoad = new List<Guid>();
+
+    async Task GetImage(Guid id, ServerRequestCallBack callback = null){
+        if(running){
+            imagesToLoad.Add(id);
+            return;
+        }
+        running = true;
+        currentID = id;
+        if(callback != null){
+            await configurationManager.ConfigurationClient.GetImage(id, ImageCallback);
+        } else {
+            await configurationManager.ConfigurationClient.GetImage(id, callback);
+        }
+    }
+
+    public async void ImageCallback(byte[] data){
+        var texture = new Texture2D(2, 2);
         texture.LoadImage(data);
 
-        SaveAsJPEG();
-        LoadAndModifyJPEG();
-        StartCoroutine(CreateSkybox());
+        try {
+            DataSaver.Instance.SaveAsJPEG(texture, currentID);
+        } catch {
+            Debug.Log("Failed to save image");
+        }
+        running = false;
+
+        if(imagesToLoad.Count > 0){
+            await GetImage(imagesToLoad[0]);
+            imagesToLoad.RemoveAt(0);
+        }
     }
 
-    void SaveAsJPEG()
-    {
-        byte[] bytes = texture.EncodeToJPG();
-        File.WriteAllBytes(Application.persistentDataPath + "/image.jpg", bytes);
-        Debug.Log("Image saved to " + Application.persistentDataPath + "/image.jpg");
+    public async void GetSkyBox(Guid imageID){
+        await GetImage(imageID, SkyBoxImageCallback);
     }
 
-    void LoadAndModifyJPEG()
-    {
-        byte[] fileData = File.ReadAllBytes(Application.persistentDataPath + "/image.jpg");
-        texture = new Texture2D(Screen.width, Screen.height);
-        texture.LoadImage(fileData);
-
-        byte[] bytes = texture.EncodeToJPG();
-        File.WriteAllBytes(Application.persistentDataPath + "/image_modified.jpg", bytes);
-        Debug.Log("Modified image saved to " + Application.persistentDataPath + "/image_modified.jpg");
+    public void SkyBoxImageCallback(byte[] data){
+        var texture = new Texture2D(2, 2);
+        texture.LoadImage(data);
+        Material skyboxMaterial = new Material(Shader.Find("Skybox/Cubemap"));
+        StartCoroutine(CreateSkybox(texture, skyboxMaterial));
     }
 
-    IEnumerator CreateSkybox(){
+    IEnumerator CreateSkybox(Texture2D texture, Material skyboxMaterial){
         int cubemapSize = DetermineCubemapSize(texture.width, texture.height);
         Cubemap cubemap = new Cubemap(cubemapSize, TextureFormat.RGBA32, false);
         yield return StartCoroutine(ConvertEquirectangularToCubemap(texture, cubemap));
         skyboxMaterial.SetTexture("_Tex", cubemap);
-        RenderSettings.skybox = skyboxMaterial;
+        DataSaver.Instance.SaveAsMaterial(skyboxMaterial, currentID);
     }
 
     int DetermineCubemapSize(int panoramaWidth, int panoramaHeight)
@@ -119,9 +111,10 @@ public class DataGetter : MonoBehaviour
                     facePixels[y * cubemap.width + x] = SampleEquirectangular(panorama, direction);
                 }
 
+                //spread the workload -> probably doable in a shader
                 if (y % 10 == 0)
                 {
-                    logText.text = $"Processing row {face}: " + (y + 1) + " of " + cubemap.height;
+                    //Debug.Log($"Processing row {face}: " + (y + 1) + " of " + cubemap.height);
                     yield return null;
                 }
             }
@@ -161,7 +154,4 @@ public class DataGetter : MonoBehaviour
 
         return panorama.GetPixelBilinear(u, v);
     }
-
-    
-
 }
