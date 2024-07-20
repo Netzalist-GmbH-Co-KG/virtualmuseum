@@ -12,6 +12,7 @@ namespace Server.Data
     public class InventoryItem
     {
         public Guid Id { get; set; }
+        #nullable enable
         public string? Label { get; set; }
         public string? TypeOfItem { get; set; }
 

@@ -11,6 +11,7 @@ namespace Server.Data
     /// </summary>
     public class InventoryPlacement
     {
+        #nullable enable
         public InventoryItem? InventoryItem { get; set; }
         public Location? Location { get; set; }
     }

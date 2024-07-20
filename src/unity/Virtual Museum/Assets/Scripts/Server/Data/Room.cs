@@ -11,6 +11,7 @@ namespace Server.Data
     public class Room
     {
         public Guid Id { get; set; }
+        #nullable enable
         public string? Label { get; set; }
         public string? Description { get; set; }
         public string ResourceUrl => "/api/rooms/" + Id;

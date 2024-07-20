@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,8 @@ public class TestScript : MonoBehaviour
     public Material skyboxMaterial;
     
     private ConfigurationManager configurationManager;
-    // Start is called before the first frame update
+
+
     void Start()
     {
         configurationManager = GetComponent<ConfigurationManager>();
@@ -55,20 +57,20 @@ public class TestScript : MonoBehaviour
         List<MediaFile> mediaFile = tableConfiguration.LocationTimeRows[0].GeoEvents[0].MediaFiles;
         Debug.Log(mediaFile.Count());
 
-        await configurationManager.ConfigurationClient.GetMedia(tableConfiguration.LocationTimeRows[0].GeoEvents[0].MediaFiles[0].Id, MediaCallBack);
+        await GetMedia(tableConfiguration.LocationTimeRows[0].GeoEvents[0].MediaFiles[0].Id);
+        }
+
+    async Task GetMedia(Guid id){
+        await configurationManager.ConfigurationClient.GetMedia(id, MediaCallBack);
     }
 
-    async public void MediaCallBack(byte[] data){
+    public void MediaCallBack(byte[] data){
         texture = new Texture2D(2, 2);
         texture.LoadImage(data);
 
-        // Step 2: Save the Texture2D as a JPEG File
         SaveAsJPEG();
-
-        // Step 3: Read and Modify the JPEG File
         LoadAndModifyJPEG();
         StartCoroutine(CreateSkybox());
-    
     }
 
     void SaveAsJPEG()
@@ -84,37 +86,24 @@ public class TestScript : MonoBehaviour
         texture = new Texture2D(Screen.width, Screen.height);
         texture.LoadImage(fileData);
 
-        // Modify the texture (optional)
-        // Perform any modifications here
-
-        // Save the modified texture
         byte[] bytes = texture.EncodeToJPG();
         File.WriteAllBytes(Application.persistentDataPath + "/image_modified.jpg", bytes);
         Debug.Log("Modified image saved to " + Application.persistentDataPath + "/image_modified.jpg");
     }
 
     IEnumerator CreateSkybox(){
-        // Create a new Cubemap
         int cubemapSize = DetermineCubemapSize(texture.width, texture.height);
-
-        // Create a new Cubemap
         Cubemap cubemap = new Cubemap(cubemapSize, TextureFormat.RGBA32, false);
-
-        // Convert the equirectangular panorama to cubemap
         yield return StartCoroutine(ConvertEquirectangularToCubemap(texture, cubemap));
-
-        // Assign the cubemap to the skybox material
         skyboxMaterial.SetTexture("_Tex", cubemap);
-
-        // Set the skybox material as the active skybox
         RenderSettings.skybox = skyboxMaterial;
     }
 
     int DetermineCubemapSize(int panoramaWidth, int panoramaHeight)
     {
         int size = Mathf.Min(panoramaWidth / 4, panoramaHeight / 2);
-        size = Mathf.ClosestPowerOfTwo(size); // Ensure the size is a power of two
-        return Mathf.Clamp(size, 512, 2048); // Clamp the size to a reasonable range
+        size = Mathf.ClosestPowerOfTwo(size);
+        return Mathf.Clamp(size, 512, 2048); 
     }
 
     IEnumerator ConvertEquirectangularToCubemap(Texture2D panorama, Cubemap cubemap)
@@ -132,7 +121,6 @@ public class TestScript : MonoBehaviour
                     facePixels[y * cubemap.width + x] = SampleEquirectangular(panorama, direction);
                 }
 
-                // Yield after processing each row to spread the workload
                 if (y % 10 == 0)
                 {
                     logText.text = $"Processing row {face}: " + (y + 1) + " of " + cubemap.height;

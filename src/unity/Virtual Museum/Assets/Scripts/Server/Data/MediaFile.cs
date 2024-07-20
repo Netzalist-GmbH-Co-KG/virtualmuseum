@@ -13,6 +13,7 @@ namespace Server.Data
     public class MediaFile
     {
         public Guid Id { get; set; }
+        #nullable enable
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Type { get; set; }

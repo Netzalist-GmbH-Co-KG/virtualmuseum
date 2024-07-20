@@ -77,7 +77,6 @@ namespace Server
                 return;
             }
             callback?.Invoke(request.downloadHandler.data);
-
         }
     }
 }

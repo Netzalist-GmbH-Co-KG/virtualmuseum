@@ -12,6 +12,7 @@ namespace Server.Data
     public class TopographicalTableConfiguration
     {
         public Guid Id { get; set; }
+        #nullable enable
         public string? Label { get; set; }
         public List<LocationTimeRow> LocationTimeRows { get; set; } = new();
     }

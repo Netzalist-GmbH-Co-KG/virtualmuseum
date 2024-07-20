@@ -10,6 +10,7 @@ namespace Server.Data
     /// </summary>
     public class LocationTimeRow
     {
+        #nullable enable
         public string? Label { get; set; }
         public List<GeoEvent> GeoEvents { get; set; } = new();
         public List<MediaFile> MediaFiles { get; set; } = new();

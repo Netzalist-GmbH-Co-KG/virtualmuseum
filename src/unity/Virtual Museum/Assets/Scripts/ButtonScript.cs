@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class ButtonScript : MonoBehaviour
 {
+    /*
     private bool isPressed = false;
     static int counter = 0;
     private void Start() {
         counter = 0;
     }
-    /*
+    
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             if(int.Parse(gameObject.transform.name) == 704 && counter == 0){
