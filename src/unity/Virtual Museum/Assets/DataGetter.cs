@@ -11,7 +11,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(ConfigurationManager))]
-public class TestScript : MonoBehaviour
+public class DataGetter : MonoBehaviour
 {
     List<Room> rooms;
     Room firstRoom;
