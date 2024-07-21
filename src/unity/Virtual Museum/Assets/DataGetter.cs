@@ -35,16 +35,18 @@ public class DataGetter : MonoBehaviour
 
     private Guid currentID;
     private ConfigurationManager configurationManager;
-    private bool running = false;
+    private bool getterRunning = false;
 
     List<Guid> imagesToLoad = new List<Guid>();
+    List<ServerRequestCallBack> callBacks = new List<ServerRequestCallBack>();
 
     async Task GetImage(Guid id, ServerRequestCallBack callback = null){
-        if(running){
+        if(getterRunning){
             imagesToLoad.Add(id);
+            callBacks.Add(callback);
             return;
         }
-        running = true;
+        getterRunning = true;
         currentID = id;
         if(callback != null){
             await configurationManager.ConfigurationClient.GetImage(id, ImageCallback);
@@ -62,14 +64,15 @@ public class DataGetter : MonoBehaviour
         } catch {
             Debug.Log("Failed to save image");
         }
-        running = false;
+        getterRunning = false;
 
         if(imagesToLoad.Count > 0){
-            await GetImage(imagesToLoad[0]);
+            await GetImage(imagesToLoad[0], callBacks[0]);
             imagesToLoad.RemoveAt(0);
+            callBacks.RemoveAt(0);
         }
     }
-
+    
     public async void GetSkyBox(Guid imageID){
         await GetImage(imageID, SkyBoxImageCallback);
     }
@@ -77,11 +80,19 @@ public class DataGetter : MonoBehaviour
     public void SkyBoxImageCallback(byte[] data){
         var texture = new Texture2D(2, 2);
         texture.LoadImage(data);
+
+        try {
+            DataSaver.Instance.SaveAsJPEG(texture, currentID);
+        } catch {
+            Debug.Log("Failed to save image");
+        }
+        getterRunning = false;
+
         Material skyboxMaterial = new Material(Shader.Find("Skybox/Cubemap"));
         StartCoroutine(CreateSkybox(texture, skyboxMaterial));
     }
 
-    IEnumerator CreateSkybox(Texture2D texture, Material skyboxMaterial){
+    public IEnumerator CreateSkybox(Texture2D texture, Material skyboxMaterial){
         int cubemapSize = DetermineCubemapSize(texture.width, texture.height);
         Cubemap cubemap = new Cubemap(cubemapSize, TextureFormat.RGBA32, false);
         yield return StartCoroutine(ConvertEquirectangularToCubemap(texture, cubemap));
