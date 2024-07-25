@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using MessagePack;
 using Server;
 using UnityEngine;
 
@@ -11,6 +10,11 @@ public class DataSaver : MonoBehaviour
 
     private void Awake() 
     { 
+        p = Application.persistentDataPath + "/";
+        RoomPath = p + $"rooms/room{RoomConfig.currentRoomId}/rooms/";
+        ImagePath = p + $"rooms/room{RoomConfig.currentRoomId}/media/2DImages/";
+        CubemapPath = p + $"rooms/room{RoomConfig.currentRoomId}/media/cubemaps/";
+        AudioPath = p + $"rooms/room{RoomConfig.currentRoomId}/media/audioClips/";
         CheckIfFilePathsExist();
         if (Instance != null && Instance != this) 
         { 
@@ -22,13 +26,19 @@ public class DataSaver : MonoBehaviour
         } 
     }
 
+    static string p;
+    public static string RoomPath;
+    public static string ImagePath;
+    public static string CubemapPath;
+    public static string AudioPath;
+
     private void CheckIfFilePathsExist(){
-        string p = Application.persistentDataPath;
-        if(!Directory.Exists(p + "rooms")) CreateFilePath(p + "rooms");
-        if(!Directory.Exists(p + "media")) CreateFilePath(p + "media");
-        if(!Directory.Exists(p + "media/2DImages")) CreateFilePath(p + "media/2DImages");
-        if(!Directory.Exists(p + "media/Cubemaps")) CreateFilePath(p + "media/Cubemaps");
-        if(!Directory.Exists(p + "media/audioClips")) CreateFilePath(p + "media/audioClips");
+        if(!Directory.Exists(p + $"rooms")) CreateFilePath(p + "rooms");
+        if(!Directory.Exists(p + $"rooms/room{RoomConfig.currentRoomId}")) CreateFilePath(p + $"rooms/room{RoomConfig.currentRoomId}");
+        if(!Directory.Exists(p + $"rooms/room{RoomConfig.currentRoomId}/media")) CreateFilePath(p + $"rooms/room{RoomConfig.currentRoomId}/media");
+        if(!Directory.Exists(p + $"rooms/room{RoomConfig.currentRoomId}/media/2DImages")) CreateFilePath(p + $"rooms/room{RoomConfig.currentRoomId}/media/2DImages");
+        if(!Directory.Exists(p + $"rooms/room{RoomConfig.currentRoomId}/media/cubemaps")) CreateFilePath(p + $"rooms/room{RoomConfig.currentRoomId}/media/cubemaps");
+        if(!Directory.Exists(p + $"rooms/room{RoomConfig.currentRoomId}/media/audioClips")) CreateFilePath(p + $"rooms/room{RoomConfig.currentRoomId}/media/audioClips");
     }
 
     private void CreateFilePath(string path){
@@ -36,33 +46,22 @@ public class DataSaver : MonoBehaviour
         Debug.Log("Created missing directory: " + path);
     }
 
-    public void SaveAsMaterial(Material material, Guid id)
-    {
-        MPMaterial serializableMaterial = new MPMaterial(material);
-        byte[] bytes = MessagePackSerializer.Serialize(serializableMaterial);
 
-        string path = Application.persistentDataPath + "" ;
-        File.WriteAllBytes(path, bytes);
-
-        Debug.Log($"Material saved to {path}");
-    }
-
-    public void SaveAsJPEG(Texture2D texture, Guid? id = null)
+    public void SaveAsPNG(Texture2D texture, Guid? id = null)
     {
         if (id == null) id = Guid.NewGuid();
-        byte[] bytes = texture.EncodeToJPG();
-        string path = Path.Combine(Application.persistentDataPath, $"image{id}.jpg");
+        byte[] bytes = texture.EncodeToPNG();
+        string path = Path.Combine(ImagePath + $"image{id}.png");
         File.WriteAllBytes(path, bytes);
         Debug.Log("Image saved to " + path);
     }
 
     public void SaveAsMP3(AudioClip audioClip, Guid? id = null)
     {
-        if (id == null) id = Guid.NewGuid();
-        ConvertAndWrite(audioClip, Path.Combine(Application.persistentDataPath, $"audio{id}.mp3"));
+        ConvertAndWriteAudio(audioClip, Path.Combine(AudioPath + $"audio{id}.mp3"));
     }
 
-    private static void ConvertAndWrite(AudioClip clip, string path)
+    private static void ConvertAndWriteAudio(AudioClip clip, string path)
     {
         float[] samples = new float[clip.samples * clip.channels];
         clip.GetData(samples, 0);

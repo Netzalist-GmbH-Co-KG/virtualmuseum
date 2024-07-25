@@ -1,95 +1,48 @@
 using System;
+using System.Collections;
 using Server;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestDataLoader : MonoBehaviour
 {
     private ConfigurationManager configurationManager;
-    private Guid testGuid;
-    private Texture2D testTexture;
-    private Material testMaterial;
+    public GameObject imageSphere;
+    public TMP_Text text;
+    public RawImage image;
+    private Texture2D texture2D;
 
-    void Start()
+    async void Start()
     {
         configurationManager = GetComponent<ConfigurationManager>();
+        text.text = "Updating RoomConfig";
+        await GetComponent<RoomConfig>().GetCurrentRoom();
         RunTests();
     }
 
     void RunTests()
     {
-        Debug.Log("Starting tests...");
-        TestSaveAndLoadMaterial();
+        text.text = "Running tests:";
+        TestSaveAndLoadCubeMap();
         TestSaveAndLoadJPEG();
-        TestLoadSkybox();
     }
 
-    void TestSaveAndLoadMaterial()
+    void  TestSaveAndLoadCubeMap()
     {
-        testMaterial = new Material(Shader.Find("Standard"));
-        testMaterial.color = Color.red;
-        testGuid = Guid.NewGuid();
-
-        DataSaver.Instance.SaveAsMaterial(testMaterial, testGuid);
-        Debug.Log("Material saved.");
-
-        Material loadedMaterial = DataLoader.Instance.LoadMaterial(testGuid);
-        Debug.Log("Material loaded.");
-
-        if (loadedMaterial != null && loadedMaterial.color == testMaterial.color)
-        {
-            Debug.Log("TestSaveAndLoadMaterial passed.");
-        }
-        else
-        {
-            Debug.LogError("TestSaveAndLoadMaterial failed.");
-        }
+        text.text = "TestSaveAndLoadCubeMap";
+        imageSphere.SetActive(true);
     }
 
-    void TestSaveAndLoadJPEG()
+    async void TestSaveAndLoadJPEG()
     {
-        testTexture = new Texture2D(2, 2);
-        testTexture.SetPixel(0, 0, Color.red);
-        testTexture.SetPixel(1, 0, Color.green);
-        testTexture.SetPixel(0, 1, Color.blue);
-        testTexture.SetPixel(1, 1, Color.white);
-        testTexture.Apply();
-
-        testGuid = Guid.NewGuid();
-        DataSaver.Instance.SaveAsJPEG(testTexture, testGuid);
-        Debug.Log("Texture saved as JPEG.");
-
-        Texture2D loadedTexture = DataLoader.Instance.LoadImage();
-        Debug.Log("Texture loaded and modified.");
-
-        if (loadedTexture != null)
-        {
-            Debug.Log("TestSaveAndLoadJPEG passed.");
-        }
-        else
-        {
-            Debug.LogError("TestSaveAndLoadJPEG failed.");
-        }
+        text.text = "TestSaveAndLoadJPEG";
+        await DataGetter.Instance.GetImage(RoomConfig.mediaId);
+        texture2D = DataLoader.Instance.LoadImage(DataSaver.ImagePath + $"image{RoomConfig.mediaId}.png", texture2D);
+        
+        image.texture = texture2D;
     }
 
-    void TestLoadSkybox()
-    {
-        testMaterial = new Material(Shader.Find("Skybox/Cubemap"));
-        testGuid = Guid.NewGuid();
 
-        DataSaver.Instance.SaveAsMaterial(testMaterial, testGuid);
-        Debug.Log("Skybox material saved.");
-
-        Material loadedSkyboxMaterial = DataLoader.Instance.LoadSkybox(testGuid);
-        Debug.Log("Skybox material loaded.");
-
-        if (loadedSkyboxMaterial != null)
-        {
-            Debug.Log("TestLoadSkybox passed.");
-        }
-        else
-        {
-            Debug.LogError("TestLoadSkybox failed.");
-        }
-    }
+    
 }
-

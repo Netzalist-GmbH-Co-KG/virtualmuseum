@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1658994, g: 0.18566239, b: 0.21022497, a: 1}
+  m_IndirectSpecularColor: {r: 0.21215841, g: 0.21215841, b: 0.21215841, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -618,7 +618,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1290284089
 RectTransform:
   m_ObjectHideFlags: 0
@@ -627,7 +627,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290284088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 4.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -823,8 +823,11 @@ GameObject:
   - component: {fileID: 1493129473}
   - component: {fileID: 1493129472}
   - component: {fileID: 1493129471}
+  - component: {fileID: 1493129475}
+  - component: {fileID: 1493129477}
+  - component: {fileID: 1493129476}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: 3DImageSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -916,6 +919,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1493129475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493129470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656b97ddc82710e41b1dec58eb6dfdff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiUrl: http://timeglide.xr-ai.de:5000/api/
+  apiToken: your-api-token
+--- !u!114 &1493129476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493129470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea77995785dca04a9bc3038cd56fb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1493129477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493129470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e89b42758dc5fa468fcc1b4fcb98b8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyBoxMaterial: {fileID: 2100000, guid: 5e6b906dd59fd2b4680eb7a96e6467b1, type: 2}
 --- !u!1 &1501984966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1551931852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,6 +1367,8 @@ GameObject:
   - component: {fileID: 1782384220}
   - component: {fileID: 1782384219}
   - component: {fileID: 1782384218}
+  - component: {fileID: 1782384223}
+  - component: {fileID: 1782384224}
   m_Layer: 0
   m_Name: DataLoader
   m_TagString: Untagged
@@ -1344,10 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 653073c50efd6be4e9fb8be6723fcb4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageData: 
-  logText: {fileID: 0}
-  texture: {fileID: 0}
-  skyboxMaterial: {fileID: 0}
+  skyboxMaterial: {fileID: 2100000, guid: 5e6b906dd59fd2b4680eb7a96e6467b1, type: 2}
 --- !u!114 &1782384219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1360,10 +1401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9df5bc099504b974084825b61fd33812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageData: 
-  logText: {fileID: 0}
-  texture: {fileID: 0}
-  skyboxMaterial: {fileID: 0}
 --- !u!114 &1782384220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1376,10 +1413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf63bd1ee85e384292543493a937b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageData: 
-  logText: {fileID: 0}
-  texture: {fileID: 0}
-  skyboxMaterial: {fileID: 0}
 --- !u!114 &1782384221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1410,6 +1443,33 @@ Transform:
   - {fileID: 636118191}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782384223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782384217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2eda73dcd5463a45b1af0a17363dc65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageSphere: {fileID: 1493129470}
+  text: {fileID: 2049155091}
+  image: {fileID: 1290284090}
+--- !u!114 &1782384224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782384217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd430bdcc436c14bacf5c5d998c0828, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1794895712
 GameObject:
   m_ObjectHideFlags: 0
@@ -1544,8 +1604,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
