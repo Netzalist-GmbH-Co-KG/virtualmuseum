@@ -14,6 +14,7 @@ public class DemoStartScript : MonoBehaviour
         string preferedRoom = PlayerPrefs.GetString("PreferedRoom");
         if(string.IsNullOrEmpty(preferedRoom)) return;
         if(preferedRoom == "Demo"){
+            RoomConfig.mediaId = Guid.Parse("00000000-0000-0000-0000-000000000000");
             demo = true;
             ClusterUI.SetActive(false);
             //DemoUI.SetActive(true);

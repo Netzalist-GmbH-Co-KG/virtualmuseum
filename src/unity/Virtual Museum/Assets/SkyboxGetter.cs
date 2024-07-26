@@ -13,6 +13,8 @@ public class SkyboxGetter : MonoBehaviour
     public Material skyBoxMaterial;
     private Guid currentID;
     private ConfigurationManager configurationManager;
+    public AudioClip narrationAudio;
+    public AudioSource parentAudioSource;
 
     private async void Awake() 
     {
@@ -29,6 +31,10 @@ public class SkyboxGetter : MonoBehaviour
         }
 
         skyBoxMaterial.SetTexture("_Tex", cubemap);
+        if(narrationAudio){
+            parentAudioSource.clip = narrationAudio;
+            parentAudioSource.Play();
+        }
     }
 
     async Task GetSkyBox(){
