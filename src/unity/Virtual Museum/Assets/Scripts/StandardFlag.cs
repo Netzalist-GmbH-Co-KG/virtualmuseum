@@ -1,12 +1,10 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
 using UnityEditor;
-using UnityEngine.Timeline;
-using Unity.VisualScripting;
 
 ///A standard flag for displaying information about a point of interest
 ///Has start and endTime for defining first mention and last seen documentation of the point of interest as well as Color attribute for 
