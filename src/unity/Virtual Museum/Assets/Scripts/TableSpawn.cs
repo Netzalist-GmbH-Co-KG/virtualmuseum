@@ -15,6 +15,7 @@ public class TableSpawn : MonoBehaviour
     [SerializeField] private GameObject anchorPrefab;
     [SerializeField] private OVRCameraRig cameraRig;
     [SerializeField] private GameObject clusterUI;
+    [SerializeField] private GameObject demoTable;
     private Guid anchorGuid;
     [SerializeField] private string debugGuid;
     private Guid defaultGuid = new Guid();
@@ -24,14 +25,7 @@ public class TableSpawn : MonoBehaviour
     private TableGhost tableGhostScript;
     private static readonly int Initiate = Animator.StringToHash("Initiate");
 
-    //testing
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.Space)){
-            TestPlacetable();
-        }
-    }
-
-    private void TestPlacetable(){
+    public void TestPlacetable(){
         var anchorInScene = GameObject.FindWithTag("Anchor");
         if (!anchorInScene)
         {
@@ -39,7 +33,7 @@ public class TableSpawn : MonoBehaviour
             return;
         }
 
-        Instantiate(table, new Vector3(anchorInScene.transform.position.x, 0f, anchorInScene.transform.position.z), Quaternion.Euler(0, anchorInScene.transform.rotation.eulerAngles.y, 0));
+        Instantiate(demoTable, new Vector3(anchorInScene.transform.position.x, 0f, anchorInScene.transform.position.z), Quaternion.Euler(0, anchorInScene.transform.rotation.eulerAngles.y, 0));
         gameObject.SetActive(false);
     }
     //testing
@@ -103,21 +97,20 @@ public class TableSpawn : MonoBehaviour
         clusterUI.transform.rotation = Quaternion.Euler(0f, eulAngles.y, 0f);
         
         Debug.Log("Initialization process started!");
-       StartCoroutine(AnchorCreation(instantiatedAnchor.AddComponent<OVRSpatialAnchor>()));
+        instantiatedAnchor.AddComponent<OVRSpatialAnchor>();
+        anchor = instantiatedAnchor.GetComponent<OVRSpatialAnchor>();
+        StartCoroutine(AnchorCreation(anchor));
     }
 
-    public void LoadSpatialAnchor()
+    public bool LoadSpatialAnchor()
     {
-        var g = LoadGuid()[0];
-        Debug.Log(g);
-        anchorGuid = g;
-        SetPositionAfterLoad();
-    }
-
-    private async void SetPositionAfterLoad()
-    {
-        await LoadAnchorByUuid(new List<Guid>{anchorGuid});
+        var g = LoadGuid();  
+        if(g == null) return false; //kein spatial Anchor mit diesem Guid gefunden
+        LoadAnchorByUuid(new List<Guid>(){anchorGuid});
         StartCoroutine(WaitAndThenSetPositionOfUI());
+        //SpatialAnchor mit Guid des Tisches wurde gefunden
+        return true;
+        
     }
 
     private IEnumerator WaitAndThenSetPositionOfUI()
@@ -130,18 +123,7 @@ public class TableSpawn : MonoBehaviour
         clusterUI.transform.rotation = Quaternion.Euler(0f, eulAngles.y, 0f);
     }
 
-    public bool LoadSpatialAnchor(Guid guid)
-    {
-        var g = LoadGuid();
-        foreach(var g2 in g){
-            if(g2 == guid){
-                anchorGuid = guid;
-                LoadAnchorByUuid(new List<Guid>(){anchorGuid});
-                return true;
-            }
-        }
-        return false;
-    }
+    
 
     private IEnumerator AnchorCreation(OVRSpatialAnchor ovrAnchor)
     {
@@ -227,6 +209,7 @@ public class TableSpawn : MonoBehaviour
                         // transform component immediately.
                         unboundAnchor.BindTo(spatialAnchor);
                         anchor = spatialAnchor;
+                        Debug.Log("Anchor localized. anchorUuid " + spatialAnchor.Uuid);
                     }
                     else
                     {
@@ -243,16 +226,16 @@ public class TableSpawn : MonoBehaviour
 
     public void SaveGuid(Guid guid)
     {
-        PlayerPrefs.SetString(PlayerPrefsKey, guid.ToString());
+        PlayerPrefs.SetString(PlayerPrefsKey + RoomConfig.currentRoomId, guid.ToString());
         PlayerPrefs.Save();
 
         Debug.Log("Guid saved successfully.");
     }
 
-    public List<Guid> LoadGuid()
+    public Guid LoadGuid()
     {
         // Get the string from PlayerPrefs
-        string guidString = PlayerPrefs.GetString(PlayerPrefsKey, string.Empty);
+        string guidString = PlayerPrefs.GetString(PlayerPrefsKey + RoomConfig.currentRoomId, string.Empty);
         Debug.Log($"Read PlayerPrefs! GUID: {guidString}");
 
         // If the string is empty, return a new list
@@ -262,7 +245,7 @@ public class TableSpawn : MonoBehaviour
             anchorGuid = defaultGuid;
             List<Guid> newGuids = new List<Guid>();
             newGuids.Add(anchorGuid); 
-            return newGuids;
+            return newGuids[0];
         }
         
         var guidList = new List<Guid>();
@@ -270,6 +253,6 @@ public class TableSpawn : MonoBehaviour
         guidList.Add(Guid.Parse(guidString));
 
         Debug.Log("Guid loaded successfully.");
-        return guidList; 
+        return guidList[0]; 
     }
 }

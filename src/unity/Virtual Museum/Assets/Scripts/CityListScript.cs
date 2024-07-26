@@ -25,9 +25,6 @@ public class CityListScript : MonoBehaviour
         cityButtonScripts.Clear();
     }
 
-    /// <summary>
-    /// This function is called when the behaviour becomes disabled or inactive.
-    /// </summary>
     private void OnDisable()
     {
         ClearCities();

@@ -17,13 +17,19 @@ public class RoomButton : MonoBehaviour
         RoomConfig.currentRoom = room;
         RoomConfig.currentRoomId = room.Id;
         RoomConfig.mediaId = tableConfiguration.LocationTimeRows[0].GeoEvents[0].MediaFiles[0].Id;
-
+        PlayerPrefs.SetString("PreferedRoom", room.Id.ToString());
         displayText.text = "Lade Raum " + RoomConfig.currentRoomId + " ...";
         //try to load spatial anchor with current room id
-        if(TableSpawn.instance.LoadSpatialAnchor(room.Id)){
-            displayText.text = "Tischplatzierung gefunden und geladen!"; 
+        if(TableSpawn.instance.LoadSpatialAnchor()){
+            displayText.text = "Tischplatzierung gefunden und geladen!";
         } else {
             displayText.text = "Tischplatzierung benötigt";
         }
+    }
+
+    public void DemoClick(){
+        PlayerPrefs.SetString("PreferedRoom", "Demo");
+        displayText.text = "Lade Demo ...";
+        TableSpawn.instance.TestPlacetable();
     }
 }

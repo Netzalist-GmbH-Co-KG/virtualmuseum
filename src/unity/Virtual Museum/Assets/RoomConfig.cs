@@ -19,6 +19,17 @@ public class RoomConfig : MonoBehaviour
     static public bool isTableConfigured = false;
     ConfigurationManager configurationManager;
 
+    private void Start() {
+        string preferedRoom = PlayerPrefs.GetString("PreferedRoom");
+        if(string.IsNullOrEmpty(preferedRoom)) {
+            GetComponent<PopupNotificationHandler>().Popup("Kein Raum ausgewählt, bitte wähle einen Raum im Admin-Modus!");
+            return;    
+        }
+        if(preferedRoom == "Demo") return;
+        Guid.Parse(preferedRoom);
+        //load the current room 
+    }
+
     public async Task GetFirstRoom(){
         isTableConfigured = false;
         configurationManager = GetComponent<ConfigurationManager>();

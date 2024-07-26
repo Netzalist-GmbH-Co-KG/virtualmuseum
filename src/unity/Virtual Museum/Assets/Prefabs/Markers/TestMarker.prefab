@@ -5709,7 +5709,7 @@ MonoBehaviour:
   - {fileID: 1421433746022104, guid: 84bb406b82cecb24cb1ffe5d4359339d, type: 3}
   - {fileID: 1681277682126416, guid: bbad862e7e06efe4a8ad0346a53e3cde, type: 3}
   housePosition: {fileID: 3423730160739144226}
-  instantiated: 0
+  instantiated: 1
 --- !u!1 &7126604064280159003
 GameObject:
   m_ObjectHideFlags: 0

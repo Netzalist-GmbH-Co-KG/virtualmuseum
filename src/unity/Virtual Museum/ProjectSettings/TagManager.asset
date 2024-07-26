@@ -9,6 +9,8 @@ TagManager:
   - InputsAndLogic
   - Marker
   - Anchor
+  - DemoUI
+  - ClusterUI
   layers:
   - Default
   - TransparentFX
