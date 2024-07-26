@@ -591,62 +591,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buttonClickActions:
-  - Title: Spawn spatial anchor
+  - Title: Move Table Anchor / Confirm Table Anchor
     Button: 1
-    ButtonMode: 0
-    Callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 843920381}
-          m_TargetAssemblyTypeName: TableSpawn, Assembly-CSharp
-          m_MethodName: CreateSpatialAnchor
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - Title: Load and spawn spatial anchors
-    Button: 2
-    ButtonMode: 0
-    Callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 843920381}
-          m_TargetAssemblyTypeName: TableSpawn, Assembly-CSharp
-          m_MethodName: LoadSpatialAnchor
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - Title: Spawn Table on Anchor
-    Button: 8192
-    ButtonMode: 0
-    Callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 843920381}
-          m_TargetAssemblyTypeName: TableSpawn, Assembly-CSharp
-          m_MethodName: SpawnTableOnAnchor
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - Title: Spawn + Move TableGhost
-    Button: 16384
     ButtonMode: 1
     Callback:
       m_PersistentCalls:
@@ -663,9 +609,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - Title: Destroy TableGhost
-    Button: 16384
-    ButtonMode: 0
+  - Title: Cancel Table Anchor
+    Button: 2
+    ButtonMode: 1
     Callback:
       m_PersistentCalls:
         m_Calls:
@@ -931,6 +877,17 @@ MonoBehaviour:
   installationRoutineCheckpoint:
     _installationRoutineId: 
     _installationVariants: []
+--- !u!114 &106167442 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3421817516268731453, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
+  m_PrefabInstance: {fileID: 1112270223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a379f34d4f4f2e408d34f14bfb753ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &111272834
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,6 +2152,39 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1268409196}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &223974226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223974227}
+  m_Layer: 0
+  m_Name: ClusterInterfaceParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &223974227
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223974226}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2097010411}
+  - {fileID: 1436871494}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &253084810
 GameObject:
@@ -11577,6 +11567,7 @@ MonoBehaviour:
   table: {fileID: 7385101694855767235, guid: 52006d526ed4e664d9c91c3e65fdc4ac, type: 3}
   anchorPrefab: {fileID: 7385101694855767235, guid: 52006d526ed4e664d9c91c3e65fdc4ac, type: 3}
   cameraRig: {fileID: 192252991}
+  clusterUI: {fileID: 223974226}
   debugGuid: 
 --- !u!114 &843920382
 MonoBehaviour:
@@ -11591,6 +11582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRig: {fileID: 192252991}
+  rightHand: {fileID: 106167442}
   tableGhost: {fileID: 7181780259601844364, guid: a71076424b10a344c8cfeeb20731ec07, type: 3}
   ghost: 0
 --- !u!114 &843920383
@@ -12691,7 +12683,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 951632368}
-  - component: {fileID: 951632369}
   - component: {fileID: 951632370}
   - component: {fileID: 951632372}
   - component: {fileID: 951632373}
@@ -12717,28 +12708,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &951632369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 951632366}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 212ccdac720d0144f83cd0d1da20043e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UserInterfaces:
-  - {fileID: 2070006133}
-  - {fileID: 1746888473}
-  - {fileID: 1822215402}
-  - {fileID: 1243309061}
-  Tools:
-  - {fileID: 7385101694855767235, guid: 52006d526ed4e664d9c91c3e65fdc4ac, type: 3}
-  ToolGhosts:
-  - {fileID: 7181780259601844364, guid: a71076424b10a344c8cfeeb20731ec07, type: 3}
-  sessionState: 2
 --- !u!114 &951632370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12746,7 +12715,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951632366}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -12765,19 +12734,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 843920382}
-        m_TargetAssemblyTypeName: TableGhost, Assembly-CSharp
-        m_MethodName: MoveGhost
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 8c74e035-fefd-439a-ba56-a53bbec26229
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
@@ -13970,6 +13927,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 192252993}
     m_Modifications:
+    - target: {fileID: 887566639635063344, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 887566639665884278, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1113376821032508370, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -14051,6 +14016,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5011963131725433120, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5669368818315744293, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5669368819342708813, guid: 314f6e1da20902f4ba50509fa6eb8fa8, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -17610,13 +17583,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436871489}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1283858684}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 223974227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -24307,7 +24280,7 @@ Transform:
   - {fileID: 257873664}
   - {fileID: 854366832}
   - {fileID: 486963549}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 223974227}
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!1 &2103738000
 GameObject:
@@ -26552,12 +26525,11 @@ SceneRoots:
   - {fileID: 951632368}
   - {fileID: 1910261285}
   - {fileID: 1842161988}
-  - {fileID: 2097010411}
   - {fileID: 7114770129566293960}
+  - {fileID: 223974227}
   - {fileID: 548078769}
   - {fileID: 192252993}
   - {fileID: 688974873}
   - {fileID: 843920380}
-  - {fileID: 1436871494}
   - {fileID: 551346123}
   - {fileID: 495076362}
