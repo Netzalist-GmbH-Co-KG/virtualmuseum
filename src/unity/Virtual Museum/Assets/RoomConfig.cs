@@ -13,12 +13,13 @@ using UnityEngine;
 [RequireComponent(typeof(ConfigurationManager))]
 public class RoomConfig : MonoBehaviour
 {
+    static public Room currentRoom;
     static public Guid currentRoomId = Guid.Empty;
     static public Guid mediaId = Guid.Empty;
-    static bool isTableConfigured = false;
+    static public bool isTableConfigured = false;
     ConfigurationManager configurationManager;
 
-    public async Task GetCurrentRoom(){
+    public async Task GetFirstRoom(){
         isTableConfigured = false;
         configurationManager = GetComponent<ConfigurationManager>();
         

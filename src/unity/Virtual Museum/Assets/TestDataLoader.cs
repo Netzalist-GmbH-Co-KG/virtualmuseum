@@ -17,7 +17,7 @@ public class TestDataLoader : MonoBehaviour
     {
         configurationManager = GetComponent<ConfigurationManager>();
         text.text = "Updating RoomConfig";
-        await GetComponent<RoomConfig>().GetCurrentRoom();
+        await GetComponent<RoomConfig>().GetFirstRoom();
         RunTests();
     }
 

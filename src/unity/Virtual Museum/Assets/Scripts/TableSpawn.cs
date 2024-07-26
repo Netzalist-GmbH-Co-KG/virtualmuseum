@@ -16,6 +16,7 @@ public class TableSpawn : MonoBehaviour
     [SerializeField] private OVRCameraRig cameraRig;
     private Guid anchorGuid;
     [SerializeField] private string debugGuid;
+    private Guid defaultGuid = new Guid();
     private OVRSpatialAnchor anchor;
     private GameObject instantiatedAnchor;
     private List<OVRSpatialAnchor.UnboundAnchor> unboundAnchors;
@@ -42,12 +43,20 @@ public class TableSpawn : MonoBehaviour
     }
     //testing
 
+    /* These things shouldnt be called at start anymore. Instead, call them in RoomButton OnClick script and pass the room as a parameter
     private void Start()
     {
         if (instance == null) instance = this;
         tableGhostScript = GetComponent<TableGhost>();
         unboundAnchors = new List<OVRSpatialAnchor.UnboundAnchor>();
         LoadSpatialAnchor();
+    }
+    */
+
+    private void Awake() {
+        if (instance == null) instance = this;
+        tableGhostScript = GetComponent<TableGhost>();
+        unboundAnchors = new List<OVRSpatialAnchor.UnboundAnchor>();
     }
 
     public void SpawnTableOnAnchor()
@@ -91,8 +100,22 @@ public class TableSpawn : MonoBehaviour
     public void LoadSpatialAnchor()
     {
         var g = LoadGuid()[0];
+        Debug.Log(g);
         anchorGuid = g;
         LoadAnchorByUuid(new List<Guid>(){anchorGuid});
+    }
+
+    public bool LoadSpatialAnchor(Guid guid)
+    {
+        var g = LoadGuid();
+        foreach(var g2 in g){
+            if(g2 == guid){
+                anchorGuid = guid;
+                LoadAnchorByUuid(new List<Guid>(){anchorGuid});
+                return true;
+            }
+        }
+        return false;
     }
 
     private IEnumerator AnchorCreation(OVRSpatialAnchor ovrAnchor)
@@ -210,9 +233,11 @@ public class TableSpawn : MonoBehaviour
         // If the string is empty, return a new list
         if (string.IsNullOrEmpty(guidString))
         {
-            Debug.Log("No Guid found, returning a new list.");
-            anchorGuid = Guid.Empty;
-            return new List<Guid>();
+            Debug.Log("No Guid found, returning default");
+            anchorGuid = defaultGuid;
+            List<Guid> newGuids = new List<Guid>();
+            newGuids.Add(anchorGuid); 
+            return newGuids;
         }
         
         var guidList = new List<Guid>();

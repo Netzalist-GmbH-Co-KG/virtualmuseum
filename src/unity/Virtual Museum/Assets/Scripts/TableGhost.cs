@@ -12,11 +12,6 @@ public class TableGhost : MonoBehaviour
     public bool ghost;
 
     private Vector2 movementVector;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void SpawnTableGhost()
     {
