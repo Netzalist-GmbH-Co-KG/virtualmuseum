@@ -4,7 +4,6 @@ using Server;
 using UnityEngine;
 
 [RequireComponent(typeof(ConfigurationManager))]
-[RequireComponent(typeof(RoomConfig))]
 public class DataSaver : MonoBehaviour
 {
     public static DataSaver Instance { get; private set; }

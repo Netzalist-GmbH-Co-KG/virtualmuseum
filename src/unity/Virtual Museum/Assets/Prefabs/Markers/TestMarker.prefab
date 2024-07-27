@@ -5248,9 +5248,9 @@ MonoBehaviour:
   _whenSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4408596710057601611}
-        m_TargetAssemblyTypeName: PokeEventInterpreter, Assembly-CSharp
-        m_MethodName: Selected
+      - m_Target: {fileID: 8460824686372819579}
+        m_TargetAssemblyTypeName: DemoMarkerSkybox, Assembly-CSharp
+        m_MethodName: LoadDemoSkyBox
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
