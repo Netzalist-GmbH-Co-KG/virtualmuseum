@@ -7,25 +7,25 @@ using UnityEngine;
 
 public class TableSpawn : MonoBehaviour
 {
+    public static TableSpawn instance;
+    
     private const string PlayerPrefsKey = "GuidList";
     
     [SerializeField] private GameObject table;
     [SerializeField] private GameObject anchorPrefab;
     [SerializeField] private OVRCameraRig cameraRig;
+    [SerializeField] private GameObject clusterUI;
+    [SerializeField] private GameObject demoTable;
     private Guid anchorGuid;
     [SerializeField] private string debugGuid;
+    private Guid defaultGuid = new Guid();
     private OVRSpatialAnchor anchor;
+    private GameObject instantiatedAnchor;
     private List<OVRSpatialAnchor.UnboundAnchor> unboundAnchors;
     private TableGhost tableGhostScript;
+    private static readonly int Initiate = Animator.StringToHash("Initiate");
 
-    private void Start()
-    {
-        tableGhostScript = GetComponent<TableGhost>();
-        unboundAnchors = new List<OVRSpatialAnchor.UnboundAnchor>();
-    }
-
-    public void SpawnTableOnAnchor()
-    {
+    public void TestPlacetable(){
         var anchorInScene = GameObject.FindWithTag("Anchor");
         if (!anchorInScene)
         {
@@ -33,7 +33,46 @@ public class TableSpawn : MonoBehaviour
             return;
         }
 
-        Instantiate(table, new Vector3(anchor.transform.position.x, 0f, anchor.transform.position.z), Quaternion.Euler(0, anchor.transform.rotation.eulerAngles.y, 0));
+        Instantiate(demoTable, new Vector3(anchorInScene.transform.position.x, 0f, anchorInScene.transform.position.z), Quaternion.Euler(0, anchorInScene.transform.rotation.eulerAngles.y, 0));
+        gameObject.SetActive(false);
+    }
+    //testing
+
+    /* These things shouldnt be called at start anymore. Instead, call them in RoomButton OnClick script and pass the room as a parameter
+    private void Start()
+    {
+        if (instance == null) instance = this;
+        tableGhostScript = GetComponent<TableGhost>();
+        unboundAnchors = new List<OVRSpatialAnchor.UnboundAnchor>();
+        LoadSpatialAnchor();
+    }
+    */
+
+    private void Awake() {
+        if (instance == null) instance = this;
+        tableGhostScript = GetComponent<TableGhost>();
+        unboundAnchors = new List<OVRSpatialAnchor.UnboundAnchor>();
+    }
+
+    public void SpawnTableOnAnchor()
+    {
+        /*var anchorInScene = GameObject.FindWithTag("Anchor");
+        if (!anchorInScene)
+        {
+            Debug.Log("No Spatial Anchor found in the scene!");
+            return;
+        }*/
+
+        // var t = Instantiate(table, new Vector3(anchor.transform.position.x, 0f, anchor.transform.position.z), Quaternion.Euler(0, anchor.transform.rotation.eulerAngles.y, 0));
+        if (instantiatedAnchor == null)
+        {
+            Debug.Log("No Spatial Anchor Table found in the scene!");
+            return;
+        }
+
+        instantiatedAnchor.GetComponent<Animator>().SetBool(Initiate, true);
+        instantiatedAnchor.GetComponent<AudioSource>().Play();
+        instantiatedAnchor.transform.GetChild(0).gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 
@@ -47,18 +86,44 @@ public class TableSpawn : MonoBehaviour
             anchor = null;
         }
         
-        var anchorSpawn = Instantiate(anchorPrefab, tableGhostScript.GetGhostPosition(),
+        instantiatedAnchor = Instantiate(anchorPrefab, tableGhostScript.GetGhostPosition(),
             tableGhostScript.GetGhostRotation());
+
+        var rotation = instantiatedAnchor.transform.rotation;
+        
+        clusterUI.transform.position = instantiatedAnchor.transform.position + rotation * new Vector3(0f, 0f, -2f);
+        
+        var eulAngles = rotation.eulerAngles;
+        clusterUI.transform.rotation = Quaternion.Euler(0f, eulAngles.y, 0f);
+        
         Debug.Log("Initialization process started!");
-       StartCoroutine(AnchorCreation(anchorSpawn.AddComponent<OVRSpatialAnchor>()));
+        instantiatedAnchor.AddComponent<OVRSpatialAnchor>();
+        anchor = instantiatedAnchor.GetComponent<OVRSpatialAnchor>();
+        StartCoroutine(AnchorCreation(anchor));
     }
 
-    public void LoadSpatialAnchor()
+    public bool LoadSpatialAnchor()
     {
-        var g = LoadGuid()[0];
-        anchorGuid = g;
+        var g = LoadGuid();  
+        if(g == null) return false; //kein spatial Anchor mit diesem Guid gefunden
         LoadAnchorByUuid(new List<Guid>(){anchorGuid});
+        StartCoroutine(WaitAndThenSetPositionOfUI());
+        //SpatialAnchor mit Guid des Tisches wurde gefunden
+        return true;
+        
     }
+
+    private IEnumerator WaitAndThenSetPositionOfUI()
+    {
+        yield return null;
+        var rotation = instantiatedAnchor.transform.rotation;
+        
+        clusterUI.transform.position = instantiatedAnchor.transform.position + rotation * new Vector3(0f, 0f, -2f);
+        var eulAngles = rotation.eulerAngles;
+        clusterUI.transform.rotation = Quaternion.Euler(0f, eulAngles.y, 0f);
+    }
+
+    
 
     private IEnumerator AnchorCreation(OVRSpatialAnchor ovrAnchor)
     {
@@ -121,7 +186,7 @@ public class TableSpawn : MonoBehaviour
         }
     }
 
-    private async void LoadAnchorByUuid(IEnumerable<Guid> uuids)
+    private async Task LoadAnchorByUuid(IEnumerable<Guid> uuids)
     {
         var result = await OVRSpatialAnchor.LoadUnboundAnchorsAsync(uuids, unboundAnchors);
 
@@ -136,13 +201,15 @@ public class TableSpawn : MonoBehaviour
                     if (success)
                     {
                         // Create a new game object with an OVRSpatialAnchor component
-                        var spatialAnchor = Instantiate(anchorPrefab).AddComponent<OVRSpatialAnchor>();
+                        instantiatedAnchor = Instantiate(anchorPrefab);
+                        var spatialAnchor = instantiatedAnchor.AddComponent<OVRSpatialAnchor>();
 
                         // Step 3: Bind
                         // Because the anchor has already been localized, BindTo will set the
                         // transform component immediately.
                         unboundAnchor.BindTo(spatialAnchor);
                         anchor = spatialAnchor;
+                        Debug.Log("Anchor localized. anchorUuid " + spatialAnchor.Uuid);
                     }
                     else
                     {
@@ -159,24 +226,26 @@ public class TableSpawn : MonoBehaviour
 
     public void SaveGuid(Guid guid)
     {
-        PlayerPrefs.SetString(PlayerPrefsKey, guid.ToString());
+        PlayerPrefs.SetString(PlayerPrefsKey + RoomConfig.currentRoomId, guid.ToString());
         PlayerPrefs.Save();
 
         Debug.Log("Guid saved successfully.");
     }
 
-    public List<Guid> LoadGuid()
+    public Guid LoadGuid()
     {
         // Get the string from PlayerPrefs
-        string guidString = PlayerPrefs.GetString(PlayerPrefsKey, string.Empty);
+        string guidString = PlayerPrefs.GetString(PlayerPrefsKey + RoomConfig.currentRoomId, string.Empty);
         Debug.Log($"Read PlayerPrefs! GUID: {guidString}");
 
         // If the string is empty, return a new list
         if (string.IsNullOrEmpty(guidString))
         {
-            Debug.Log("No Guid found, returning a new list.");
-            anchorGuid = Guid.Empty;
-            return new List<Guid>();
+            Debug.Log("No Guid found, returning default");
+            anchorGuid = defaultGuid;
+            List<Guid> newGuids = new List<Guid>();
+            newGuids.Add(anchorGuid); 
+            return newGuids[0];
         }
         
         var guidList = new List<Guid>();
@@ -184,6 +253,6 @@ public class TableSpawn : MonoBehaviour
         guidList.Add(Guid.Parse(guidString));
 
         Debug.Log("Guid loaded successfully.");
-        return guidList; 
+        return guidList[0]; 
     }
 }

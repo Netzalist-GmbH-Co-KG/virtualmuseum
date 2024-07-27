@@ -11,6 +11,7 @@ public class InstantiateMarkerVisual : MonoBehaviour
     // This gets called in the animation
     public void InstantiateMarker()
     {
+
         if(instantiated){
             AcitvateMarker();
             return;
@@ -19,7 +20,6 @@ public class InstantiateMarkerVisual : MonoBehaviour
         int index = Random.Range(0, viusals.Count);
         GameObject viusal = Instantiate(viusals[index], housePosition.position, Quaternion.identity);
         housePosition.gameObject.SetActive(true);
-        viusal.transform.parent = housePosition;
         viusal.transform.localScale = Vector3.one;
         viusal.transform.localPosition = Vector3.zero;
         //randomize rotation of visual by rotating randomly between -90 and 90 degrees along the y axis
