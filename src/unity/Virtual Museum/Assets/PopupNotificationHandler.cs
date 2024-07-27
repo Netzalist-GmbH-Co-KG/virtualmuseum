@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PopupNotificationHandler : MonoBehaviour
 {
-    
     public GameObject popupNotification;
     public TMP_Text text;
     private Coroutine deactivateRoutine;

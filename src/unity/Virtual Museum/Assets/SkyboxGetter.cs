@@ -16,6 +16,7 @@ public class SkyboxGetter : MonoBehaviour
     private ConfigurationManager configurationManager;
     public AudioClip narrationAudio;
     public AudioSource parentAudioSource;
+    private bool skyboxApplied = false;
 
     private async void Awake() 
     {
@@ -38,6 +39,13 @@ public class SkyboxGetter : MonoBehaviour
             Debug.Log("No Skybox found trying to get one from Server");
             await GetSkyBox();
         }
+    }
+
+    private void Update() {
+        if(!skyboxApplied){
+            return;
+        }
+        skyboxApplied = false;
         skyBoxMaterial.SetTexture("_Tex", cubemap);
         LTDescr l = LeanTween.value(1, -1, 2f).setOnUpdate((float val) => {
             voronoiMaterial.SetFloat("_Float", val);
@@ -69,7 +77,7 @@ public class SkyboxGetter : MonoBehaviour
     public IEnumerator CreateSkybox(Texture2D texture){
         yield return StartCoroutine(ConvertEquirectangularToCubemap(texture, cubemap));
         skyBoxMaterial.SetTexture("_Tex", cubemap);
-
+        skyboxApplied = true;
         GetComponent<SkyBoxLoader>().CubeMapSaveFaces(cubemap, currentID);
     }
 

@@ -6,7 +6,6 @@ using UnityEngine;
 public class CheckControllerActiveState : MonoBehaviour
 {
     public List<ControllerActiveState> _activeState = new List<ControllerActiveState>();
-    private bool childrenActive = false;
     void Update()
     {
         int c = 0;
@@ -18,13 +17,11 @@ public class CheckControllerActiveState : MonoBehaviour
             Debug.Log(c);
         }
         if(c == 2){
-            childrenActive = true;
             foreach(Transform child in transform){
                 Debug.Log("Enabling " + child.gameObject.name);
                 child.gameObject.SetActive(true);
             }
         } else if(c < 2){
-            childrenActive = false;
             Debug.Log(c);
             foreach(Transform child in transform){
                 Debug.Log("Disabling " + child.gameObject.name);
