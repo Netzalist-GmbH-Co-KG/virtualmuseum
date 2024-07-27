@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 public class CSVInterpreter : MonoBehaviour
 {
     //test
-    private bool sphereTest = false;
     public Cubemap testCubeMap;
     public GameObject cubeMapPrefab;
     //test

@@ -6,6 +6,8 @@ public class AnimationEventWrapper : MonoBehaviour
 {
     [SerializeField] private Animation anim;
     [SerializeField] private TableCoordinates tableCoordinates;
+    [SerializeField] private AudioClip tableRiseClip;
+    [SerializeField] private AudioClip hydraulicSoundClip;
 
     public void PlayAnimation()
     {
@@ -16,4 +18,16 @@ public class AnimationEventWrapper : MonoBehaviour
     {
         tableCoordinates.Begin();
     }
+
+    public void PlayTableRise()
+    {
+        GetComponent<AudioSource>().PlayOneShot(hydraulicSoundClip);
+        GetComponent<AudioSource>().PlayOneShot(tableRiseClip);
+    }
+
+    public void PlayParticleEffects(){
+
+        GetComponent<ParticleSystem>().Play();
+    }
+    
 }

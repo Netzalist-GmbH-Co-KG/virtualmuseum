@@ -11,6 +11,7 @@ public class SkyboxGetter : MonoBehaviour
 {
     private Cubemap cubemap;
     public Material skyBoxMaterial;
+    public Material voronoiMaterial;
     private Guid currentID;
     private ConfigurationManager configurationManager;
     public AudioClip narrationAudio;
@@ -18,6 +19,14 @@ public class SkyboxGetter : MonoBehaviour
 
     private async void Awake() 
     {
+        voronoiMaterial.SetFloat("_Float", -1);
+        LTDescr l = LeanTween.value(-1, 1, 2f).setOnUpdate((float val) => {
+            voronoiMaterial.SetFloat("_Float", val);
+        }).setOnComplete(StartUp);
+    }
+
+    private async void StartUp(){
+        GetComponent<MeshRenderer>().SetMaterials(new List<Material>{skyBoxMaterial, voronoiMaterial});
         configurationManager = GetComponent<ConfigurationManager>();
         int cubemapSize = 1024;
         cubemap = new Cubemap(cubemapSize, TextureFormat.RGBA32, false);
@@ -29,8 +38,13 @@ public class SkyboxGetter : MonoBehaviour
             Debug.Log("No Skybox found trying to get one from Server");
             await GetSkyBox();
         }
-
         skyBoxMaterial.SetTexture("_Tex", cubemap);
+        LTDescr l = LeanTween.value(1, -1, 2f).setOnUpdate((float val) => {
+            voronoiMaterial.SetFloat("_Float", val);
+        }).setOnComplete(StartAudio);
+    }
+
+    public void StartAudio(){
         if(narrationAudio){
             parentAudioSource.clip = narrationAudio;
             parentAudioSource.Play();

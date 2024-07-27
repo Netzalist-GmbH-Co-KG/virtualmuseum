@@ -7,33 +7,29 @@ public class CheckControllerActiveState : MonoBehaviour
 {
     public List<ControllerActiveState> _activeState = new List<ControllerActiveState>();
     private bool childrenActive = false;
-    Coroutine deactivationRoutine;
     void Update()
     {
         int c = 0;
         foreach(ControllerActiveState state in _activeState){
+            Debug.Log(state.Active);
             if(state.Active){
                 c ++;
             }
+            Debug.Log(c);
         }
         if(c == 2){
             childrenActive = true;
-            if(deactivationRoutine != null){
-                StopCoroutine(deactivationRoutine);
-            }
             foreach(Transform child in transform){
+                Debug.Log("Enabling " + child.gameObject.name);
                 child.gameObject.SetActive(true);
             }
-        } else if(childrenActive && c < 2){
+        } else if(c < 2){
             childrenActive = false;
-            deactivationRoutine = StartCoroutine(DeactivateAdminUI());
-        }
-    }
-
-    IEnumerator DeactivateAdminUI(){
-        yield return new WaitForSeconds(1f);
-        foreach(Transform child in transform){
-            child.gameObject.SetActive(false);
+            Debug.Log(c);
+            foreach(Transform child in transform){
+                Debug.Log("Disabling " + child.gameObject.name);
+                child.gameObject.SetActive(false);
+            }
         }
     }
 }
