@@ -9,6 +9,9 @@ TagManager:
   - InputsAndLogic
   - Marker
   - Anchor
+  - DemoUI
+  - ClusterUI
+  - 3DImageSphere
   layers:
   - Default
   - TransparentFX

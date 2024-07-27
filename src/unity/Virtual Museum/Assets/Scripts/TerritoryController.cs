@@ -5,7 +5,6 @@ using UnityEngine;
 public class TerritoryController : MonoBehaviour
 {
     bool working = false;
-    float time = 0;
     public Material territoryMaterial;
     // Start is called before the first frame update
     void Start()
@@ -42,7 +41,6 @@ public class TerritoryController : MonoBehaviour
     
     public void AdvanceTerritories(){
         if(Territory.Territories.Count == 0) return;
-        time = 0;
         foreach(Territory territory in Territory.Territories){
             territory.previousBorder = territory.currentBorder;
         }
@@ -54,7 +52,6 @@ public class TerritoryController : MonoBehaviour
 
     public void RegressTerritories(){
         if(Territory.Territories.Count == 0) return;
-        time = 0;
         foreach(Territory territory in Territory.Territories){
             territory.previousBorder = territory.currentBorder;
         }

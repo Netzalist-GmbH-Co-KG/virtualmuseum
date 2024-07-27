@@ -1,29 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using Oculus.Interaction.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class TableGhost : MonoBehaviour
 {
     [SerializeField] private OVRCameraRig cameraRig;
+    [SerializeField] private Hand rightHand;
     [SerializeField] private GameObject tableGhost;
-
     private GameObject tableInstance;
     public bool ghost;
 
     private Vector2 movementVector;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void SpawnTableGhost()
     {
-        if (ghost) return;
-        tableInstance = Instantiate(tableGhost, cameraRig.rightControllerInHandAnchor.position, Quaternion.identity);
-        tableInstance.transform.position =
-            new Vector3(tableInstance.transform.position.x, 0f, tableInstance.transform.position.z);
+        if (rightHand.GetFingerIsPinching(HandFinger.Index)) return;
+        if (ghost)
+        {
+            TableSpawn.instance.CreateSpatialAnchor();
+            DestroyTableGhost();
+            return;
+        }
+
+        var forwardPos = cameraRig.centerEyeAnchor.position + cameraRig.centerEyeAnchor.forward;
+        tableInstance = Instantiate(tableGhost, forwardPos, Quaternion.identity);
+        /*var position = tableInstance.transform.position;
+        
+        position = new Vector3(position.x, 0f, position.z);
+        tableInstance.transform.position = position;*/
         ghost = true;
     }
 
@@ -43,19 +47,21 @@ public class TableGhost : MonoBehaviour
     void Update()
     {
         if (!ghost) return;
-        var rightController = cameraRig.rightControllerInHandAnchor;
+        var headCenter = cameraRig.centerEyeAnchor;
         tableInstance.transform.rotation =
-            Quaternion.Euler(0f, rightController.rotation.eulerAngles.y, 0f);
-        tableInstance.transform.Translate(new Vector3(movementVector.x, 0f, movementVector.y) * (Time.deltaTime * 2f));
+            Quaternion.Euler(0f, headCenter.rotation.eulerAngles.y, 0f);
+        var offset = new Vector3(0f, 0f, 2.5f);
+        var position = headCenter.position + headCenter.TransformDirection(offset);
+        tableInstance.transform.position = new Vector3(position.x, 0f, position.z);
     }
 
     public Vector3 GetGhostPosition()
     {
-        return !tableInstance ? Vector3.zero : tableInstance.transform.position;
+        return !tableInstance ? Vector3.zero : new Vector3(tableInstance.transform.position.x, 0f, tableInstance.transform.position.z);
     }
 
     public Quaternion GetGhostRotation()
     {
-        return !tableInstance ? Quaternion.identity : tableInstance.transform.rotation;
+        return !tableInstance ? Quaternion.identity : Quaternion.Euler(0f, tableInstance.transform.rotation.eulerAngles.y, 0f);
     }
 }
