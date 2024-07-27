@@ -40,7 +40,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043343390379990245}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5036,7 +5036,7 @@ GameObject:
   - component: {fileID: 2840505826696371611}
   - component: {fileID: 4408596710057601611}
   - component: {fileID: 7451044311113655008}
-  - component: {fileID: 1703977186187816116}
+  - component: {fileID: 8460824686372819579}
   m_Layer: 6
   m_Name: TestMarker
   m_TagString: Marker
@@ -5248,9 +5248,9 @@ MonoBehaviour:
   _whenSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4408596710057601611}
-        m_TargetAssemblyTypeName: PokeEventInterpreter, Assembly-CSharp
-        m_MethodName: Selected
+      - m_Target: {fileID: 8460824686372819579}
+        m_TargetAssemblyTypeName: DemoMarkerSkybox, Assembly-CSharp
+        m_MethodName: LoadDemoSkyBox
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5269,7 +5269,7 @@ MonoBehaviour:
   _whenCancel:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1703977186187816116
+--- !u!114 &8460824686372819579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5278,7 +5278,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3986729018367164808}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6ba47eaf7b5d544ac4e01ca6464d25, type: 3}
+  m_Script: {fileID: 11500000, guid: db11071cf1e74554b92ecd1df2298096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4438645308706543959
@@ -5350,7 +5350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5226868823650298281
 Transform:
   m_ObjectHideFlags: 0
@@ -5626,7 +5626,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     ColorTime: 0.1
   _hoverColorState:
-    Color: {r: 0, g: 0, b: 1, a: 1}
+    Color: {r: 1, g: 0.19339621, b: 0.19339621, a: 1}
     ColorCurve:
       serializedVersion: 2
       m_Curve:
@@ -5653,7 +5653,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     ColorTime: 0.1
   _selectColorState:
-    Color: {r: 0, g: 1, b: 0, a: 1}
+    Color: {r: 1, g: 0.6084906, b: 0.6084906, a: 1}
     ColorCurve:
       serializedVersion: 2
       m_Curve:
@@ -5722,7 +5722,7 @@ MonoBehaviour:
   - {fileID: 1421433746022104, guid: 84bb406b82cecb24cb1ffe5d4359339d, type: 3}
   - {fileID: 1681277682126416, guid: bbad862e7e06efe4a8ad0346a53e3cde, type: 3}
   housePosition: {fileID: 3423730160739144226}
-  instantiated: 0
+  instantiated: 1
 --- !u!1 &7126604064280159003
 GameObject:
   m_ObjectHideFlags: 0
@@ -5734,7 +5734,6 @@ GameObject:
   - component: {fileID: 3423730160739144226}
   - component: {fileID: 8472362020544582632}
   - component: {fileID: 4047165404203323954}
-  - component: {fileID: 5085631934275790146}
   m_Layer: 6
   m_Name: HousePosition
   m_TagString: Untagged
@@ -5867,68 +5866,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!108 &5085631934275790146
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7126604064280159003}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.82689786, b: 0, a: 1}
-  m_Intensity: 2.59
-  m_Range: 1
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 1
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 2
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1 &7921392168519498091
 GameObject:
   m_ObjectHideFlags: 0

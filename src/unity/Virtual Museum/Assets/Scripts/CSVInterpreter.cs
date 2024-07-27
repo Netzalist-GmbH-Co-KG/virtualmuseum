@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 public class CSVInterpreter : MonoBehaviour
 {
     //test
-    private bool sphereTest = false;
     public Cubemap testCubeMap;
     public GameObject cubeMapPrefab;
     //test
@@ -40,13 +39,14 @@ public class CSVInterpreter : MonoBehaviour
     void Update()
     {
         if (!calculatedStuff) return;
-
+        /*
         // TEST -----------------------------------
         if (Input.GetKeyDown(KeyCode.Return))
         {
             StandardFlag.NextPeriod();
         }
         // TEST -----------------------------------
+        */
     }
 
     public void UpdateDesiredCorners(Vector3 newTopLeft, Vector3 newBottomRight)
@@ -124,6 +124,7 @@ public class CSVInterpreter : MonoBehaviour
                 {
                     gpsCoordinates.Add(new float[] { lat, lon });
                     points.Add(Instantiate(pointPrefab));
+
                 }
             }
         }
@@ -163,16 +164,8 @@ public class CSVInterpreter : MonoBehaviour
             {
                 Vector3 newPosition = hit.point + new Vector3(0, 0.1f, 0);
                 StandardFlag newFlag;
-                if(sphereTest) {
-                    newFlag = new StandardFlag(records.ersterwähnungen[i], hit.point, points[i].transform, Color.red, records.ort[i], $"Landkreis: {records.landkreis[i]}\n GPS: {records.gpsOld[i]}");
-                } else {
-                    Debug.Log(newPosition);
-                    //test
-                    sphereTest = true;
-                    GameObject personalCubeMap = CreateCubeMap(testCubeMap, cubeMapPrefab);
-                    newFlag = new StandardFlag(records.ersterwähnungen[i], hit.point, points[i].transform, Color.red, records.ort[i], $"Landkreis: {records.landkreis[i]}\n GPS: {records.gpsOld[i]}", personalCubeMap);
-                    //test
-                }
+                newFlag = new StandardFlag(records.ersterwähnungen[i], hit.point, points[i].transform, Color.red, records.ort[i], $"Landkreis: {records.landkreis[i]}\n GPS: {records.gpsOld[i]}");
+                
                 if (!erscheinungsMap.TryGetValue(records.ersterwähnungen[i], out var flagList))
                 {
                     erscheinungsMap[records.ersterwähnungen[i]] = new List<StandardFlag>();

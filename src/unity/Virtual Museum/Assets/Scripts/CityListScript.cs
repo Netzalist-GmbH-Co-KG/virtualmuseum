@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,9 +24,6 @@ public class CityListScript : MonoBehaviour
         cityButtonScripts.Clear();
     }
 
-    /// <summary>
-    /// This function is called when the behaviour becomes disabled or inactive.
-    /// </summary>
     private void OnDisable()
     {
         ClearCities();
