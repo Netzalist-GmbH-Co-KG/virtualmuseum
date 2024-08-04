@@ -1,0 +1,2057 @@
+﻿{
+  "Tables": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "label": "Topographischer Tisch",
+      "locationTimeRows": [
+        {
+          "label": "Von 704 bis 774 (17 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 704,
+              "label": "Großmonta",
+              "latitude": 51.213014135033404,
+              "longitude": 11.292545644029113,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 704,
+              "label": "Arnstadt",
+              "latitude": 50.798675991743565,
+              "longitude": 10.971400349540067,
+              "mediaFiles": []
+            },
+            {
+              "year": 704,
+              "label": "Mühlberg",
+              "latitude": 50.86927773223871,
+              "longitude": 10.826146928481224,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 706,
+              "label": "Tonndorf",
+              "latitude": 50.88202689123464,
+              "longitude": 11.226847775888254,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 725,
+              "label": "Ohrdruf",
+              "latitude": 50.82475479163669,
+              "longitude": 10.742109804758904,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 731,
+              "label": "Freienbessingen",
+              "latitude": 51.233392420930834,
+              "longitude": 10.775475489542751,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 736,
+              "label": "Thamsbrück",
+              "latitude": 51.14010379655854,
+              "longitude": 10.63607973494517,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 742,
+              "label": "Erfurt",
+              "latitude": 50.98487664306335,
+              "longitude": 11.023525046028205,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 744,
+              "label": "Wundersleben",
+              "latitude": 51.154535619078935,
+              "longitude": 11.03759660653199,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 744,
+              "label": "Straußfurt",
+              "latitude": 51.167950945564186,
+              "longitude": 10.99026497525889,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 744,
+              "label": "Gerstungen",
+              "latitude": 50.96065891798273,
+              "longitude": 10.088880040701836,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 750,
+              "label": "Achelstädt (Witzleben)",
+              "latitude": 50.835960033164426,
+              "longitude": 11.12258760283785,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 758,
+              "label": "Jüchsen",
+              "latitude": 50.47905854698735,
+              "longitude": 10.501602854022485,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 772,
+              "label": "Großenehrich",
+              "latitude": 51.24709390505027,
+              "longitude": 10.845480855181984,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 772,
+              "label": "Schernberg (Sondershausen)",
+              "latitude": 51.32816013391134,
+              "longitude": 10.769219686773113,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 772,
+              "label": "Görsbach",
+              "latitude": 51.461810927239554,
+              "longitude": 10.94073020614686,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 772,
+              "label": "Tennstedt",
+              "latitude": 51.15248098690745,
+              "longitude": 10.861955302703256,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 774 bis 785 (31 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 774,
+              "label": "Nordheim",
+              "latitude": 49.10647929595412,
+              "longitude": 9.1194985001577,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 774,
+              "label": "Tüngeda",
+              "latitude": 51.0346264923001,
+              "longitude": 10.582782934364696,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Zimmersupra",
+              "latitude": 50.98917131928185,
+              "longitude": 10.875736757174575,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Mechterstädt",
+              "latitude": 50.94131430538436,
+              "longitude": 10.524881971659564,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Apfelstädt",
+              "latitude": 50.8891822914476,
+              "longitude": 10.876880424764058,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Gotha",
+              "latitude": 50.947688634553614,
+              "longitude": 10.706651772401552,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Gräfentonna",
+              "latitude": 51.09156164878442,
+              "longitude": 10.732209458767901,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Gierstädt",
+              "latitude": 51.04309324448465,
+              "longitude": 10.828608682169632,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Göllingen",
+              "latitude": 51.34389942671112,
+              "longitude": 11.01282997527468,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Elxleben",
+              "latitude": 51.04449969959169,
+              "longitude": 10.947183678292294,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Creuzburg",
+              "latitude": 51.05237260948435,
+              "longitude": 10.24839197403996,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Salzungen",
+              "latitude": 50.816912018033086,
+              "longitude": 10.245768220832517,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Großmölsen",
+              "latitude": 51.02602901388816,
+              "longitude": 11.146591299548312,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 775,
+              "label": "Kirchhasel",
+              "latitude": 50.72991438819262,
+              "longitude": 11.394917407352045,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 776,
+              "label": "Westhausen",
+              "latitude": 48.879588552464575,
+              "longitude": 10.18493868629643,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 776,
+              "label": "Rudolstadt",
+              "latitude": 50.71767820479279,
+              "longitude": 11.327836265931944,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 777,
+              "label": "Heldrungen",
+              "latitude": 51.30120402984215,
+              "longitude": 11.223249006640367,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 778,
+              "label": "Hochheim",
+              "latitude": 51.01705292013776,
+              "longitude": 10.66101936809415,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 778,
+              "label": "Mittelsdorf",
+              "latitude": 50.607564236162155,
+              "longitude": 10.132099602782418,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 778,
+              "label": "Sundremda (Rudolstadt)",
+              "latitude": 50.74725113282782,
+              "longitude": 11.213172971848666,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 779,
+              "label": "Hochheim",
+              "latitude": 50.95685514665493,
+              "longitude": 10.998941548983003,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 779,
+              "label": "Tröchtelborn",
+              "latitude": 50.990768860256445,
+              "longitude": 10.814881761424973,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 779,
+              "label": "Großenlupnitz",
+              "latitude": 50.995374223335176,
+              "longitude": 10.39714229898003,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 780,
+              "label": "Niedersachswerfen",
+              "latitude": 51.55081891490134,
+              "longitude": 10.76466052486428,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 780,
+              "label": "Herbsleben",
+              "latitude": 51.11777219372178,
+              "longitude": 10.845692864159185,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 781,
+              "label": "Roßdorf",
+              "latitude": 50.70329088172984,
+              "longitude": 10.22274295213684,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 783,
+              "label": "Birx",
+              "latitude": 50.52986210571342,
+              "longitude": 10.047615590835644,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 783,
+              "label": "Berkach",
+              "latitude": 50.43720752929505,
+              "longitude": 10.398041583996987,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 784,
+              "label": "Sülzfeld",
+              "latitude": 50.52451434458615,
+              "longitude": 10.35755337682501,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 784,
+              "label": "Milz",
+              "latitude": 50.37877218114374,
+              "longitude": 10.537656413193877,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 784,
+              "label": "Sülzdorf (Römhild)",
+              "latitude": 50.41054206375453,
+              "longitude": 10.489571340833853,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 785 bis 786 (1 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 785,
+              "label": "Großvargula",
+              "latitude": 51.11554245925312,
+              "longitude": 10.78438014224003,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 786 bis 799 (75 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 786,
+              "label": "Buttstädt",
+              "latitude": 51.121222320296994,
+              "longitude": 11.419263946365101,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Groß-/Kleinbrembach",
+              "latitude": 51.128027913512085,
+              "longitude": 11.279471690175699,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Guthmannshausen",
+              "latitude": 51.13464129884953,
+              "longitude": 11.365626365499823,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Griefstedt",
+              "latitude": 51.229808733631295,
+              "longitude": 11.133322918219454,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Büchel",
+              "latitude": 51.248547340474715,
+              "longitude": 11.156896037226348,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Großneuhausen",
+              "latitude": 51.15966641700856,
+              "longitude": 11.286321754583424,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Kindelbrück",
+              "latitude": 51.26249104970728,
+              "longitude": 11.09321844444428,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Riethgen",
+              "latitude": 51.23944990521673,
+              "longitude": 11.112752280711637,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Schwerstedt",
+              "latitude": 51.15712378727647,
+              "longitude": 10.921290130172817,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Gebesee",
+              "latitude": 51.11312866742574,
+              "longitude": 10.933881015205884,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Ringleben",
+              "latitude": 51.10562819504323,
+              "longitude": 10.954879500767548,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Kölleda",
+              "latitude": 51.1898281657466,
+              "longitude": 11.2533335619919,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Friemar",
+              "latitude": 50.9777445417869,
+              "longitude": 10.788694349729731,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Molschleben",
+              "latitude": 51.0047629036144,
+              "longitude": 10.775967957074004,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Pferdingsleben",
+              "latitude": 50.97104951073124,
+              "longitude": 10.818830528824067,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Großrettbach",
+              "latitude": 50.92436505901514,
+              "longitude": 10.862540352169525,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Günthersleben",
+              "latitude": 50.900981494222144,
+              "longitude": 10.768573750269663,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Wechmar",
+              "latitude": 50.89246156977108,
+              "longitude": 10.77358790529266,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Leina",
+              "latitude": 50.90048593102301,
+              "longitude": 10.631446258470032,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Friedrichswerth",
+              "latitude": 50.99440780816579,
+              "longitude": 10.539027937646791,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Remstädt",
+              "latitude": 50.979051670619725,
+              "longitude": 10.689313719136935,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Siebleben",
+              "latitude": 50.94224531036747,
+              "longitude": 10.745003009785231,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Fahner (Großfahner)",
+              "latitude": 51.05530255260566,
+              "longitude": 10.828936242429801,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Sundhausen",
+              "latitude": 50.93080633864294,
+              "longitude": 10.679297948507376,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Wölfis",
+              "latitude": 50.80906762327854,
+              "longitude": 10.774100059899254,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Schwabhausen",
+              "latitude": 48.29934906486135,
+              "longitude": 11.34536113676493,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Ermstedt",
+              "latitude": 50.97071347303899,
+              "longitude": 10.879688014760442,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Frienstedt",
+              "latitude": 50.95675580753668,
+              "longitude": 10.916453951130396,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Mittelhausen",
+              "latitude": 51.043961691926484,
+              "longitude": 11.003960537458845,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Artern",
+              "latitude": 51.36724542563524,
+              "longitude": 11.292650058492212,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Kachstedt (Artern)",
+              "latitude": 51.390837683037105,
+              "longitude": 11.259329924761605,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Voigstedt (Artern)",
+              "latitude": 51.39197381460006,
+              "longitude": 11.319718410952198,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Donndorf",
+              "latitude": 51.293795222291806,
+              "longitude": 11.378518748265805,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Wiehe",
+              "latitude": 51.26618501589728,
+              "longitude": 11.410852452237366,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Hechendorf",
+              "latitude": 51.277287940203486,
+              "longitude": 11.396171042603465,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Rockensußra",
+              "latitude": 51.26821263157783,
+              "longitude": 10.701159208034008,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Gehofen",
+              "latitude": 51.32333808535238,
+              "longitude": 11.31998055412896,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Oberbösa",
+              "latitude": 51.289083172580746,
+              "longitude": 11.018174461412944,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Trebra",
+              "latitude": 51.2840148214036,
+              "longitude": 10.979466645766756,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Reinsdorf",
+              "latitude": 50.697098914662874,
+              "longitude": 12.555862797561144,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Borxleben",
+              "latitude": 51.39629760948145,
+              "longitude": 11.22856081059676,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Bretleben",
+              "latitude": 51.33605093820638,
+              "longitude": 11.234919036484968,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Gorsleben",
+              "latitude": 51.2764511904165,
+              "longitude": 11.181340814964857,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Weberstedt",
+              "latitude": 51.10766243395754,
+              "longitude": 10.518954247783928,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Bruchstedt",
+              "latitude": 51.184080758429474,
+              "longitude": 10.786690757135041,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Urleben",
+              "latitude": 51.15319540939771,
+              "longitude": 10.770205170108975,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Kutzleben",
+              "latitude": 51.19547027184429,
+              "longitude": 10.871488147324682,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Buttelstedt",
+              "latitude": 51.07351258583311,
+              "longitude": 11.339628616199066,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Niedertrebra",
+              "latitude": 51.06812480583825,
+              "longitude": 11.586080351729299,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Daasdorf (Ettersberg)",
+              "latitude": 51.064355600362035,
+              "longitude": 11.343007491772214,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Nermsdorf",
+              "latitude": 51.084448730417186,
+              "longitude": 11.370240041115373,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Rothenstein",
+              "latitude": 50.851372867474076,
+              "longitude": 11.604623190390795,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Behringen",
+              "latitude": 51.02279732609141,
+              "longitude": 10.519112627230344,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Dorndorf",
+              "latitude": 50.835380994658784,
+              "longitude": 10.090577214319117,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Badelachen (Vacha)",
+              "latitude": 50.830140957434196,
+              "longitude": 10.039310529824936,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Wolferbütt (Vacha)",
+              "latitude": 50.76879610745834,
+              "longitude": 10.055661080746036,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Mariengart (Vacha)",
+              "latitude": 50.75951772808209,
+              "longitude": 10.04928090780422,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 786,
+              "label": "Wüllersleben",
+              "latitude": 50.81522224755415,
+              "longitude": 11.072076895152703,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 788,
+              "label": "Diedorf",
+              "latitude": 48.35648725955916,
+              "longitude": 10.78634187022498,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 788,
+              "label": "Schwallungen",
+              "latitude": 50.69522669819002,
+              "longitude": 10.36290672081009,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 788,
+              "label": "Herpf",
+              "latitude": 50.579460896434355,
+              "longitude": 10.334552645471527,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 793,
+              "label": "Schloßvippach",
+              "latitude": 51.10582704765391,
+              "longitude": 11.151086432245169,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Kaltennordheim",
+              "latitude": 50.62714450801067,
+              "longitude": 10.17727685666261,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Kaltensundheim",
+              "latitude": 50.606271730512816,
+              "longitude": 10.155389156889045,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Kaltenwestheim",
+              "latitude": 50.609538492356236,
+              "longitude": 10.119270261930131,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Unterweid",
+              "latitude": 50.60985011895593,
+              "longitude": 10.06080809188665,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Oberweid",
+              "latitude": 50.590795958951965,
+              "longitude": 10.066576515703455,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Behrungen",
+              "latitude": 50.41097486553148,
+              "longitude": 10.415064658712588,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Kühndorf",
+              "latitude": 50.60781124638763,
+              "longitude": 10.493671000594514,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 795,
+              "label": "Wiesenthal",
+              "latitude": 50.70277676638031,
+              "longitude": 10.1682355117421,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 796,
+              "label": "Gügleben",
+              "latitude": 50.87962089368649,
+              "longitude": 11.083905245763868,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 796,
+              "label": "Beinerstadt",
+              "latitude": 50.47192006049664,
+              "longitude": 10.594930865827504,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 796,
+              "label": "Marisfeld",
+              "latitude": 50.55624280536826,
+              "longitude": 10.574761164025304,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 796,
+              "label": "Trostadt",
+              "latitude": 50.46419755360536,
+              "longitude": 10.640785077548985,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 796,
+              "label": "Themar",
+              "latitude": 50.502218326171764,
+              "longitude": 10.621324851403958,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 799 bis 810 (26 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 799,
+              "label": "Wichtshausen",
+              "latitude": 50.600533607757676,
+              "longitude": 10.572672962573366,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 799,
+              "label": "Streufdorf (Straufhain)",
+              "latitude": 50.360235178813234,
+              "longitude": 10.688539584412835,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 799,
+              "label": "Dingsleben",
+              "latitude": 50.43319781865611,
+              "longitude": 10.596843911040649,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 799,
+              "label": "Seidigstadt (Straufhain)",
+              "latitude": 50.33273301514521,
+              "longitude": 10.693053083977532,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 799,
+              "label": "Hindfeld (Römhild)",
+              "latitude": 50.36679009589123,
+              "longitude": 10.565473890736394,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 799,
+              "label": "Döllstädt",
+              "latitude": 51.082475896399586,
+              "longitude": 10.814493453815357,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 800,
+              "label": "Kleinschwabhausen",
+              "latitude": 50.93153244867806,
+              "longitude": 11.461367217930958,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 800,
+              "label": "Römhild",
+              "latitude": 50.40076900619321,
+              "longitude": 10.542416305652091,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Kleinrettbach",
+              "latitude": 50.93383264050634,
+              "longitude": 10.884795552356179,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Goldbach",
+              "latitude": 50.00294275842533,
+              "longitude": 9.178558339878501,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Dachwig",
+              "latitude": 51.078527180954254,
+              "longitude": 10.858698403707884,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Schwarzhausen",
+              "latitude": 50.90178713142879,
+              "longitude": 10.472516031931471,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Mihla",
+              "latitude": 51.076868330187565,
+              "longitude": 10.33158097528125,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Greußen",
+              "latitude": 51.228002805739365,
+              "longitude": 10.952951315792756,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Körner",
+              "latitude": 51.232032042840686,
+              "longitude": 10.58930074990826,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Umpferstedt",
+              "latitude": 50.97921355891519,
+              "longitude": 11.418527922356418,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Salza",
+              "latitude": 51.52412399111503,
+              "longitude": 10.786998064582006,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Haßleben",
+              "latitude": 51.10805912288909,
+              "longitude": 10.996413975391482,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Straßfurt",
+              "latitude": 51.8594235922078,
+              "longitude": 11.585048674450418,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Werningshausen",
+              "latitude": 51.13931479747255,
+              "longitude": 11.0014809264313,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Günstedt",
+              "latitude": 51.22202289121527,
+              "longitude": 11.0835527622064,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Markvippach",
+              "latitude": 51.0782384154476,
+              "longitude": 11.175921593964752,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 802,
+              "label": "Orlishausen (Sömmerda)",
+              "latitude": 51.15560308821471,
+              "longitude": 11.195406171740176,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 805,
+              "label": "Andisleben",
+              "latitude": 51.082062164249585,
+              "longitude": 10.929831971196913,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 805,
+              "label": "Rudersdorf",
+              "latitude": 50.84160687832168,
+              "longitude": 8.150518698097493,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 805,
+              "label": "Oberdorla",
+              "latitude": 51.17011588271084,
+              "longitude": 10.391470707271937,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 810 bis 839 (58 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 810,
+              "label": "Dietzhausen",
+              "latitude": 50.60116092032605,
+              "longitude": 10.59584168276589,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Molsdorf",
+              "latitude": 50.90089021828961,
+              "longitude": 10.95150389785065,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Seebach",
+              "latitude": 50.91339261579825,
+              "longitude": 10.424696903483957,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Dornheim",
+              "latitude": 50.83365997960581,
+              "longitude": 11.001040073104164,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Bösleben",
+              "latitude": 50.8252507308827,
+              "longitude": 11.058964913775611,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Geismar (Geisa)",
+              "latitude": 50.68090821889631,
+              "longitude": 9.928250064654119,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Borsch",
+              "latitude": 50.73370867923273,
+              "longitude": 9.966501117571362,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Rohr",
+              "latitude": 50.57670701589681,
+              "longitude": 10.494806941216552,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Kleinneuhausen",
+              "latitude": 51.15241129731938,
+              "longitude": 11.277939725407208,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Großschwabhausen",
+              "latitude": 50.93585930329415,
+              "longitude": 11.489185178505267,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 815,
+              "label": "Krautheim",
+              "latitude": 51.0881386989751,
+              "longitude": 11.306923603086789,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Haufeld (Rudolstadt)",
+              "latitude": 50.802016724004275,
+              "longitude": 11.273417652896946,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Grüningen",
+              "latitude": 51.2296136582399,
+              "longitude": 10.972405589116459,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Westgreußen",
+              "latitude": 51.23888424891498,
+              "longitude": 10.914403982531258,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Wernrode",
+              "latitude": 51.39992540347038,
+              "longitude": 10.738195958830937,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Auleben",
+              "latitude": 51.425406904400205,
+              "longitude": 10.929234599205365,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Kreuzebra",
+              "latitude": 51.34125226523325,
+              "longitude": 10.253599805811367,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Dingelstädt",
+              "latitude": 51.314033633860234,
+              "longitude": 10.318570242237282,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Wandersleben",
+              "latitude": 50.90284015868808,
+              "longitude": 10.85408140487529,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Altengottern",
+              "latitude": 51.16536613385623,
+              "longitude": 10.590983130246885,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Diedorf",
+              "latitude": 48.35534294412603,
+              "longitude": 10.790449054640034,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Eisfeld",
+              "latitude": 50.42277623978869,
+              "longitude": 10.916046559863881,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Rieht (Heldburg)",
+              "latitude": 50.264050557913166,
+              "longitude": 10.633382632067438,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Birkenfeld (Hildburghausen)",
+              "latitude": 50.418339300690654,
+              "longitude": 10.7494177223044,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Veilsdorf",
+              "latitude": 50.40866280068235,
+              "longitude": 10.81198561149616,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Geisa",
+              "latitude": 50.7117855156241,
+              "longitude": 9.946521130339566,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Spahl (Geisa)",
+              "latitude": 50.657766651150986,
+              "longitude": 9.9125061061936,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Vacha",
+              "latitude": 50.822928116978964,
+              "longitude": 10.028818691168405,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Belrieth",
+              "latitude": 50.52958649904201,
+              "longitude": 10.496798674828792,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Rosa",
+              "latitude": 50.712136942270845,
+              "longitude": 10.249442008758924,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Behringen (Stadtilm)",
+              "latitude": 50.77306192133373,
+              "longitude": 11.013091843624451,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 817,
+              "label": "Alperstedt",
+              "latitude": 51.09375315829385,
+              "longitude": 11.047414739083372,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 819,
+              "label": "Teutleben",
+              "latitude": 50.94506031449833,
+              "longitude": 10.55679055229586,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 819,
+              "label": "Kaltenlengsfeld",
+              "latitude": 50.64281298973746,
+              "longitude": 10.191881505283334,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 822,
+              "label": "Warza",
+              "latitude": 50.99757035219475,
+              "longitude": 10.69165445206951,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 825,
+              "label": "Empfertshausen",
+              "latitude": 50.664682828831786,
+              "longitude": 10.100029207362546,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 825,
+              "label": "Ettenhausen (Salzungen)",
+              "latitude": 50.88028902676186,
+              "longitude": 10.232708902655132,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 825,
+              "label": "Bibra",
+              "latitude": 50.470240195532455,
+              "longitude": 10.437920355478312,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 825,
+              "label": "Wölfershausen",
+              "latitude": 50.490134088411594,
+              "longitude": 10.438991854472771,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 826,
+              "label": "Lengfeld",
+              "latitude": 50.52500180788215,
+              "longitude": 10.657231324463702,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 826,
+              "label": "Heilsberg (Rudolstadt)",
+              "latitude": 50.765740547573934,
+              "longitude": 11.265615803928007,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 827,
+              "label": "Völkershausen (Vacha)",
+              "latitude": 50.79830182386053,
+              "longitude": 10.047620691238656,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 827,
+              "label": "Schwarza",
+              "latitude": 50.61848678439142,
+              "longitude": 10.52894880838098,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 828,
+              "label": "Dörrensolz",
+              "latitude": 50.60640291491971,
+              "longitude": 10.254979127848507,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 830,
+              "label": "Seeba",
+              "latitude": 50.57003831278903,
+              "longitude": 10.30010845610381,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 833,
+              "label": "Kapellendorf",
+              "latitude": 50.97644156608076,
+              "longitude": 11.464071831916945,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 833,
+              "label": "Kirchheiligen",
+              "latitude": 51.184040454373374,
+              "longitude": 10.70567740162585,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 833,
+              "label": "Kleinfura",
+              "latitude": 51.41936896089605,
+              "longitude": 10.76241526928432,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 833,
+              "label": "Christes",
+              "latitude": 50.661512003175524,
+              "longitude": 10.472886829266203,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 834,
+              "label": "Wolkramshausen",
+              "latitude": 51.42372501726515,
+              "longitude": 10.741327724968043,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Urnshausen",
+              "latitude": 50.733266372267934,
+              "longitude": 10.181762374279122,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Hellingen",
+              "latitude": 50.2525641255029,
+              "longitude": 10.684404988051766,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Heldburg",
+              "latitude": 50.276890404253024,
+              "longitude": 10.726958830211515,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Eishausen (Straufhain)",
+              "latitude": 50.374921839375524,
+              "longitude": 10.737809214747957,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Ummerstadt",
+              "latitude": 50.26036097868495,
+              "longitude": 10.80996548342033,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Ober-/Untermaßfeld",
+              "latitude": 50.52940394837662,
+              "longitude": 10.423656257382575,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 837,
+              "label": "Fischbach",
+              "latitude": 49.45542626912674,
+              "longitude": 7.920466417611914,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 838,
+              "label": "Aschenhausen",
+              "latitude": 50.59844623642943,
+              "longitude": 10.20448941879505,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 839 bis 860 (30 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 839,
+              "label": "Haina",
+              "latitude": 50.41730070927696,
+              "longitude": 10.540021146432464,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 840,
+              "label": "Vachdorf",
+              "latitude": 50.52483395840882,
+              "longitude": 10.531331146904355,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 840,
+              "label": "Niederspier",
+              "latitude": 51.28936282037394,
+              "longitude": 10.843579699193928,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Otterstedt",
+              "latitude": 53.134655474673266,
+              "longitude": 9.156691334048485,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Topfstedt",
+              "latitude": 51.259848010891474,
+              "longitude": 10.955600881624873,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Rannstedt",
+              "latitude": 51.08604041105501,
+              "longitude": 11.540616607890634,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Pfuhlsborn",
+              "latitude": 51.0443521225803,
+              "longitude": 11.597634975899485,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Hopfengarten",
+              "latitude": 50.660722254191136,
+              "longitude": 10.37955811996987,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Göttern",
+              "latitude": 50.896607337543166,
+              "longitude": 11.465129542038065,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Darnstedt",
+              "latitude": 51.080329701276,
+              "longitude": 11.61205255213575,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Auerstedt",
+              "latitude": 51.099010077140036,
+              "longitude": 11.586909712190856,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Wiesenfeld (Geisa)",
+              "latitude": 50.70366580072328,
+              "longitude": 9.927577320537985,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Tüttleben",
+              "latitude": 50.94688854739196,
+              "longitude": 10.790491233849442,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Ollendorf",
+              "latitude": 51.03623697829532,
+              "longitude": 11.188723563138502,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Rothenberga",
+              "latitude": 51.20076264716981,
+              "longitude": 11.425602948826963,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Dienstedt (Stadtilm)",
+              "latitude": 50.80443127619009,
+              "longitude": 11.168999449583977,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 842,
+              "label": "Witzleben",
+              "latitude": 50.8228258470703,
+              "longitude": 11.11421616914788,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 845,
+              "label": "Erbenhausen",
+              "latitude": 50.577071231282865,
+              "longitude": 10.158370993933854,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 850,
+              "label": "Bettenhausen",
+              "latitude": 50.55633613623153,
+              "longitude": 10.285656997172769,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 850,
+              "label": "Schwabsdorf (Bad Sulza)",
+              "latitude": 50.989874228704316,
+              "longitude": 11.42845430551517,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 852,
+              "label": "Schönstedt",
+              "latitude": 51.12002021265624,
+              "longitude": 10.582981033442044,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Helmershausen",
+              "latitude": 50.56344745495283,
+              "longitude": 10.235667425545996,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Rippersroda",
+              "latitude": 50.757993302118976,
+              "longitude": 10.872393944918098,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Kranichfeld",
+              "latitude": 50.858480832208656,
+              "longitude": 11.202291954219556,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Sohnstedt",
+              "latitude": 50.960629266528656,
+              "longitude": 11.17241419220435,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Solsdorf",
+              "latitude": 50.71556563518781,
+              "longitude": 11.161544042341118,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Volkstedt (Rudolstadt)",
+              "latitude": 50.701810353127456,
+              "longitude": 11.31993186847748,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 856,
+              "label": "Geilsdorf (Stadtilm)",
+              "latitude": 50.74414438555365,
+              "longitude": 11.080281317135816,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 857,
+              "label": "Neubrunn",
+              "latitude": 50.49930480963738,
+              "longitude": 10.46694913110115,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 857,
+              "label": "Wohlmuthausen",
+              "latitude": 50.574120704608674,
+              "longitude": 10.211381570928943,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        },
+        {
+          "label": "Von 860 bis 874 (12 Gründungen)",
+          "geoEvents": [
+            {
+              "year": 860,
+              "label": "Bechstedtstraß",
+              "latitude": 50.9572206035164,
+              "longitude": 11.19722801605917,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 860,
+              "label": "Großromstedt",
+              "latitude": 50.97938938874741,
+              "longitude": 11.494107572390137,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 860,
+              "label": "Wangenheim",
+              "latitude": 51.02054812487148,
+              "longitude": 10.62991700875541,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 860,
+              "label": "Kammerforst",
+              "latitude": 51.120723837090914,
+              "longitude": 10.425753337471557,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 860,
+              "label": "Sundhausen",
+              "latitude": 51.15634203622608,
+              "longitude": 10.711944184274083,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 860,
+              "label": "Greußen",
+              "latitude": 51.22880025672405,
+              "longitude": 10.952484666160226,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 860,
+              "label": "Seebach",
+              "latitude": 50.914413555102065,
+              "longitude": 10.42409533019108,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 863,
+              "label": "Stepfershausen",
+              "latitude": 50.59709498841543,
+              "longitude": 10.298492824759778,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 869,
+              "label": "Klings",
+              "latitude": 50.649393437043706,
+              "longitude": 10.115478324245867,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 870,
+              "label": "Bendeleben",
+              "latitude": 51.373306976244066,
+              "longitude": 11.008373865491775,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 871,
+              "label": "Westenfeld (Römhild)",
+              "latitude": 50.4307867284819,
+              "longitude": 10.4984633865367,
+              "mediaFiles": [
+              ]
+            },
+            {
+              "year": 873,
+              "label": "Leimbach",
+              "latitude": 50.81417411015967,
+              "longitude": 10.188927984403065,
+              "mediaFiles": [
+              ]
+            }
+          ],
+          "mediaFiles": []
+        }
+      ]
+    }
+  ]
+}
