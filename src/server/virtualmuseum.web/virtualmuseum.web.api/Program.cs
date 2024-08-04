@@ -1,5 +1,5 @@
 using dotenv.net;
-using Microsoft.OpenApi.Models;
+using Radzen;
 using virtualmuseum.web.api.Components;
 using virtualmuseum.web.api.Services;
 using virtualmuseum.web.api.Services.Configuration;
@@ -30,6 +30,8 @@ builder.Services.AddHttpClient<ReleaseService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddRadzenComponents();
 
 var app = builder.Build();
 
