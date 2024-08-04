@@ -37,7 +37,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: Android
-          projectPath: "src/unity/Virtual Museum"
+          projectPath: "src/unity/TimeGlideVR"
 
       - name: Archive Android build
         uses: actions/upload-artifact@v3
