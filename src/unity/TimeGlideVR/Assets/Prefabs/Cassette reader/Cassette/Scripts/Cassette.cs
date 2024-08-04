@@ -19,6 +19,9 @@ public class Cassette : MonoBehaviour
     public AudioClip audioClipSaved;
     private GameObject objectReference;
 
+    private void Update() {
+        if(transform.position.y < -10) Destroy(gameObject);
+    }
     public Guid GetMediaGuid(){
         return Guid.Parse(mediaGuid);
     }
