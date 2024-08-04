@@ -77,11 +77,8 @@ jobs:
           git tag v${{ steps.version.outputs.version }}
           git push origin v${{ steps.version.outputs.version }}
 
-
-
-server-build:
+  server-build:
     runs-on: ubuntu-latest
-    needs: [generate-version]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -92,14 +89,14 @@ server-build:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore "src/server/virtualmuseum.web/virtualmuseum.web.csproj"
+        run: dotnet restore "src/server/virtualmuseum.web/virtualmuseum.web.api/virtualmuseum.web.api.csproj"
       
       - name: Generate a version number
         id: version
         run: echo "::set-output name=version::$(date +'%Y.%m.%d').${{ github.run_number }}"
 
       - name: Publish
-        run: dotnet publish "src/server/virtualmuseum.web/virtualmuseum.web.csproj" -c Release -o /tmp/publish
+        run: dotnet publish "src/server/virtualmuseum.web/virtualmuseum.web.api/virtualmuseum.web.api.csproj" -c Release -o /tmp/publish
 
       - name: Zip published files
         run: zip -r virtualmuseum-${{ steps.version.outputs.version }}.zip /tmp/publish
