@@ -16,5 +16,4 @@ public class InventoryItem
         "TOPOGRAPHICAL_TABLE" => "/api/topographical-table/" + Id,
         _ => ""
     };
-
 }

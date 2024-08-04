@@ -1,0 +1,32 @@
+﻿{
+  "Rooms": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "label": "Der erste Raum",
+      "description": "Das ist die Beschreibung des Raums. Die ID sollte mit einem bestimmten Spatial Anchor verknüpft sein.",
+      "resourceUrl": "/api/rooms/00000000-0000-0000-0000-000000000000",
+      "mediaFiles": [],
+      "inventoryPlacements": [
+        {
+          "inventoryItem": {
+            "id": "00000000-0000-0000-0000-000000000001",
+            "label": "Topographischer Tisch",
+            "typeOfItem": "TOPOGRAPHICAL_TABLE",
+            "resourceUrl": "/api/topographical-table/00000000-0000-0000-0000-000000000001"
+          },
+          "location": {
+            "positionX": 100,
+            "positionY": 100,
+            "positionZ": 0,
+            "rotationX": 0,
+            "rotationY": 0,
+            "rotationZ": 0,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          }
+        }
+      ]
+    }
+  ]
+}
