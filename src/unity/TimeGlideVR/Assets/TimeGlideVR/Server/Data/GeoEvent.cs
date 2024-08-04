@@ -1,0 +1,15 @@
+﻿using System.Collections.Generic;
+
+namespace TimeGlideVR.Server.Data
+{
+
+    public class GeoEvent
+    {
+        public int Year { get; set; }
+        #nullable enable
+        public string? Label { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public List<MediaFile> MediaFiles { get; set; } = new ();
+    }
+}

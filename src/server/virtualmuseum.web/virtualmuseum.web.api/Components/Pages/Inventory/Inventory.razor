@@ -1,0 +1,131 @@
+﻿@rendermode InteractiveServer
+
+@page "/Inventory"
+@using virtualmuseum.web.data
+@using virtualmuseum.web.api.Services
+@inject IConfigurationRepository ConfigurationRepository
+
+<h3>Inventar</h3>
+<div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
+    <h4>Inventar Verwaltung</h4>
+    <RadzenTree Data=@_rooms Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange">
+        <RadzenTreeLevel Text="@GetTextForNode"/>
+    </RadzenTree>
+    @* *@
+    @* <p>&nbsp;</p> *@
+    @* <div class="small font-monospace bg-black text-white"> *@
+    @*     <ul> *@
+    @*         @foreach (var message in _debugMessages) *@
+    @*         { *@
+    @*             <li>@message</li> *@
+    @*         } *@
+    @*     </ul> *@
+    @* </div> *@
+</div>
+
+@code {
+
+    private void Log(string message)
+    {
+        _debugMessages.Insert(0, message);
+        _debugMessages = _debugMessages.Take(30).ToList();
+    }
+
+
+    private List<Room> _rooms = [];
+
+    private List<string> _debugMessages = ["Starting"];
+    private object _selectedItem = null!;
+
+    void OnChange()
+    {
+        Log($"Selected: {GetTextForNode(_selectedItem)}");
+    }
+
+    private string GetTextForNode(object data)
+    {
+        Log($"Getting text for: {data.GetType()}");
+        return data.GetType() switch
+        {
+            { } t when t == typeof(Room) => ((Room)data).Label,
+            { } t when t == typeof(InventoryPlacement) => ((InventoryPlacement)data).InventoryItem.Label,
+            { } t when t == typeof(LocationTimeRow) => ((LocationTimeRow)data).Label,
+            { } t when t == typeof(GeoEvent) => ((GeoEvent)data).Label,
+            { } t when t == typeof(MediaFile) => ((MediaFile)data).Name,
+            _ => "Unknown"
+        };
+    }
+
+    void ExpandTree(TreeExpandEventArgs args)
+    {
+        Log($"Expanding: {args.Text}");
+        switch (args.Value.GetType())
+        {
+            case { } t when t == typeof(Room):
+                var room = (Room)args.Value;
+                var roomDetails = ConfigurationRepository.GetRoom(room.Id);
+                args.Children.Data = roomDetails.InventoryPlacements;
+                args.Children.Text = GetTextForNode;
+                args.Children.HasChildren = (inventoryPlacement) => (inventoryPlacement as InventoryPlacement)!.InventoryItem!.TypeOfItem == "TOPOGRAPHICAL_TABLE";
+                args.Children.Template = value => _testFragment(value);
+                break;
+
+            case { } t when t == typeof(InventoryPlacement):
+                var inventoryPlacement = (InventoryPlacement)args.Value;
+                var tableId = inventoryPlacement.InventoryItem!.Id;
+                var locationTimeRows = ConfigurationRepository.GetTopographicalTableConfiguration(tableId).LocationTimeRows;
+                args.Children.Data = locationTimeRows;
+                args.Children.Text = GetTextForNode;
+                args.Children.HasChildren = (locationTimeRow) => (locationTimeRow as LocationTimeRow)!.GeoEvents.Count > 0;
+                args.Children.Template = value => _testFragment(value);
+                break;
+
+            case { } t when t == typeof(LocationTimeRow):
+                var locationTimeRow = (LocationTimeRow)args.Value;
+                args.Children.Data = locationTimeRow.GeoEvents;
+                args.Children.Text = GetTextForNode;
+                args.Children.HasChildren = (geoEvent) => (geoEvent as GeoEvent)!.MediaFiles.Count > 0;
+                Log($"LocationTimeRow: {locationTimeRow.Label}");
+                args.Children.Template = value => _testFragment(value);
+                break;
+
+
+            case { } t when t == typeof(GeoEvent):
+                var geoEvent = (GeoEvent)args.Value;
+                args.Children.Data = geoEvent.MediaFiles;
+                args.Children.Text = GetTextForNode;
+                args.Children.HasChildren = (_) => false;
+                args.Children.Template = value => _testFragment(value);
+                break;
+        }
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _rooms = ConfigurationRepository.GetAllRooms();
+        return base.OnInitializedAsync();
+    }
+
+    readonly RenderFragment<RadzenTreeItem> _testFragment = (context) => builder =>
+    {
+        builder.OpenComponent<RadzenIcon>(0);
+        var icon = context.Value.GetType() switch
+        {
+            { } t when t == typeof(Room) => "home",
+            { } t when t == typeof(InventoryPlacement) => "table_bar",
+            { } t when t == typeof(LocationTimeRow) => "list",
+            { } t when t == typeof(GeoEvent) => "open_with",
+            { } t when t == typeof(MediaFile) => "photo_camera",
+            _ => "question"
+        };
+
+
+        builder.AddAttribute(1, "Icon", icon);
+
+        builder.CloseComponent();
+
+        // Append the current item text
+        builder.AddContent(3, context.Text);
+    };
+
+}

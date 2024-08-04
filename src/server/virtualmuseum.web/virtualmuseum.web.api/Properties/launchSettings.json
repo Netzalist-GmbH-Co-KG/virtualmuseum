@@ -9,6 +9,12 @@
       }
     },
     "profiles": {
+      "Watch": {
+        "commandName": "Executable",
+        "workingDirectory": "$(ProjectDir)",
+        "executablePath": "dotnet.exe",
+        "commandLineArgs": "watch run debug --launch-profile Debug"
+      },
       "http": {
         "commandName": "Project",
         "dotnetRunMessages": true,

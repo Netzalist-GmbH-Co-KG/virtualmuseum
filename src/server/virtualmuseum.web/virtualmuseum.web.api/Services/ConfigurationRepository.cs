@@ -13,10 +13,10 @@ public class ConfigurationRepository : IConfigurationRepository
 
     public ConfigurationRepository()
     {
-        InitializeRooms();
         InitializeTableConfigurations();
+        InitializeRooms();
     }
-    
+
     public List<Room> GetAllRooms() => _rooms.Select(r => new Room
     {
         Id = r.Id,
@@ -24,6 +24,7 @@ public class ConfigurationRepository : IConfigurationRepository
         Description = r.Description,
         InventoryPlacements = [],
     }).ToList();
+
     public Room GetRoom(Guid id) => _rooms.First(r => r.Id == id);
     public TopographicalTableConfiguration GetTopographicalTableConfiguration(Guid id) => _tableConfigurations[id];
 
@@ -34,31 +35,35 @@ public class ConfigurationRepository : IConfigurationRepository
             Id = _dummyRoomId,
             Label = "Der erste Raum",
             InventoryPlacements = GetInventoryPlacements(),
-            Description = "Das ist die Beschreibung des Raums. Die ID sollte mit einem bestimmten Spatial Anchor verknüpft sein."
+            Description =
+                "Das ist die Beschreibung des Raums! Die ID sollte mit einem bestimmten Spatial Anchor verknüpft sein."
         };
-        
+
         _rooms.Add(room1);
     }
 
     private List<InventoryPlacement> GetInventoryPlacements()
     {
-        return [new InventoryPlacement
-        {
-            InventoryItem = new InventoryItem
+        return
+        [
+            new InventoryPlacement
             {
-                Id = _dummyTableId,
-                Label = "Topographischer Tisch",
-                TypeOfItem = "TOPOGRAPHICAL_TABLE",
-            },
-            Location = new Location
-            {
-                PositionX = 100,
-                PositionY = 100,
-                PositionZ = 0,
+                InventoryItem = new InventoryItem
+                {
+                    Id = _dummyTableId,
+                    Label = "Topographischer Tisch",
+                    TypeOfItem = "TOPOGRAPHICAL_TABLE",
+                },
+                Location = new Location
+                {
+                    PositionX = 100,
+                    PositionY = 100,
+                    PositionZ = 0,
+                }
             }
-        }];
+        ];
     }
-    
+
     private void InitializeTableConfigurations()
     {
         var tableConfiguration = new TopographicalTableConfiguration
@@ -67,7 +72,7 @@ public class ConfigurationRepository : IConfigurationRepository
             Label = "Topographischer Tisch",
             LocationTimeRows = GetLocationTimeRows(),
         };
-        
+
         _tableConfigurations.Add(tableConfiguration.Id, tableConfiguration);
     }
 
@@ -79,11 +84,12 @@ public class ConfigurationRepository : IConfigurationRepository
         };
         var geoEvents = ReadCsv("InputData/MuseumGPS.csv");
         var locationTimeRows = new List<LocationTimeRow>();
-        for(var i = 0; i < dummySections.Count-1; i++)
+        for (var i = 0; i < dummySections.Count - 1; i++)
         {
             var yearStart = dummySections[i];
-            var yearEnd = dummySections[i+1];
-            var geoEventsInRange = geoEvents.Where(geoEvent => geoEvent.Year >= yearStart && geoEvent.Year < yearEnd).ToList();
+            var yearEnd = dummySections[i + 1];
+            var geoEventsInRange = geoEvents.Where(geoEvent => geoEvent.Year >= yearStart && geoEvent.Year < yearEnd)
+                .ToList();
             var locationTimeRow = new LocationTimeRow
             {
                 Label = $"From {yearStart} to {yearEnd} ({geoEventsInRange.Count} events)",
@@ -93,7 +99,6 @@ public class ConfigurationRepository : IConfigurationRepository
         }
 
         return locationTimeRows;
-
     }
 
     private static List<GeoEvent> ReadCsv(string filePath)
@@ -114,7 +119,14 @@ public class ConfigurationRepository : IConfigurationRepository
                 Label = parts[1],
                 Latitude = double.Parse(location[0], CultureInfo.InvariantCulture),
                 Longitude = double.Parse(location[1], CultureInfo.InvariantCulture),
-                MediaFiles = [ new MediaFile { Id = Guid.Empty, Type = "JPG", Description = "Just a test", Name="Test Image", Url = $"/api/media/{Guid.Empty}/display"}]
+                MediaFiles =
+                [
+                    new MediaFile
+                    {
+                        Id = Guid.Empty, Type = "JPG", Description = "Just a test", Name = "Test Image",
+                        Url = $"/api/media/{Guid.Empty}/display"
+                    }
+                ]
             };
 
             geoEvents.Add(geoEvent);
@@ -122,5 +134,4 @@ public class ConfigurationRepository : IConfigurationRepository
 
         return geoEvents;
     }
-
 }
