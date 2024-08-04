@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class CassettePlayer : MonoBehaviour
 {
     [SerializeField]
-    List<string> acceptedNames = new List<string>();
+    List<string> acceptedTags = new List<string>();
     [SerializeField]
     private UnityEvent insertEvent;
     [SerializeField]
@@ -24,7 +24,7 @@ public class CassettePlayer : MonoBehaviour
     private GameObject cassetteReference;
 
     public void InsertCassette(GameObject g){
-        if(!acceptedNames.Contains(g.name) || cassetteInserted){
+        if(!acceptedTags.Contains(g.tag) || cassetteInserted){
             return;
         }
         

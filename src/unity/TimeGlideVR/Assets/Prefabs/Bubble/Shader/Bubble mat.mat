@@ -42,7 +42,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Add_Alpha: 0.4
+    - _Add_Alpha: 0.1
     - _BUILTIN_AlphaClip: 1
     - _BUILTIN_Blend: 0
     - _BUILTIN_CullMode: 2

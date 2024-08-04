@@ -2,11 +2,14 @@ using System;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TimeGlideVR.TableInstallation.ItemDropper
 {
     public class DropObject : MonoBehaviour
     {
+        [SerializeField]
+        UnityEvent uponHitTableEvent;
         private Rigidbody _rb;
         private Collider _col;
         private TextMeshPro _textMesh;
@@ -86,6 +89,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                     _soundEffect.Stop();
                 _soundEffect.Play();
             }
+
+            uponHitTableEvent.Invoke();
 
             // Remove the Rigidbody and Collider components
             Destroy(_rb);

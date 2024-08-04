@@ -15,7 +15,7 @@ public class Bubble : MonoBehaviour
     private AudioSource audioSource;
     private bool popped = false;
 
-    void Start(){
+    void Awake(){
         //set up
         bubbleObject = transform.GetChild(0).gameObject;
         rbInBubble = bubbleObject.transform.GetChild(0).GetComponent<Rigidbody>();
