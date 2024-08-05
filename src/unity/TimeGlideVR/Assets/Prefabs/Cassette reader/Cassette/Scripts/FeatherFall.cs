@@ -29,6 +29,10 @@ public class FeatherFall : MonoBehaviour
         if(rb.velocity.y < -maximumDownwardVelocity) {
             rb.velocity = new Vector3(rb.velocity.x * 0.9f, -maximumDownwardVelocity, rb.velocity.z * 0.9f);
         }
+        // Destroy if y<-10
+        if(transform.position.y < -10){
+            Destroy(gameObject);
+        }
     }
 
     private void OnDisable() {

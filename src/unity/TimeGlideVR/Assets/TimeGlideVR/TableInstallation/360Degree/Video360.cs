@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Video;
 
 public class Video360 : MonoBehaviour
@@ -14,14 +15,18 @@ public class Video360 : MonoBehaviour
 
     [SerializeField] private Transform center;
     private Transform player;
-    
+
     private bool _playingVideo = false;
     private float _transparency = 1;
-    
+
 
     private void Awake()
     {
         player = Camera.main!.transform;
+        videoPlayer.errorReceived += (source, message) =>
+        {
+            Debug.LogError($"Video player error: {message}");
+        };
         _videoScreenRenderer = videoScreen.GetComponent<MeshRenderer>();
         _videoScreenMaterial = _videoScreenRenderer.materials[0];
     }
@@ -29,15 +34,16 @@ public class Video360 : MonoBehaviour
     public void Update()
     {
         if (player is null) return;
-        var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(new Vector3(player.position.x, 0, player.position.z), new Vector3(center.position.x, 0, center.position.z));
+        var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(
+            new Vector3(player.position.x, 0, player.position.z), new Vector3(center.position.x, 0, center.position.z));
         if (horizontalDistanceOfPlayerFromCenter > 3)
         {
-            if(videoPlayer is not null)
+            if (videoPlayer is not null)
                 videoPlayer.Stop();
             // 90% transparency
             _transparency = 0.4f;
         }
-        else if(horizontalDistanceOfPlayerFromCenter is < 3 and > 1 )
+        else if (horizontalDistanceOfPlayerFromCenter is < 3 and > 1)
         {
             // gradually increase transparency from 90% to 0%
             _transparency = 0.4f + (3 - horizontalDistanceOfPlayerFromCenter) * 0.3f;
@@ -47,6 +53,7 @@ public class Video360 : MonoBehaviour
             // 0% transparency
             _transparency = 1;
         }
+
         SetTransparency();
     }
 
@@ -57,8 +64,8 @@ public class Video360 : MonoBehaviour
         color.a = _transparency;
         _videoScreenMaterial.color = color;
     }
-    
-    
+
+
     private void Start()
     {
         // ToggleVisible();
@@ -69,33 +76,64 @@ public class Video360 : MonoBehaviour
     {
         _videoScreenMaterial.mainTexture = texture;
     }
-    
 
 
     public void ToggleContent()
     {
-        if (!videoScreen.activeSelf) return;
-        
-        if(!_playingVideo && videoPlayer is not null)
+        try
         {
-            SetTexture(videoTexture);
-            videoPlayer.time = 0;
-            videoPlayer.Play();
-            _playingVideo = true;
+            if (!videoScreen.activeSelf) return;
+
+            if (!_playingVideo && videoPlayer is not null)
+            {
+                SetTexture(videoTexture);
+                videoPlayer.source = VideoSource.Url;
+                videoPlayer.url = "https://timeglide-vr.b-cdn.net/Intro3.mp4";
+                videoPlayer.time = 0;
+                videoPlayer.Play();
+                _playingVideo = true;
+            }
+            else
+            {
+                if (videoPlayer is not null)
+                    videoPlayer.Stop();
+                LoadImageFromUrl("https://timeglide-vr.b-cdn.net/IMG_20240609_110734_00_374.jpg");
+                _playingVideo = false;
+            }
         }
-        else
+        catch (Exception e)
         {
-            if(videoPlayer is not null)
-                videoPlayer.Stop();
-            SetTexture(imageTexture);
-            _playingVideo = false;
+            Debug.LogError($"Error toggling content: {e.Message}");
         }
-        
+    }
+
+    private void LoadImageFromUrl(string url)
+    {
+        var request = UnityWebRequestTexture.GetTexture(url);
+        request.SendWebRequest().completed += _ =>
+        {
+            try
+            {
+                if (request.responseCode == 200)
+                {
+                    var texture = DownloadHandlerTexture.GetContent(request);
+                    SetTexture(texture);
+                }
+                else
+                {
+                    Debug.LogError($"Failed to load image from URL [Error {request.responseCode}]: {url}");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error loading image from URL: {e.Message}");
+            }
+        };
     }
 
     public void ToggleVisible()
     {
-        if(videoPlayer is not null)
+        if (videoPlayer is not null)
             videoPlayer.Stop();
         videoScreen.SetActive(!videoScreen.activeSelf);
     }
