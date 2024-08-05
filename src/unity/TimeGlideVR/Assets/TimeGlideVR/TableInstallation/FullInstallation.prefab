@@ -906,6 +906,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4886888731423425301}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleContent
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Video360, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344114616800442274, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
+      propertyPath: GeneralMediaEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5365525526580409590, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
       propertyPath: ejectedEvent.m_PersistentCalls.m_Calls.Array.size
       value: 4
@@ -920,7 +948,7 @@ PrefabInstance:
       objectReference: {fileID: 4886888731423425301}
     - target: {fileID: 5365525526580409590, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
       propertyPath: animateInsertFinishedEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5365525526580409590, guid: 8a32b08659ebbbb4085c19306bd43abf, type: 3}
       propertyPath: ejectedEvent.m_PersistentCalls.m_Calls.Array.data[3].m_CallState

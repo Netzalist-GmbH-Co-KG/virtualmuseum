@@ -567,6 +567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2991022096946509518}
   - component: {fileID: 5365525526580409590}
+  - component: {fileID: 4344114616800442274}
   m_Layer: 0
   m_Name: CassettePlayer
   m_TagString: Untagged
@@ -590,7 +591,7 @@ Transform:
   - {fileID: 5058095699947635468}
   - {fileID: 5012757149549789427}
   - {fileID: 8932944380238521431}
-  - {fileID: 3746367324731945403}
+  - {fileID: 756312235017024549}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5365525526580409590
@@ -714,6 +715,36 @@ MonoBehaviour:
         m_CallState: 2
   mediaEventAudioSource: {fileID: 8895246415308657217}
   cassettePlacement: {fileID: 247361479927558594}
+--- !u!114 &4344114616800442274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7929625649401307790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b5c09cf5f1473408192c9b29b7596e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ThreeSixtyImageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ThreeSixtyVideoEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DefaultImageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DefaultVideoEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DefaultAudioEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  GeneralMediaEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &9052103623256992929
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +776,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5058095699947635468}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &3780627056224261712
+--- !u!1001 &1005512751021675470
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -798,14 +829,22 @@ PrefabInstance:
       value: model
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 39426699934713403, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: -8607410352759060519, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: 1158813769558620748, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: -8793850574137865510, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: 5340261127802255241, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: 2716741602715980800, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: -8213200812220389673, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
+    - {fileID: 4321363856071972076, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
---- !u!4 &3746367324731945403 stripped
+--- !u!4 &756312235017024549 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
-  m_PrefabInstance: {fileID: 3780627056224261712}
+  m_PrefabInstance: {fileID: 1005512751021675470}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5253902462132657856
 PrefabInstance:
@@ -871,6 +910,10 @@ PrefabInstance:
       propertyPath: _enterHoverNormal
       value: 0.015
       objectReference: {fileID: 0}
+    - target: {fileID: 8819018430573139202, guid: 8ce887af5f2f3d949b8654ac69353e61, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -1642654745573217572, guid: 9e55a4fd12afe7946a403b44e7b33ffa, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

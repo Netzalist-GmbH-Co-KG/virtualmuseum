@@ -22,6 +22,7 @@ public class CassettePlayer : MonoBehaviour
     GameObject ejectionDirection;
     private bool cassetteInserted = false;
     private GameObject cassetteReference;
+    private MediaTypeUnityEvents mediaTypeUnityEvents;
 
     public void InsertCassette(GameObject g){
         if(!acceptedTags.Contains(g.tag) || cassetteInserted){
@@ -34,6 +35,7 @@ public class CassettePlayer : MonoBehaviour
         if(!ejectionDirection){
             ejectionDirection = cassettePlacement.transform.GetChild(0).gameObject;   
         }
+        mediaTypeUnityEvents = GetComponent<MediaTypeUnityEvents>();
         cassetteReference = g;
         cassetteInserted = true;
         insertEvent.Invoke();
@@ -109,13 +111,36 @@ public class CassettePlayer : MonoBehaviour
         cassetteReference.TryGetComponent<Cassette>(out var cassette);
 
         if(!cassette) return;
-        cassette.InvokeEvent();
+        cassette.InvokeSpawnObjectEvent();
 
-        if(!cassette.hasAudio || !mediaEventAudioSource) return;
-        mediaEventAudioSource.clip = cassette.audioClipSaved;
-
-        if(!cassette.playAudioOnInsert) return;
-        mediaEventAudioSource.Play();
+        var mediaReferences = cassette.GetAllMediaFiles();
+        if(mediaReferences.Count == 0) {
+            mediaTypeUnityEvents.InvokeGeneralMediaEvent();
+            return;
+        }
+        foreach(var media in cassette.GetAllMediaFiles()){
+            //check type of media and handle accordingly
+            switch(media.Type){
+                case "3Djpg":
+                    mediaTypeUnityEvents.InvokeThreeSixtyImageEvent(media.Url);
+                    break;
+                case "3Dmp4":
+                    mediaTypeUnityEvents.InvokeThreeSixtyVideoEvent(media.Url);
+                    break; 
+                case "audio":
+                    mediaTypeUnityEvents.InvokeDefaultAudioEvent(media.Url);
+                    break;
+                case "2Djpg":
+                    mediaTypeUnityEvents.InvokeDefaultImageEvent(media.Url);
+                    break;
+                case "2Dmp4":
+                    mediaTypeUnityEvents.InvokeDefaultVideoEvent(media.Url);
+                    break;
+                default :
+                    mediaTypeUnityEvents.InvokeGeneralMediaEvent();
+                    break; 
+            }
+        }
     }
 
     public void TryDestroySpawnedMedia(){

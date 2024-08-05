@@ -5,7 +5,5 @@ using UnityEngine;
 
 public interface IMediaPlayer
 {
-
-    public Guid mediaId { get; set; }
-    public void GetMediaById();
+    public void GetMediabyUrl();
 }

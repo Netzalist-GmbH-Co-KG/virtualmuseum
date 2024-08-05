@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using TimeGlideVR.Server.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,7 +21,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         private float _autoDespawnHeight = -1;
         private float _heightPercentage = 1.0f;
         private string _label = "";
-        
+
         [SerializeField] private GameObject poleObject;
         [SerializeField] private GameObject labelObject;
         [SerializeField] private float distanceScaleFactor = 2.5f;

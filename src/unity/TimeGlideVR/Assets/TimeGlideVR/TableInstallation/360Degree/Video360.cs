@@ -83,22 +83,13 @@ public class Video360 : MonoBehaviour
         try
         {
             if (!videoScreen.activeSelf) return;
-
             if (!_playingVideo && videoPlayer is not null)
             {
-                SetTexture(videoTexture);
-                videoPlayer.source = VideoSource.Url;
-                videoPlayer.url = "https://timeglide-vr.b-cdn.net/Intro3.mp4";
-                videoPlayer.time = 0;
-                videoPlayer.Play();
-                _playingVideo = true;
+                LoadVideoFromUrl("https://timeglide-vr.b-cdn.net/Intro3.mp4");
             }
             else
             {
-                if (videoPlayer is not null)
-                    videoPlayer.Stop();
                 LoadImageFromUrl("https://timeglide-vr.b-cdn.net/IMG_20240609_110734_00_374.jpg");
-                _playingVideo = false;
             }
         }
         catch (Exception e)
@@ -107,8 +98,22 @@ public class Video360 : MonoBehaviour
         }
     }
 
+    private void LoadVideoFromUrl(string url){
+        if (_playingVideo || videoPlayer is null) return;
+        SetTexture(videoTexture);
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.url = url;
+        videoPlayer.time = 0;
+        videoPlayer.Play();
+        _playingVideo = true;
+    }
+
     private void LoadImageFromUrl(string url)
     {
+        if (videoPlayer is not null)
+            videoPlayer.Stop();
+        _playingVideo = false;
+
         var request = UnityWebRequestTexture.GetTexture(url);
         request.SendWebRequest().completed += _ =>
         {
