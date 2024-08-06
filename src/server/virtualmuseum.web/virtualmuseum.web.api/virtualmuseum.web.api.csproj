@@ -14,7 +14,7 @@
       <None Update="InputData\MuseumGPS.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="InputData\Media\Spaziergang1.jpg">
+      <None Update="InputData\Media\Arnstadt\Spaziergang1.jpg">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
