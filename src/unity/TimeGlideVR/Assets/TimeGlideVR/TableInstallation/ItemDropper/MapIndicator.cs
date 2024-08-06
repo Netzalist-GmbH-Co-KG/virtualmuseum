@@ -9,6 +9,7 @@ using TimeGlideVR.Server.Data;
 using TimeGlideVR.Server.WebClient;
 using TimeGlideVR.TableInstallation.Table.Panel;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace TimeGlideVR.TableInstallation.ItemDropper
@@ -147,7 +148,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 try
                 {
                     SpawnOrDespawnItem(geoEvent.Label,
-                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude));
+                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude), geoEvent.MediaFiles);
                 }
                 catch (Exception e)
                 {
@@ -179,7 +180,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             return new Vector3(localX, spawnHeight, localZ);
         }
 
-        private void SpawnOrDespawnItem(string label, Vector2 location, bool remove = false)
+        private void SpawnOrDespawnItem(string label, Vector2 location,List<MediaFile> mediaFiles, bool remove = false)
         {
             if (_spawnedItems.ContainsKey(label))
             {
@@ -197,6 +198,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 var newDropObject = Instantiate(dropItemTemplate.gameObject, transform);
                 var dropObject = newDropObject.GetComponent<DropObject>();
                 dropObject.Init(label, null, despawnHeight, distance);
+                var configureBubble = newDropObject.GetComponent<ConfigureBubble>();
+                configureBubble.Init(mediaFiles);
                 newDropObject.transform.localPosition = spawnLocation;
                 _spawnedItems.Add(label, newDropObject.transform);
             }
