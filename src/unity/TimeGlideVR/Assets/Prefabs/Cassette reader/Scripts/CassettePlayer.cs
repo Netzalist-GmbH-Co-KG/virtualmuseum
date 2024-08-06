@@ -120,6 +120,13 @@ public class CassettePlayer : MonoBehaviour
         }
         foreach(var media in cassette.GetAllMediaFiles()){
             //check type of media and handle accordingly
+            //what types dont mix:
+            //2dmp4 and 3dmp4
+            //3dmp4 and audio
+            //2dmp4 and audio
+            //3djpg and 3dmp4
+            //2djpg and 2dmp4
+            //if any of these are present, sequence them TODO
             switch(media.Type){
                 case "3Djpg":
                     mediaTypeUnityEvents.InvokeThreeSixtyImageEvent(media.Url);
