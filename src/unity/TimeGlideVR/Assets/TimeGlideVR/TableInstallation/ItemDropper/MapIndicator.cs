@@ -9,6 +9,7 @@ using TimeGlideVR.Server.Data;
 using TimeGlideVR.Server.WebClient;
 using TimeGlideVR.TableInstallation.Table.Panel;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace TimeGlideVR.TableInstallation.ItemDropper
@@ -19,6 +20,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         [SerializeField] public Vector2 mapCoordinatesTopRight = new(50.20243178812832f, 9.865952981932047f);
         [SerializeField] public Vector2 dropZoneSize = new(2.52f, 2.17f);
 
+        [SerializeField] private GameObject cassettePrefab;
         [SerializeField] public DropObject dropItemTemplate;
         [SerializeField] public float spawnHeight = 1.8f;
         [SerializeField] public float despawnHeight = -1.0f;
@@ -137,17 +139,33 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             StartCoroutine(SpawnItems(evt));
         }
 
+        private void SpawnHelper()
+        {
+            var media = new MediaFile
+            {
+                Id = Guid.NewGuid(),
+                Description = "Eine kleine Beschreibung",
+                Name = "Einführung in TimeglideVR",
+                Type = "3dmp4",
+                Url = "https://timeglide-vr.b-cdn.net/Intro.mp4"
+
+            };
+            SpawnOrDespawnItem("Informationen",
+                new Vector2(50.582299f, 10.091699f), new List<MediaFile>{ media });
+        }
+
         private IEnumerator SpawnItems(DisplayLocationTimeRowEvent evt)
         {
             const int batchSize = 10;
             var batchCount = 0;
+            SpawnHelper();
             foreach (var geoEvent in evt.Row.GeoEvents)
             {
                 batchCount++;
                 try
                 {
                     SpawnOrDespawnItem(geoEvent.Label,
-                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude));
+                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude), geoEvent.MediaFiles);
                 }
                 catch (Exception e)
                 {
@@ -179,7 +197,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             return new Vector3(localX, spawnHeight, localZ);
         }
 
-        private void SpawnOrDespawnItem(string label, Vector2 location, bool remove = false)
+        private void SpawnOrDespawnItem(string label, Vector2 location, List<MediaFile> mediaFiles, bool remove = false)
         {
             if (_spawnedItems.ContainsKey(label))
             {
@@ -199,6 +217,9 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 dropObject.Init(label, null, despawnHeight, distance);
                 newDropObject.transform.localPosition = spawnLocation;
                 _spawnedItems.Add(label, newDropObject.transform);
+                if(mediaFiles.Count <= 0) return;
+                var configureBubble = newDropObject.GetComponent<ConfigureBubble>();
+                configureBubble.Init(mediaFiles, label, cassettePrefab);
             }
         }
 
