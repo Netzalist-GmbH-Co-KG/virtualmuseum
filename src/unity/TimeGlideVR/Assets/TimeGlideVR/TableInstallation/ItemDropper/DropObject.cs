@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using TimeGlideVR.Server.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TimeGlideVR.TableInstallation.ItemDropper
 {
     public class DropObject : MonoBehaviour
     {
+        [SerializeField]
+        UnityEvent uponHitTableEvent;
         private Rigidbody _rb;
         private Collider _col;
         private TextMeshPro _textMesh;
@@ -16,7 +21,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         private float _autoDespawnHeight = -1;
         private float _heightPercentage = 1.0f;
         private string _label = "";
-        
+
         [SerializeField] private GameObject poleObject;
         [SerializeField] private GameObject labelObject;
         [SerializeField] private float distanceScaleFactor = 2.5f;
@@ -86,6 +91,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                     _soundEffect.Stop();
                 _soundEffect.Play();
             }
+
+            uponHitTableEvent.Invoke();
 
             // Remove the Rigidbody and Collider components
             Destroy(_rb);
