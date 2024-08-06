@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using TimeGlideVR.Server.Data;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Video;
@@ -9,6 +11,9 @@ public class Video360 : MonoBehaviour
     [SerializeField] private GameObject videoScreen;
     private MeshRenderer _videoScreenRenderer;
     private Material _videoScreenMaterial;
+    
+    private List<MediaFile> _mediaFiles = new List<MediaFile>();
+    private MediaFile _currentMediaFile;
 
     [SerializeField] private Texture imageTexture;
     [SerializeField] private Texture videoTexture;
@@ -16,12 +21,14 @@ public class Video360 : MonoBehaviour
     [SerializeField] private Transform center;
     private Transform player;
 
+    private MediaTypeUnityEvents _mediaTypeUnityEvents;
+    
     private bool _playingVideo = false;
     private float _transparency = 1;
 
-
     private void Awake()
     {
+        
         player = Camera.main!.transform;
         videoPlayer.errorReceived += (source, message) =>
         {
@@ -29,6 +36,17 @@ public class Video360 : MonoBehaviour
         };
         _videoScreenRenderer = videoScreen.GetComponent<MeshRenderer>();
         _videoScreenMaterial = _videoScreenRenderer.materials[0];
+
+        _mediaTypeUnityEvents = FindObjectOfType<MediaTypeUnityEvents>(true);
+        if(_mediaTypeUnityEvents is null) throw new Exception("Media Type Unity Events not found");
+
+        _mediaTypeUnityEvents.ThreeSixtyImageEvent.AddListener(HandleThreeSixtyImageEvent);
+        _mediaTypeUnityEvents.ResetMediaEvent.AddListener(ResetMedia);
+    }
+
+    private void ResetMedia()
+    {
+        _mediaFiles.Clear();
     }
 
     public void Update()
@@ -76,29 +94,53 @@ public class Video360 : MonoBehaviour
     {
         _videoScreenMaterial.mainTexture = texture;
     }
+    
+    private void HandleThreeSixtyImageEvent(MediaFile file)
+    {
+        _mediaFiles.Add(file);
+        if (_currentMediaFile is not null) return;
 
+        _currentMediaFile = file;
+        LoadImageFromUrl(file.Url);
+    }
 
     public void ToggleContent()
     {
         try
         {
-            if (!videoScreen.activeSelf) return;
-            if (!_playingVideo && videoPlayer is not null)
+            if (_mediaFiles.Count == 0) return;
+            if (_currentMediaFile is null)
             {
-                LoadVideoFromUrl("https://timeglide-vr.b-cdn.net/Intro3.mp4");
+                _currentMediaFile = _mediaFiles[0];
             }
             else
             {
-                LoadImageFromUrl("https://timeglide-vr.b-cdn.net/IMG_20240609_110734_00_374.jpg");
+                var index = _mediaFiles.IndexOf(_currentMediaFile);
+                index = (index + 1) % _mediaFiles.Count;
+                _currentMediaFile = _mediaFiles[index];
             }
+
+            switch (_currentMediaFile.Type)
+            {
+                case "3Djpg":
+                    LoadImageFromUrl(_currentMediaFile.Url);
+                    break;
+                case "3dmp4":
+                    LoadVideoFromUrl(_currentMediaFile.Url);
+                    break;
+            }
+
         }
         catch (Exception e)
         {
             Debug.LogError($"Error toggling content: {e.Message}");
         }
     }
+    
 
     private void LoadVideoFromUrl(string url){
+        Debug.Log($"Loading video from URL: {url}");
+
         if (_playingVideo || videoPlayer is null) return;
         SetTexture(videoTexture);
         videoPlayer.source = VideoSource.Url;
@@ -110,6 +152,7 @@ public class Video360 : MonoBehaviour
 
     private void LoadImageFromUrl(string url)
     {
+        Debug.Log($"Loading image from URL: {url}");
         if (videoPlayer is not null)
             videoPlayer.Stop();
         _playingVideo = false;
