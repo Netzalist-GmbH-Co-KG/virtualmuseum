@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  unity-build:
     runs-on: ubuntu-latest
     steps:
 
@@ -75,4 +75,34 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git tag v${{ steps.version.outputs.version }}
-          git push origin v${{ steps.version.outputs.version }}          
+          git push origin v${{ steps.version.outputs.version }}
+
+  server-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore "src/server/virtualmuseum.web/virtualmuseum.web.api/virtualmuseum.web.api.csproj"
+      
+      - name: Generate a version number
+        id: version
+        run: echo "::set-output name=version::$(date +'%Y.%m.%d').${{ github.run_number }}"
+
+      - name: Publish
+        run: dotnet publish "src/server/virtualmuseum.web/virtualmuseum.web.api/virtualmuseum.web.api.csproj" -c Release -o /tmp/publish
+
+      - name: Zip published files
+        run: zip -r virtualmuseum-${{ steps.version.outputs.version }}.zip /tmp/publish
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ServerBuild-${{ steps.version.outputs.version }}
+          path: virtualmuseum-${{ steps.version.outputs.version }}.zip       
