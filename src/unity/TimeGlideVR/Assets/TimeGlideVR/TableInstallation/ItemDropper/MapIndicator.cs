@@ -139,10 +139,26 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             StartCoroutine(SpawnItems(evt));
         }
 
+        private void SpawnHelper()
+        {
+            var media = new MediaFile
+            {
+                Id = Guid.NewGuid(),
+                Description = "Eine kleine Beschreibung",
+                Name = "Einführung in TimeglideVR",
+                Type = "3dmp4",
+                Url = "https://timeglide-vr.b-cdn.net/Intro.mp4"
+
+            };
+            SpawnOrDespawnItem("Informationen",
+                new Vector2(50.582299f, 10.091699f), new List<MediaFile>{ media });
+        }
+
         private IEnumerator SpawnItems(DisplayLocationTimeRowEvent evt)
         {
             const int batchSize = 10;
             var batchCount = 0;
+            SpawnHelper();
             foreach (var geoEvent in evt.Row.GeoEvents)
             {
                 batchCount++;

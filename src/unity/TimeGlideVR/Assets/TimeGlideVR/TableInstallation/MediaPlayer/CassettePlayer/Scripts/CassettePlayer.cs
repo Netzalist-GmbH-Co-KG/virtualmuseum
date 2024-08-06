@@ -45,17 +45,19 @@ public class CassettePlayer : MonoBehaviour
         DeactivateHandGrab(cassetteReference);
         //UngrabGrabbableComponentOfObject(g);
         SetParentOfObject(cassetteReference);
-        StartCoroutine(lerpToParent(cassetteReference));
+        StartCoroutine(LerpToParent(cassetteReference));
     }
 
     public void RemoveCassette(){
         cassetteInserted = false;
         cassetteReference.transform.parent = null;
         ejectedEvent.Invoke();
-        EJECT();
+        Eject();
     }
 
-    private void EJECT(){
+    private void Eject(){
+        ResetMedia();
+        Debug.Log("Ejecting cassette");
         //maybe shoot out the cassette
         ActivateHandGrab(cassetteReference);
         cassetteReference.TryGetComponent<Rigidbody>(out var rb);
@@ -67,9 +69,10 @@ public class CassettePlayer : MonoBehaviour
         featherFall.enabled = true;
         TryDestroySpawnedMedia();
         cassetteReference = null;
+        Debug.Log("Ejected cassette");
     }
 
-    private IEnumerator lerpToParent(GameObject g){
+    private IEnumerator LerpToParent(GameObject g){
         float i = 0;
         while(i < 1){
             g.transform.localPosition = Vector3.Lerp(g.transform.localPosition, Vector3.zero, i);
@@ -80,7 +83,7 @@ public class CassettePlayer : MonoBehaviour
         animateInsertFinishedEvent.Invoke();
     }
 
-    public void SetParentOfObject(GameObject g){
+    private void SetParentOfObject(GameObject g){
         g.transform.parent = cassettePlacement.transform;
         g.TryGetComponent<Rigidbody>(out var rb);
         if(rb) {
@@ -88,7 +91,7 @@ public class CassettePlayer : MonoBehaviour
         }
     }
 
-    public void DeactivateHandGrab(GameObject g){
+    private void DeactivateHandGrab(GameObject g){
         foreach(Transform tran in g.transform){
             tran.TryGetComponent<Grabbable>(out var grabbable);
             if(grabbable){
@@ -97,7 +100,7 @@ public class CassettePlayer : MonoBehaviour
         }    
     }
 
-    public void ActivateHandGrab(GameObject g){
+    private void ActivateHandGrab(GameObject g){
         foreach(Transform tran in g.transform){
             tran.TryGetComponent<Grabbable>(out var grabbable);
             if(grabbable){
@@ -106,7 +109,9 @@ public class CassettePlayer : MonoBehaviour
         }
     }
 
-    public void TryReadCassette(){
+    public void TryReadCassette() {
+        ResetMedia();
+        Debug.Log("Trying to read cassette");
         if(!cassetteInserted || !cassetteReference) return;
         cassetteReference.TryGetComponent<Cassette>(out var cassette);
 
@@ -119,6 +124,7 @@ public class CassettePlayer : MonoBehaviour
             return;
         }
         foreach(var media in cassette.GetAllMediaFiles()){
+            Debug.Log($"Media found: {media.Type} / {media.Name}");
             //check type of media and handle accordingly
             //what types dont mix:
             //2dmp4 and 3dmp4
@@ -127,30 +133,33 @@ public class CassettePlayer : MonoBehaviour
             //3djpg and 3dmp4
             //2djpg and 2dmp4
             //if any of these are present, sequence them TODO
-            switch(media.Type){
-                case "3Djpg":
+            switch(media.Type?.ToLowerInvariant()){
+                case "3djpg":
                     mediaTypeUnityEvents.InvokeThreeSixtyImageEvent(media);
                     break;
-                case "3Dmp4":
+                case "3dmp4":
                     mediaTypeUnityEvents.InvokeThreeSixtyVideoEvent(media);
                     break; 
                 case "audio":
                     mediaTypeUnityEvents.InvokeDefaultAudioEvent(media);
                     break;
-                case "2Djpg":
+                case "2djpg":
                     mediaTypeUnityEvents.InvokeDefaultImageEvent(media);
                     break;
-                case "2Dmp4":
+                case "2dmp4":
                     mediaTypeUnityEvents.InvokeDefaultVideoEvent(media);
                     break;
-                default :
-                    mediaTypeUnityEvents.InvokeResetMediaEvent();
-                    break; 
             }
         }
     }
 
-    public void TryDestroySpawnedMedia(){
+    private void ResetMedia()
+    {
+        if(mediaTypeUnityEvents is null) return;
+        mediaTypeUnityEvents.InvokeResetMediaEvent();
+    }
+
+    private void TryDestroySpawnedMedia(){
         cassetteReference.TryGetComponent<Cassette>(out var cassette);
         if(cassette){
             cassette.DestroyObject();
