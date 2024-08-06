@@ -6,6 +6,8 @@ public class FeatherFall : MonoBehaviour
 {
     [SerializeField]
     private float maximumDownwardVelocity = 1f;
+    [SerializeField]
+    private TrailRenderer trailRenderer;
     private Rigidbody rb;
     private bool falling = false;
     /// <summary>
@@ -16,6 +18,7 @@ public class FeatherFall : MonoBehaviour
         TryGetComponent<Rigidbody>(out var rb);
         if(rb){
             this.rb = rb;
+            trailRenderer.enabled = true;
             StartCoroutine(WaitABit());
         }
     }
@@ -31,8 +34,9 @@ public class FeatherFall : MonoBehaviour
         }
     }
 
-    private void OnDisable() {
+    public void OnDisable() {
         falling = false;
+        trailRenderer.enabled = false;
         rb = null;
     }
 
