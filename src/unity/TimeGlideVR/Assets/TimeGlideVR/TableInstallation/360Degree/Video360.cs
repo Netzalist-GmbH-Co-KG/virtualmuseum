@@ -17,6 +17,7 @@ public class Video360 : MonoBehaviour
     private AudioSource _audioSource;
     private MeshRenderer _videoScreenRenderer;
     private Material _videoScreenMaterial;
+    private Material _doorMaterial;
 
     private List<MediaFile> _mediaFiles = new List<MediaFile>();
     private MediaFile _currentMediaFile;
@@ -30,7 +31,7 @@ public class Video360 : MonoBehaviour
     private MediaTypeUnityEvents _mediaTypeUnityEvents;
 
     private bool _playingVideo = false;
-    private float _transparency = 1;
+    private float _transparency = 0.4f;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class Video360 : MonoBehaviour
         videoPlayer.errorReceived += (source, message) => { Debug.LogError($"Video player error: {message}"); };
         _videoScreenRenderer = videoScreen.GetComponent<MeshRenderer>();
         _videoScreenMaterial = _videoScreenRenderer.materials[0];
+        _doorMaterial = _videoScreenRenderer.materials[1];
 
         _mediaTypeUnityEvents = FindObjectOfType<MediaTypeUnityEvents>(true);
         if (_mediaTypeUnityEvents is null) throw new Exception("Media Type Unity Events not found");
@@ -81,38 +83,48 @@ public class Video360 : MonoBehaviour
 
     public void Update()
     {
-        if (player is null) return;
-        var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(
-            new Vector3(player.position.x, 0, player.position.z), new Vector3(center.position.x, 0, center.position.z));
-        if (horizontalDistanceOfPlayerFromCenter > 3)
+        try
         {
-            if (videoPlayer is not null)
-                videoPlayer.Stop();
-            // 90% transparency
-            _transparency = 0.4f;
-        }
-        else if (horizontalDistanceOfPlayerFromCenter is < 3 and > 1)
-        {
-            // gradually increase transparency from 90% to 0%
-            _transparency = 0.4f + (3 - horizontalDistanceOfPlayerFromCenter) * 0.3f;
-        }
-        else
-        {
-            // 0% transparency
-            _transparency = 1;
-        }
+            if (player is null) return;
+            var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(
+                new Vector3(player.position.x, 0, player.position.z),
+                new Vector3(center.position.x, 0, center.position.z));
+            if (horizontalDistanceOfPlayerFromCenter > 3)
+            {
+                // 90% transparency
+                _transparency = 0.4f;
+            }
+            else if (horizontalDistanceOfPlayerFromCenter is < 3 and > 1)
+            {
+                // gradually increase transparency from 90% to 0%
+                _transparency = 0.4f + (3 - horizontalDistanceOfPlayerFromCenter) * 0.3f;
+            }
+            else
+            {
+                // 0% transparency
+                _transparency = 1;
+            }
 
-        SetTransparency();
+            SetTransparency();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     private void SetTransparency()
     {
         if (!videoScreen.activeSelf) return;
+
         var color = _videoScreenMaterial.color;
         color.a = _transparency;
         _videoScreenMaterial.color = color;
+        
+        var doorColor = _doorMaterial.color;
+        doorColor.a = _transparency < 0.5f ? 0.1f : _transparency;
+        _doorMaterial.color = doorColor;
     }
-
 
     private void Start()
     {
