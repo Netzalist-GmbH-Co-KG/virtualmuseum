@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TableMat 1
+  m_Name: MapMat (1)
   m_Shader: {fileID: -6465566751694194690, guid: 1d17aa0003876b8488e1d9afb52d0d17, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -55,6 +55,6 @@ Material:
     - _BUILTIN_ZTest: 4
     - _BUILTIN_ZWrite: 0
     - _BUILTIN_ZWriteControl: 0
-    - _DisplayUpTo: 0.002
+    - _DisplayUpTo: 0.0015
     m_Colors: []
   m_BuildTextureStacks: []

@@ -49,12 +49,16 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 _buttonPanelScript.onButtonClick.AddListener(HandleButtonClick);
 
                 LoadConfiguration().ConfigureAwait(false);
-                StartCoroutine(nameof(DisplayButtons));
+                //StartCoroutine(nameof(DisplayButtons));
             }
             catch (Exception e)
             {
                 Debug.Log(e.ToString());
             }
+        }
+
+        public void StartDisplayButtons(){
+            StartCoroutine(nameof(DisplayButtons));
         }
 
         // Need coroutine to get back to main thread
