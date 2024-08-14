@@ -15,6 +15,8 @@ public class FallBelowZero : MonoBehaviour
     [SerializeField]
     private bool useAwakePosition;
     private Vector3 awakePosition;
+    [SerializeField]
+    private bool useAwakeScale;
     
     private void Awake() {
         if(useAwakePosition) {

@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 1600709651059854932}
   - component: {fileID: 3534097037038015094}
   - component: {fileID: 5885973660641062486}
+  - component: {fileID: 6570989515627317439}
+  - component: {fileID: 5111336267706131196}
   m_Layer: 0
   m_Name: Table
-  m_TagString: Untagged
+  m_TagString: CollisionIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,8 +89,71 @@ MonoBehaviour:
   meshRenderer: {fileID: 1732813613285893975}
   targetMatToChangeIndex: 1
   tableMats:
-  - {fileID: 2100000, guid: 81e889da61b256144a7d3464617f76c7, type: 2}
+  - {fileID: 2100000, guid: 3a397245d4d54dc4481339e9ab399695, type: 2}
   - {fileID: 2100000, guid: c6113c1a0c5306d49b8e1f1100935ceb, type: 2}
+--- !u!114 &6570989515627317439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752208012440245881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1372b4994c990bc4f90fb04861490fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headDetected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4234323638512038532}
+        m_TargetAssemblyTypeName: OpacityController, Assembly-CSharp
+        m_MethodName: TryMakeTransparent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  headLeft:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4234323638512038532}
+        m_TargetAssemblyTypeName: OpacityController, Assembly-CSharp
+        m_MethodName: TryMakeOpaque
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!65 &5111336267706131196
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752208012440245881}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.3893073, y: 3.9084632, z: 2.6010795}
+  m_Center: {x: -0.0000018232008, y: 0.35087654, z: -0.12931725}
 --- !u!1001 &1138748169362832339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -168,6 +233,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6a384308b2ff83f4ea67fcb67ce62c96, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8139004574427047730}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6a384308b2ff83f4ea67fcb67ce62c96, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4234323638512038532}
   m_SourcePrefab: {fileID: 100100000, guid: 6a384308b2ff83f4ea67fcb67ce62c96, type: 3}
 --- !u!1 &219775593409037954 stripped
 GameObject:
@@ -196,6 +264,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 1176307857437010790, guid: 6a384308b2ff83f4ea67fcb67ce62c96, type: 3}
+--- !u!114 &4234323638512038532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219775593409037954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a03531a1e5b8a479e98272365ad283, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &596476331865283640 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6a384308b2ff83f4ea67fcb67ce62c96, type: 3}

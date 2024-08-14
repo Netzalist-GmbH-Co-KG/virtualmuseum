@@ -56,5 +56,7 @@ Material:
     - _BUILTIN_ZWrite: 0
     - _BUILTIN_ZWriteControl: 0
     - _DisplayUpTo: 0.0015
+    - _alphaOverride: 0
+    - _alphaOverrideValue: 0.1
     m_Colors: []
   m_BuildTextureStacks: []
