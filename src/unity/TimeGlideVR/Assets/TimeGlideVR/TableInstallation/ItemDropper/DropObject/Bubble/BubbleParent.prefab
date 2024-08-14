@@ -5142,7 +5142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e045021645bbb21499c24569914ef682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectInBubble: {fileID: 0}
   popSounds:
   - {fileID: 8300000, guid: 27e5168e4a422404d850b33c094e1574, type: 3}
   - {fileID: 8300000, guid: b4834fa60c7fe744abb75ca412bbfe31, type: 3}
@@ -5158,6 +5157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6898752500022646083}
   - component: {fileID: 2665309611620341410}
+  - component: {fileID: 7312735697191691296}
   m_Layer: 0
   m_Name: InsideBubble
   m_TagString: Untagged
@@ -5207,3 +5207,31 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 14
   m_CollisionDetection: 0
+--- !u!114 &7312735697191691296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8972492173582221027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36915fd5d16864646b2e4426eee1c451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onChildFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5402868905977573252}
+        m_TargetAssemblyTypeName: TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts.Bubble,
+          Assembly-CSharp
+        m_MethodName: SetObjectInBubble
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
