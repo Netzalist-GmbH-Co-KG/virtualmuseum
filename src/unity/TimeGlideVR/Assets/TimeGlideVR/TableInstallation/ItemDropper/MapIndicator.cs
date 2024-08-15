@@ -158,7 +158,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         {
             const int batchSize = 10;
             var batchCount = 0;
-            SpawnHelper();
+            //SpawnHelper();
             foreach (var geoEvent in evt.Row.GeoEvents)
             {
                 batchCount++;
