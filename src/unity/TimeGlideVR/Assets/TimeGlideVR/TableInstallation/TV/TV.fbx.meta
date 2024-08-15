@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3d8fa149cf92b7c4b90333d5fb640809
+guid: fb26f290e1c067a44ab28a9671137cef
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,18 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: 360Degree
-    second: {fileID: 2100000, guid: b4f931c037d77184eb0efad51fc06386, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Panel
-    second: {fileID: 2100000, guid: b01504975aa8fa94cbc614b536191408, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wood
-    second: {fileID: 2100000, guid: 0e479d83c724c1e40a78c874bbbe5b78, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: 0bb7fd84799c1294cb377dd87d6a74e5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
