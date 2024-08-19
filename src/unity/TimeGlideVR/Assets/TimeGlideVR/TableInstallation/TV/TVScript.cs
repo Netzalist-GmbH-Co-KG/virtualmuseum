@@ -52,7 +52,7 @@ public class TVScript : MonoBehaviour
         if (_currentMediaFile is not null)
         {
             return;
-        };
+        }
 
         _currentMediaFile = file;
         DisplayCurrentMedia();

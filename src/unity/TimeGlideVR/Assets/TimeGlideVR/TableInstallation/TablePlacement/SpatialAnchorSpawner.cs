@@ -22,12 +22,7 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
         {
             _cameraRig = FindAnyObjectByType<OVRCameraRig>();
             _spatialAnchorLocalStorageManager = GetComponent<SpatialAnchorLocalStorageManager>();
-            AnchorPrefab = anchorPrefab;
-            if (OVRInput.GetConnectedControllers() != OVRInput.Controller.RTouch)
-            {
-                LoadAnchorsFromDefaultLocalStorage();
-            }
-
+            LoadAnchorsFromDefaultLocalStorage();
         }
 
         public void Update()
@@ -47,35 +42,27 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
             _anchorPrefabTransform.rotation = Quaternion.Euler(0, _cameraRig.rightControllerAnchor.rotation.eulerAngles.y, 0);
         }
 
-        private GameObject AnchorPrefab
-        {
-            get => anchorPrefab;
-            set
-            {
-                anchorPrefab = value;
-                TogglePlacement();
-            }
-        }
-        
+        private GameObject AnchorPrefab => anchorPrefab;
+
         public void LoadAnchorsFromDefaultLocalStorage()
         {
+            Debug.Log($"Loading anchors from local storage");
             StopPlacement();
             var uuids = _spatialAnchorLocalStorageManager.GetAnchorAnchorUuidFromLocalStorage();
+            Debug.Log($"Loaded {uuids?.Count} anchors from local storage");
             if (uuids == null) return;
             spatialAnchorCore.LoadAndInstantiateAnchors(AnchorPrefab, uuids);
+            Debug.Log($"Instantiated {uuids.Count} anchors from local storage");
         }
 
         private void StartPlacement()
         {
             StopPlacement();
+            Debug.Log($"Erasing all anchors");
+            _spatialAnchorLocalStorageManager.Reset();
             spatialAnchorCore.EraseAllAnchors();
             if (_anchorPrefabTransform) Destroy(_anchorPrefabTransform.gameObject);
             _anchorPrefabTransform = Instantiate(AnchorPrefab).transform;
-            var tableLift = _anchorPrefabTransform.GetComponentInChildren<Lift.Lift>();
-            if (tableLift)
-            {
-                tableLift.ToggleLift();
-            }
             _anchorPlacementInProgress = true;
         }
 
@@ -97,11 +84,13 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
 
             if (_anchorPlacementInProgress)
             {
+                Debug.Log("Stopping placement. Creating fixes object.");
                 spatialAnchorCore.InstantiateSpatialAnchor(anchorPrefab, _anchorPrefabTransform.position, _anchorPrefabTransform.rotation);
                 StopPlacement();
             }
             else
             {
+                Debug.Log("Starting placement");
                 StartPlacement();
             }
         }
