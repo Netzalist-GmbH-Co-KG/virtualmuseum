@@ -45,6 +45,7 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
 
         public void SaveAnchorUuidToLocalStorage(OVRSpatialAnchor anchor, OVRSpatialAnchor.OperationResult result)
         {
+            Debug.Log($"[{nameof(SpatialAnchorLocalStorageManager)}] SaveAnchorUuidToLocalStorage: {anchor.Uuid} {result}");
             if (result != OVRSpatialAnchor.OperationResult.Success)
             {
                 return;
