@@ -24,6 +24,10 @@ public class FallBelowZero : MonoBehaviour
         }
     }
 
+    public void SetAwakePos(Vector3 pos){
+        awakePosition = pos;
+    }
+
     // Update is called once per frame
     void Update()
     {

@@ -20,6 +20,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         [SerializeField] public Vector2 mapCoordinatesTopRight = new(50.20243178812832f, 9.865952981932047f);
         [SerializeField] public Vector2 dropZoneSize = new(2.52f, 2.17f);
 
+        [SerializeField] private BubblePlacer bubblePlacerReference;
         [SerializeField] private GameObject cassettePrefab;
         [SerializeField] public DropObject dropItemTemplate;
         [SerializeField] public float spawnHeight = 1.8f;
@@ -223,7 +224,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 _spawnedItems.Add(label, newDropObject.transform);
                 if(mediaFiles.Count <= 0) return;
                 var configureBubble = newDropObject.GetComponent<ConfigureBubble>();
-                configureBubble.Init(mediaFiles, label, cassettePrefab);
+                configureBubble.Init(mediaFiles, label, cassettePrefab, bubblePlacerReference);
             }
         }
 
