@@ -75,7 +75,12 @@ namespace TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts
             Destroy(gameObject, 2f);
         
             if(!ObjectInBubble) return;
-            ObjectInBubble.transform.parent = null;
+            if(transform.parent){
+                ObjectInBubble.transform.parent = transform.parent; // set the parent to the point on the map so the cassette can disappear with it
+            } else {
+                ObjectInBubble.transform.parent = null;
+            }
+            
             if(ObjectInBubble.GetComponent<Rigidbody>()){
                 ObjectInBubble.GetComponent<Rigidbody>().isKinematic = false;
             }

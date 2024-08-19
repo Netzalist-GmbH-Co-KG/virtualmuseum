@@ -655,7 +655,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  objectToSpawn: {fileID: 8147861230455996878, guid: d5fd8b9dcc3c23344ad979504244fae9, type: 3}
+  objectToSpawn: {fileID: 0}
   invokeEventOnInsert: 1
 --- !u!114 &5370453479130947969
 MonoBehaviour:
@@ -801,6 +801,7 @@ MonoBehaviour:
   childPositionDepth: 2
   parentObject: {fileID: 8147861230455996878, guid: d5fd8b9dcc3c23344ad979504244fae9, type: 3}
   useAwakePosition: 1
+  useAwakeScale: 0
 --- !u!1 &5590109977237184814
 GameObject:
   m_ObjectHideFlags: 0
