@@ -20,13 +20,10 @@ public class Cassette : MonoBehaviour
     [SerializeField]
     private bool invokeEventOnInsert = true;
     private GameObject objectReference;
+
     public void Init(List<MediaFile> mediaFiles, string cityName){
         this.mediaFiles = mediaFiles;
         InvokeUpdateCityDisplayText(cityName);
-    }
-
-    private void Update() {
-        if(transform.position.y < -10) Destroy(gameObject);
     }
     public List<MediaFile> GetAllMediaFiles(){
         return mediaFiles;
