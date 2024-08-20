@@ -12,7 +12,6 @@ public class FallBelowZero : MonoBehaviour
     private int childPositionDepth;
     [SerializeField]
     private GameObject parentObject;
-    private Transform parentOfParent;
     [SerializeField]
     private bool useAwakePosition;
     private Vector3 awakePosition;
@@ -31,8 +30,6 @@ public class FallBelowZero : MonoBehaviour
 
     public void SetAwakePos(Transform posTransform){
         awakePosition = posTransform.position;
-        if(!posTransform.parent) return;
-        parentOfParent = posTransform.parent.parent;
     }
 
     // Update is called once per frame
@@ -43,9 +40,6 @@ public class FallBelowZero : MonoBehaviour
             if(spawnParent) {
                 //right now just used to instantiate a new bubble in the original position
                 var parent = Instantiate(parentObject, awakePosition, Quaternion.identity);
-                if(parentOfParent) {
-                    parent.transform.parent = parentOfParent; //setting parent of the new bubble to the pointer so that when the pointer is removed, so is the new bubble
-                }
                 var child = parent.transform;
                 for(int i = 0; i < childPositionDepth; i++) {
                     child = child.transform.GetChild(0);

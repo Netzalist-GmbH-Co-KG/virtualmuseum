@@ -81,6 +81,7 @@ Transform:
   - {fileID: 9006608160488078057}
   - {fileID: 7130538287453782195}
   - {fileID: 5889834998001618582}
+  - {fileID: 8699848040150249781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8738668300149627940
@@ -530,6 +531,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DropperArea
       objectReference: {fileID: 0}
+    - target: {fileID: 7297114628113419219, guid: 722169cebbbe4e945a5629405d59c519, type: 3}
+      propertyPath: bubblePrefab
+      value: 
+      objectReference: {fileID: 8147861230455996878, guid: d5fd8b9dcc3c23344ad979504244fae9, type: 3}
     - target: {fileID: 7297114628113419219, guid: 722169cebbbe4e945a5629405d59c519, type: 3}
       propertyPath: cassettePrefab
       value: 

@@ -23,9 +23,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts
 
             _meshRenderer = _bubbleObject.GetComponent<MeshRenderer>();
             _popParticles = _bubbleObject.GetComponent<ParticleSystem>();
-            _audioSource = _bubbleObject.GetComponent<AudioSource>();
-
-            
+            _audioSource = _bubbleObject.GetComponent<AudioSource>();   
         }
 
         public void SetObjectInBubble(){

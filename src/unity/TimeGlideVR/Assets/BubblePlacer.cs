@@ -27,25 +27,24 @@ public class BubblePlacer : MonoBehaviour
 
     public void PlaceBubble(Transform bubbleTransform, GameObject cas){
         //cull removed bubbles
-        foreach(var b in _bubbles){
-            if(b == null) _bubbles.Remove(b);
-        }
+        _bubbles.RemoveAll(x => !x);
 
         int index = _bubbles.Count;
         _bubbles.Add(bubbleTransform);
         
-        bubbleTransform.transform.position = transform.position + GetPositionByIndex(index);
-        bubbleTransform.transform.localRotation = Quaternion.identity;
+        bubbleTransform.position = transform.position + GetPositionByIndex(index);
+        bubbleTransform.localRotation = Quaternion.identity;
         cas.GetComponent<FallBelowZero>().SetAwakePos(bubbleTransform);
     }
 
     private Vector3 GetPositionByIndex(int index){
         if(index == 0) return Vector3.zero;
     
-        float x = (index % 2) * 0.3f;  // Alternates between 0 and 0.3
-        float z = -((index / 2) % 2) * 0.3f;  // Alternates between 0 and 0.3 every two
+        var left = - transform.right * (index % 2) * 0.3f;  // Alternates between 0 and 0.3
+        var backward = - transform.forward * ((index / 2) % 2) * 0.3f;  // Alternates between 0 and 0.3 every two
         float y = (Mathf.Floor(index / 4) * 0.3f);  // Moves up every 4
 
-        return new Vector3(x,y,z);
+        var pos = left + backward + new Vector3(0, y, 0);
+        return pos;
     }
 }
