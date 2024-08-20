@@ -210,6 +210,10 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 foreach (var item in _spawnedItems[label])
                 {
                     if (item != null){
+                        if(item.root.name == "FullInstallation") {
+                            Destroy(item.gameObject);
+                            continue;
+                        }
                         Destroy(item.root.gameObject);
                     }
                 }
@@ -255,6 +259,10 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             {
                 if (item != null && item.Count != 0){
                     foreach(var t in item){ // at max 2 items per city, the item with label and the bubble/cassette
+                        if(t.root.name == "FullInstallation") {
+                            Destroy(t.gameObject);
+                            continue;
+                        }
                         Destroy(t.root.gameObject);
                     }
                 }
