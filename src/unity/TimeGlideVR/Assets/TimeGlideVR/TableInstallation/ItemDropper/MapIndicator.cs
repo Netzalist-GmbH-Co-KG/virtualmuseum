@@ -210,7 +210,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 foreach (var item in _spawnedItems[label])
                 {
                     if (item != null){
-                        if(item.root.name == "FullInstallation") {
+                        if(item.root.gameObject.CompareTag("GameController")) {
                             Destroy(item.gameObject);
                             continue;
                         }
