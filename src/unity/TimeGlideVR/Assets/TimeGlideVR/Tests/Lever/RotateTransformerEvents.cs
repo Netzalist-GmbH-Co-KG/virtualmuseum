@@ -11,7 +11,7 @@ public class RotateTransformerEvents : MonoBehaviour
     [SerializeField]
     private float minAngleToTrigger;
     [SerializeField]
-    private UnityEvent onTriggerEnterEvent;
+    private UnityEvent<int> triggerLeverEvent;
     [SerializeField]
     private UnityEvent<string> currentAngleEvent;
     private bool alreadyTriggered = false;
@@ -19,12 +19,11 @@ public class RotateTransformerEvents : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation.ToAngleAxis(out float angle, out Vector3 axis);
-        currentAngleEvent.Invoke(angle.ToString());
+        transform.localRotation.ToAngleAxis(out float angle, out Vector3 axis);
         if(angle > minAngleToTrigger) {
             Debug.Log(angle);
             if(alreadyTriggered) return; 
-            onTriggerEnterEvent.Invoke();
+            triggerLeverEvent.Invoke(0);
             alreadyTriggered = true;
             return;
         } else {

@@ -17,6 +17,10 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
         
         [SerializeField]
         public UnityEvent<ToggleButtonEvent> onClick;
+        [SerializeField]
+        public UnityEvent<ToggleButtonEvent> onDeactivate;
+        [SerializeField]
+        private bool callDeactivateOnDisable = false;
 
         private void Awake()
         {
@@ -45,11 +49,25 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
         {
             _selected = !_selected;
             lightComponent.gameObject.SetActive(_selected);
+            if(_selected == false){
+                Deactivate();
+            } 
 
             if(!_clickSound.isPlaying)
                 _clickSound.Play();
 
             onClick.Invoke(new ToggleButtonEvent(labelText, _selected));
+        }
+
+        public void Deactivate(){
+            _selected = false;
+            lightComponent.gameObject.SetActive(_selected);
+            onDeactivate.Invoke(new ToggleButtonEvent(labelText, _selected));
+        }
+
+        private void OnDisable() {
+            if(callDeactivateOnDisable)
+                Deactivate();
         }
         
     }

@@ -20,7 +20,9 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         [SerializeField] public Vector2 mapCoordinatesTopRight = new(50.20243178812832f, 9.865952981932047f);
         [SerializeField] public Vector2 dropZoneSize = new(2.52f, 2.17f);
 
+        [SerializeField] private BubblePlacer bubblePlacerReference;
         [SerializeField] private GameObject cassettePrefab;
+        [SerializeField] public GameObject bubblePrefab;
         [SerializeField] public DropObject dropItemTemplate;
         [SerializeField] public float spawnHeight = 1.8f;
         [SerializeField] public float despawnHeight = -1.0f;
@@ -30,7 +32,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
 
         private ButtonPanelScript _buttonPanelScript;
 
-        private readonly Dictionary<string, Transform> _spawnedItems = new();
+        private readonly Dictionary<string, List<Transform>> _spawnedItems = new();
         private TopographicalTableConfiguration _tableConfiguration;
         private readonly Dictionary<string, Vector2> _cityCoordinates = new();
         private IConfigurationClient _configurationClient;
@@ -49,12 +51,16 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 _buttonPanelScript.onButtonClick.AddListener(HandleButtonClick);
 
                 LoadConfiguration().ConfigureAwait(false);
-                StartCoroutine(nameof(DisplayButtons));
+                //StartCoroutine(nameof(DisplayButtons));
             }
             catch (Exception e)
             {
                 Debug.Log(e.ToString());
             }
+        }
+
+        public void StartDisplayButtons(){
+            StartCoroutine(nameof(DisplayButtons));
         }
 
         // Need coroutine to get back to main thread
@@ -201,8 +207,16 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         {
             if (_spawnedItems.ContainsKey(label))
             {
-                Debug.Log($"Despawning item for city: {label}");
-                Destroy(_spawnedItems[label].gameObject);
+                foreach (var item in _spawnedItems[label])
+                {
+                    if (item != null){
+                        if(item.root.name == "FullInstallation") {
+                            Destroy(item.gameObject);
+                            continue;
+                        }
+                        Destroy(item.root.gameObject);
+                    }
+                }
                 _spawnedItems.Remove(label);
             }
             else
@@ -216,11 +230,26 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 var dropObject = newDropObject.GetComponent<DropObject>();
                 dropObject.Init(label, null, despawnHeight, distance);
                 newDropObject.transform.localPosition = spawnLocation;
-                _spawnedItems.Add(label, newDropObject.transform);
-                if(mediaFiles.Count <= 0) return;
-                var configureBubble = newDropObject.GetComponent<ConfigureBubble>();
-                configureBubble.Init(mediaFiles, label, cassettePrefab);
+                newDropObject.transform.parent = null; // this is so deleting the "root" in ClearItems or above wont delete the whole installation
+                List<Transform> dictList = new List<Transform>();
+                dictList.Add(newDropObject.transform);
+                if(mediaFiles.Count > 0) {
+                    var cassetteTransform = SpawnBubbleWithCassette(mediaFiles, label, cassettePrefab);
+                    if(cassetteTransform) dictList.Add(cassetteTransform);
+                }
+                
+                _spawnedItems.Add(label, dictList);
             }
+        }
+
+        public Transform SpawnBubbleWithCassette(List<MediaFile> mediaFiles, string cityName, GameObject cassettePrefab){
+            var bubble = Instantiate(bubblePrefab);
+            var insideBubbleReference = bubble.transform.GetChild(0).GetChild(0);
+            var cas = Instantiate(cassettePrefab, insideBubbleReference.transform);
+            cas.transform.localPosition = Vector3.zero;
+            cas.GetComponent<Cassette>().Init(mediaFiles, cityName);
+            bubblePlacerReference.PlaceBubble(bubble.transform, cas);
+            return cas.transform;
         }
 
         public void ClearItems()
@@ -228,8 +257,15 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             Debug.Log("Clearing items...");
             foreach (var item in _spawnedItems.Values)
             {
-                if (item != null && item.gameObject != null)
-                    Destroy(item.gameObject);
+                if (item != null && item.Count != 0){
+                    foreach(var t in item){ // at max 2 items per city, the item with label and the bubble/cassette
+                        if(t.root.name == "FullInstallation") {
+                            Destroy(t.gameObject);
+                            continue;
+                        }
+                        Destroy(t.root.gameObject);
+                    }
+                }
             }
 
             _spawnedItems.Clear();
