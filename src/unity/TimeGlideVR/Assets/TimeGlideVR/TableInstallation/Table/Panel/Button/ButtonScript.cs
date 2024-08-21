@@ -49,6 +49,9 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
         {
             _selected = !_selected;
             lightComponent.gameObject.SetActive(_selected);
+            if(_selected == false){
+                Deactivate();
+            } 
 
             if(!_clickSound.isPlaying)
                 _clickSound.Play();

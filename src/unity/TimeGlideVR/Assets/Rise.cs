@@ -11,14 +11,14 @@ public class Rise : MonoBehaviour
     }
 
     private void OnDisable() {
-        transform.position = startPos;
+        transform.localPosition = startPos;
     }
 
     private IEnumerator RiseToZero(){
-        startPos = transform.position;
+        startPos = transform.localPosition;
         float i = 0;
         while(i < 1){
-            transform.position = Vector3.Lerp(startPos, Vector3.zero, i);
+            transform.localPosition = Vector3.Lerp(startPos, Vector3.zero, i);
             i += Time.deltaTime * speed;
             yield return new WaitForEndOfFrame();
         }
