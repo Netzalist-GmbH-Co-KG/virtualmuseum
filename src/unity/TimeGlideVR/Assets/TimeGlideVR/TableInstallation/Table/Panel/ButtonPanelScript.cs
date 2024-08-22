@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using TimeGlideVR.Server.Data;
+using TimeGlideVR.TableInstallation.Table.InfoDisplay;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,9 +25,12 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         private List<LocationTimeRow> _locationTimeRows = new ();
         private List<ButtonScript> _dialectButtons;
         private List<ButtonScript> _wallButtons;
+        
+        [CanBeNull] private InfoDisplay.InfoDisplay _infoDisplay;
 
         public void Start()
         {
+            _infoDisplay = FindObjectOfType<InfoDisplay.InfoDisplay>();
             _dialectButtons = dialectButtonPrefab.GetComponentsInChildren<ButtonScript>().ToList();
             _wallButtons = wallButtonPrefab.GetComponentsInChildren<ButtonScript>().ToList();
             
@@ -45,6 +50,15 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             foreach (var button in _wallButtons)
             {
                 button.SetSelected(button.LabelText == evt.Name && evt.IsSelected);
+                if (button.LabelText == evt.Name && evt.IsSelected && _infoDisplay != null)
+                {
+                    var displayData = button.GetComponent<InfoData>();
+                    if (displayData != null)
+                    {
+                        _infoDisplay.DisplayTitle(displayData.title);
+                        _infoDisplay.DisplayDescription(displayData.description);
+                    }
+                }
             }
         }
 
@@ -54,6 +68,16 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             foreach (var button in _dialectButtons)
             {
                 button.SetSelected(button.LabelText == evt.Name && evt.IsSelected);
+                if (button.LabelText == evt.Name && evt.IsSelected && _infoDisplay != null)
+                {
+                    var displayData = button.GetComponent<InfoData>();
+                    if (displayData != null)
+                    {
+                        _infoDisplay.DisplayTitle(displayData.title);
+                        _infoDisplay.DisplayDescription(displayData.description);
+                    }
+                }
+
             }
         }
 

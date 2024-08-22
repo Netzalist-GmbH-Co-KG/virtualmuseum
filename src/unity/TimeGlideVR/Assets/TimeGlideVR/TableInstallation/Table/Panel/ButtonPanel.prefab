@@ -609,8 +609,41 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5451495208787123167}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+--- !u!1 &486594940892567988 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 1326518012365250994}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5451495208787123167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486594940892567988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Holz-Palisaden um 1078
+  description: "Nach der urkundlichen Ersterw\xE4hnung im Jahr 874 taucht Schmalkalden
+    f\xFCr fast 200 Jahre erneut in das Dunkel der Geschichte hinab. Dann aber wird
+    der Ort in die Reichsgeschichte verwickelt. K\xF6nig Heinrich IV.  war wegen
+    des Investiturstreites vom Papst mit dem Kirchenbann belegt worden war. Er konnte
+    sich zwar durch seinen Gang nach Canossa vom Bann l\xF6sen, die Gegner Heinrichs
+    hatten aber ihn zuvor f\xFCr abgesetzt erkl\xE4rt und einen Gegenk\xF6nig gew\xE4hlt.
+    Im Jahr 1078 kommt es beim unterfr\xE4nkischen Mellrichstadt am Fu\xDFe der Rh\xF6n
+    zur Schlacht zwischen den feindlichen Lagern. Nach der f\xFCr die Gegner Heinrichs
+    siegreichen Schlacht, verw\xFCsten und zerst\xF6ren diese auf dem R\xFCckmarsch
+    Schmalkalden, weil man dort Unterst\xFCtzer des K\xF6nigs vermutet. Die her zu
+    sehende erste Umwehrung Schmalkaldens, bestand aus Gr\xE4ben und W\xE4llen mit
+    Holz-Palisaden und kann durch arch\xE4ologische Ausgrabungen belegt werden."
 --- !u!4 &3748922087573398737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
@@ -621,7 +654,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 1326518012365250994}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 486594940892567988}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
@@ -953,19 +986,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7533896108498748825}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
 --- !u!4 &709962118768840970 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 3437424183341929577}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4259325024365292655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 3437424183341929577}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7533896108498748825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4259325024365292655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Stadtmauer um 1434
+  description: "Die technischen Entwicklungen der Zeit machten auch vor der Schmalkalder
+    Stadtmauer nicht halt. Mauern m\xFCssten jetzt auch Schutz vor den aufkommenden
+    Handfeuerwaffen und Gesch\xFCtzen bieten. Zu Beginn des 15. Jahrhundert fing
+    man an, einen zweiten, aber weniger hohen Mauerring um die Stadt zu legen. Im
+    Jahr 1419 wurde etwa mit der Errichtung des Zwingers zwischen Auer-Tor und dem
+    Stiller-Tor begonnen, ab 1434 begann man die drei Haupttore der Stadt, das Auer-,
+    das Weidebrunner- und das Stiller-Tor zu doppelten, festungsartigen Stadttoren
+    auszubauen. Durch dutzende von Wehrt\xFCrmen im \xE4u\xDFeren und inneren Stadtmauerring
+    wurde Schmalkalden so zur am befesten befestigten Stadt in ganz S\xFCdth\xFCringen."
 --- !u!114 &8079960741165000380 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 3437424183341929577}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4259325024365292655}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
@@ -1192,19 +1255,54 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4588057656147589292}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
 --- !u!4 &1745020650359020163 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 4492880304851345376}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3094514225164593126 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 4492880304851345376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4588057656147589292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3094514225164593126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: "Fr\xFChe Stadtmauer um 1203"
+  description: "125 Jahre nach der ersten Verw\xFCstung Schmalkaldens, wird der Ort
+    erneut in reichspolitische Auseinandersetzungen hineingezogen und erneut zerst\xF6rt.
+    Schmalkalden ist mittlerweile im Besitz der Th\xFCringer Landgrafen aus dem Geschlecht
+    der Ludowinger. Der Staufer Philipp und der Welfe Otto ringen um die Macht und
+    die K\xF6nigskrone im Reich. Der Th\xFCringer Landgraf Hermann wechselt in dieser
+    milit\xE4rischen Auseinandersetzung mehrfach die Fronten. Gegen ihn unternimmt
+    der Staufer im Fr\xFChsommer 1203 einen Feldzug. Auf dem R\xFCckzug wird Schmalkalden
+    vollkommen verw\xFCstet. Das Ausma\xDF der Zerst\xF6rung war so verheerend, \u201Edass
+    kaum noch ein Mensch in den H\xE4sern wohnte\u201C, wie es eine Chronik berichtet.
+    Weiter hei\xDFt es, dass viele Menschen Hungers gestorben seien und \u201Ealle
+    vornehmen Geb\xE4ude samt der Mauer dem Erdboden gleichgemacht und geschleift\u201C
+    worden sind. Diese fr\xFChe Stadtmauer, die die mittelalterliche Markt- und Handwerkersiedlung
+    mit der Burganlage auf dem heutigen Schlossberg schlauchartig verband, ist ebenfalls
+    durch arch\xE4ologische Befunde belegt."
 --- !u!114 &7047021519382277429 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 4492880304851345376}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 3094514225164593126}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
@@ -1435,19 +1533,51 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3820679141053102456}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
 --- !u!114 &683888965067322932 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 6262342190034748641}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4773896509456514279}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4773896509456514279 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 6262342190034748641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3820679141053102456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4773896509456514279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Stadtmauer um 1328
+  description: "Nach der Zerst\xF6rung von 1203 wird Schmalkalden wieder aufgebaut
+    und zugleich planm\xE4\xDFig um das Gebiet des heutigen Neumarkts erweitert.
+    Dazu war es n\xF6tig, die urspr\xFCnglich durch das Stadtgebiet verlaufenden
+    Fl\xFCsse Stille und Schmalkalden in ihre heutigen Betten zu verlegen. Im Jahr
+    1315 verleiht der deutsche K\xF6nig Graf Berthold VII. von Henneberg, Schmalkalden
+    ist mittlerweile im Besitz der Grafen von Henneberg, das Ungeld in Schmalkalden.
+    Die Einnahmen aus dieser Verbrauchssteuer auf Bier und Wein sollen dem Bau bzw.
+    der Reparatur der Stadtmauer dienen. 1328 tritt der Henneberger Graf das Ungeld
+    an die Stadt Schmalkalden ab, die ab jetzt f\xFCr die Baulast der Mauer verantwortlich
+    ist. Das Ungeld war im \xDCbrigen bis zum Ende des 17. Jahrhunderts die einzige
+    Verbrauchssteuer die von den damaligen Untertanen zu zahlen war."
 --- !u!4 &8108215281658823042 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
@@ -1897,6 +2027,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6883712757484352317}
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2998116553288435380}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
 --- !u!4 &6743896835673674846 stripped
 Transform:
@@ -2004,3 +2137,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2998116553288435380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8021264099113380155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Rudolstadt
+  description: 

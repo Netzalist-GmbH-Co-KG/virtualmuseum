@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2228625365048832815}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a05f579131948f4481597cb0764b2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onMapSwitched:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &182408952934823903
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -322,8 +325,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2038549679824635059}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+--- !u!1 &1594288999857426393 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 182408952934823903}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2038549679824635059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594288999857426393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: "Urkundliche Ersterw\xE4hnungen"
+  description: "Einige der St\xE4dte besitzen zus\xE4tzliche Medien! Diese werden
+    hinter ihnen auf dem Tisch als Kassette erscheinen.   Diese einfach in den Kassettenspieler
+    werfen und in die Kuppel dahinter gehen um Bilder anzugucken oder Audiodateien
+    abzuspielen!"
 --- !u!4 &2658933738974114492 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
@@ -334,7 +362,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 182408952934823903}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1594288999857426393}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
@@ -611,19 +639,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4840130385892888954}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
 --- !u!114 &548681537970496439 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 6343505457412886882}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5521604480754231652}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5521604480754231652 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 6343505457412886882}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4840130385892888954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5521604480754231652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Stadtbefestigungen von 1078 bis 1434
+  description: "Die verschiedenen Stadtbefestigungen von Schmalkalden.   Die einzelnen
+    Kn\xF6pfe zeigen die Befestigungen zur jeweiligen Zeit, ausserdem finden sie
+    hier noch zus\xE4tzliche Informationen wenn sie die Kn\xF6pfe gedr\xFCckt haben! "
 --- !u!4 &9108192999627904001 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
@@ -852,14 +904,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7594847979471652792}
   m_SourcePrefab: {fileID: 100100000, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
 --- !u!114 &4435741618051238745 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 7069259334685784460}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8553192722622054794}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929bd797c6ad6644d97ae60943454a05, type: 3}
@@ -870,3 +925,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2769262816637322595, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   m_PrefabInstance: {fileID: 7069259334685784460}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8553192722622054794 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+  m_PrefabInstance: {fileID: 7069259334685784460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7594847979471652792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8553192722622054794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71668290589628d45bf68b36cb1c4ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: "Dialekte in Th\xFCringen"
+  description: "Die verschiedenen Dialekte von Th\xFCringen. Beschreibungen zu diesen
+    finden sie in den Buttons auf dem Panel vor ihnen. Einfach antippen und Dialekte
+    lauschen!"
