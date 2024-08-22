@@ -16,7 +16,7 @@ public class MoveOverTime : MonoBehaviour
     private bool animateForward;
     public Vector3 direction;
     float time = 0;
-    // Start is called before the first frame update
+    // SlideUp is called before the first frame update
 
     // Update is called once per frame
     void Update()

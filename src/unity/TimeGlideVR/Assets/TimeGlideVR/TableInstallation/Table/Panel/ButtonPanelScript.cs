@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using TimeGlideVR.Debugging;
 using TimeGlideVR.Server.Data;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
 using UnityEngine;
@@ -12,15 +11,60 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
     {
         [SerializeField]
         private GameObject buttonPrefab;
+        
+        [SerializeField] private GameObject wallButtonPrefab;
+        [SerializeField] private GameObject dialectButtonPrefab;
 
         private readonly Dictionary<string, GameObject> _buttons = new();
         public UnityEvent<DisplayLocationTimeRowEvent> onButtonClick;
+        public UnityEvent<ToggleButtonEvent> onWallButtonClick;
+        public UnityEvent<ToggleButtonEvent> onDialectButtonClick;
         
-        private List<LocationTimeRow> _locationTimeRows;
+        private List<LocationTimeRow> _locationTimeRows = new ();
+        private List<ButtonScript> _dialectButtons;
+        private List<ButtonScript> _wallButtons;
+
+        public void Start()
+        {
+            _dialectButtons = dialectButtonPrefab.GetComponentsInChildren<ButtonScript>().ToList();
+            _wallButtons = wallButtonPrefab.GetComponentsInChildren<ButtonScript>().ToList();
+            
+            foreach (var button in _dialectButtons)
+            {
+                button.onClick.AddListener(HandleDialectButtonClick);
+            }
+            foreach (var button in _wallButtons)
+            {
+                button.onClick.AddListener(HandleWallButtonClick);
+            }
+        }
+
+        private void HandleWallButtonClick(ToggleButtonEvent evt)
+        {
+            onWallButtonClick.Invoke(evt);
+            foreach (var button in _wallButtons)
+            {
+                button.SetSelected(button.LabelText == evt.Name && evt.IsSelected);
+            }
+        }
+
+        private void HandleDialectButtonClick(ToggleButtonEvent evt)
+        {
+            onDialectButtonClick.Invoke(evt);
+            foreach (var button in _dialectButtons)
+            {
+                button.SetSelected(button.LabelText == evt.Name && evt.IsSelected);
+            }
+        }
 
         public void Init(List<LocationTimeRow> locationTimeRows)
         {
+            Debug.Log($"Initializing ButtonPanel with {locationTimeRows.Count} rows");
             _locationTimeRows = locationTimeRows;
+        }
+
+        public void DisplayButtons()
+        {
             foreach (var timeRow in _locationTimeRows)
             {
                 AddButton(timeRow.Label);
@@ -57,11 +101,11 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
 
         private void HandleButtonClick(ToggleButtonEvent evt)
         {
-            Debug.Log("Panel Button Click on: " + evt.Name);
+            Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected);
             var locationTimeRow = _locationTimeRows.FirstOrDefault(row => row.Label == evt.Name);
             if(locationTimeRow != null)
                 onButtonClick.Invoke(new DisplayLocationTimeRowEvent(locationTimeRow, !evt.IsSelected));
         }
-
+        
     }
 }

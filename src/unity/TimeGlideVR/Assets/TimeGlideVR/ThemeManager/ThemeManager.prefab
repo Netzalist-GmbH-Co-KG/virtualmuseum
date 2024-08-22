@@ -97,6 +97,7 @@ MonoBehaviour:
   lidMaterial: {fileID: 2100000, guid: 81e1f16f9d35dab41a5446e3578f291f, type: 2}
   liftFrameMaterial: {fileID: 2100000, guid: aec8c760b49f9ca49848b009f0efeeeb, type: 2}
   cinemaDoorMaterial: {fileID: 2100000, guid: aec8c760b49f9ca49848b009f0efeeeb, type: 2}
+  mainButtonMaterial: {fileID: 2100000, guid: da6f3f6878f5f6d48a0922dfede37269, type: 2}
 --- !u!1 &8036499807426822405
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +150,7 @@ MonoBehaviour:
   lidMaterial: {fileID: 2100000, guid: 3cfed235ed2fe3744b3e91e79eadfc7e, type: 2}
   liftFrameMaterial: {fileID: 2100000, guid: 0e479d83c724c1e40a78c874bbbe5b78, type: 2}
   cinemaDoorMaterial: {fileID: 2100000, guid: 0e479d83c724c1e40a78c874bbbe5b78, type: 2}
+  mainButtonMaterial: {fileID: 2100000, guid: da6f3f6878f5f6d48a0922dfede37269, type: 2}
 --- !u!1 &8546443289832222905
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +203,7 @@ MonoBehaviour:
   lidMaterial: {fileID: 2100000, guid: 3cfed235ed2fe3744b3e91e79eadfc7e, type: 2}
   liftFrameMaterial: {fileID: 2100000, guid: 0e479d83c724c1e40a78c874bbbe5b78, type: 2}
   cinemaDoorMaterial: {fileID: 2100000, guid: 0e479d83c724c1e40a78c874bbbe5b78, type: 2}
+  mainButtonMaterial: {fileID: 2100000, guid: da6f3f6878f5f6d48a0922dfede37269, type: 2}
 --- !u!1 &8785028179583621604
 GameObject:
   m_ObjectHideFlags: 0

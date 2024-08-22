@@ -65,7 +65,7 @@ namespace TimeGlideVR.TableInstallation.Lift
                 _liftedTransformBaseY = liftedObjectTransform.localPosition.y;
         }
 
-        // public void Start()
+        // public void SlideUp()
         // {
         //     ToggleLift();
         //     // StartCoroutine(nameof(ToggleTest));
@@ -94,6 +94,7 @@ namespace TimeGlideVR.TableInstallation.Lift
             if (_liftState == LiftState.Bottom && lidAnimator.State == LidState.Closed && (liftedObjectTransform.gameObject.activeSelf || boxTransform.gameObject.activeSelf || floorTransform.gameObject.activeSelf))
             {
                 boxTransform.gameObject.SetActive(false);
+                floorTransform.gameObject.SetActive(false);
                 liftedObjectTransform.gameObject.SetActive(false);
                 floorTransform.gameObject.SetActive(false);
             }
@@ -101,6 +102,7 @@ namespace TimeGlideVR.TableInstallation.Lift
             if (_liftState == LiftState.Top)
             {
                 boxTransform.gameObject.SetActive(false);
+                floorTransform.gameObject.SetActive(false);
             }
         }
 

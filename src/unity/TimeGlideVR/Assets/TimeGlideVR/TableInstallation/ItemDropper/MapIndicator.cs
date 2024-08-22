@@ -51,7 +51,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 _buttonPanelScript.onButtonClick.AddListener(HandleButtonClick);
 
                 LoadConfiguration().ConfigureAwait(false);
-                //StartCoroutine(nameof(DisplayButtons));
+                StartCoroutine(nameof(DisplayButtons));
             }
             catch (Exception e)
             {
@@ -106,6 +106,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
 
             _tableConfiguration = await _configurationClient.GetTableConfiguration(firstTable.Value);
             _dataLoaded = true;
+            Debug.Log($"Configuration loaded: {_tableConfiguration.LocationTimeRows.Count} rows");
         }
 
         private void InitializeDummyCoordinates()

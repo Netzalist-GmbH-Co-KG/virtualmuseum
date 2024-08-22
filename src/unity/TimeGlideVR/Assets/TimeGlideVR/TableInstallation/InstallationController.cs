@@ -27,7 +27,8 @@ namespace TimeGlideVR.TableInstallation
                 _mapIndicator = GetComponentInChildren<MapIndicator>(true);
                 _panelMovement = GetComponentInChildren<PanelMovement>(true);
 
-                StartCoroutine(nameof(PlayInitialMessage));
+                // TODO: Do not play immediately. Play when user enters zone later
+                // StartCoroutine(nameof(PlayInitialMessage));
             }
             catch (Exception e)
             {
