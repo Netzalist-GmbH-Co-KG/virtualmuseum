@@ -24,6 +24,12 @@ public class CassettePlayer : MonoBehaviour
     private GameObject cassetteReference;
     private MediaTypeUnityEvents mediaTypeUnityEvents;
 
+    private void Update() {
+        if(cassetteInserted && cassetteReference == null){
+            RemoveCassette();
+        }
+    }
+
     public void InsertCassette(GameObject g){
         if(!acceptedTags.Contains(g.tag) || cassetteInserted){
             return;
@@ -50,25 +56,32 @@ public class CassettePlayer : MonoBehaviour
 
     public void RemoveCassette(){
         cassetteInserted = false;
-        cassetteReference.transform.parent = null;
+        if(cassetteReference) cassetteReference.transform.parent = null;
         ejectedEvent.Invoke();
         Eject();
     }
 
+    /// <summary>
+    /// Step two in removing cassette, call RemoveCassette() if you want to fully remove an object
+    /// </summary>
     private void Eject(){
         ResetMedia();
         Debug.Log("Ejecting cassette");
         //maybe shoot out the cassette
-        ActivateHandGrab(cassetteReference);
-        cassetteReference.TryGetComponent<Rigidbody>(out var rb);
+        if(cassetteReference) { 
+            ActivateHandGrab(cassetteReference);
+            cassetteReference.TryGetComponent<Rigidbody>(out var rb);
+            if(rb){
+                rb.isKinematic = false;
+                Vector3 dir = (ejectionDirection.transform.position - cassetteReference.transform.position).normalized;
+                rb.AddForce(dir * 5, ForceMode.Impulse);
+            }
+            cassetteReference.TryGetComponent<FeatherFall>(out var featherFall);
+            if(featherFall) featherFall.enabled = true;
+            TryDestroySpawnedMedia();
+            cassetteReference = null;
+        }
         mediaEventAudioSource.Stop();
-        rb.isKinematic = false;
-        Vector3 dir = (ejectionDirection.transform.position - cassetteReference.transform.position).normalized;
-        rb.AddForce(dir * 5, ForceMode.Impulse);
-        cassetteReference.TryGetComponent<FeatherFall>(out var featherFall);
-        featherFall.enabled = true;
-        TryDestroySpawnedMedia();
-        cassetteReference = null;
         Debug.Log("Ejected cassette");
     }
 
