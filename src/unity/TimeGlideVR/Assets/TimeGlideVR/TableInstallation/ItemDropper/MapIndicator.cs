@@ -48,7 +48,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 var realWidth = mapCoordinatesBottomLeft.y - mapCoordinatesTopRight.y;
                 _ratioWidth = dropZoneSize.x / realWidth;
                 _buttonPanelScript = FindObjectOfType<ButtonPanelScript>(true);
-                _buttonPanelScript.onButtonClick.AddListener(HandleButtonClick);
+                _buttonPanelScript.onTimeRowButtonClick.AddListener(HandleButtonClick);
+                _buttonPanelScript.onDespawnAllItems.AddListener(DespawnAllItems);
 
                 LoadConfiguration().ConfigureAwait(false);
                 StartCoroutine(nameof(DisplayButtons));
@@ -241,6 +242,26 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 
                 _spawnedItems.Add(label, dictList);
             }
+        }
+
+        private void DespawnAllItems()
+        {
+            Debug.Log("Despawning all items...");
+            if (_spawnedItems == null) return;
+            
+            foreach (var item in _spawnedItems.Values)
+            {
+                if (item != null && item.Count != 0){
+                    foreach(var t in item){ // at max 2 items per city, the item with label and the bubble/cassette
+                        if(t.root.name == "FullInstallation") {
+                            Destroy(t.gameObject);
+                            continue;
+                        }
+                        Destroy(t.root.gameObject);
+                    }
+                }
+            }
+            _spawnedItems.Clear();
         }
 
         public Transform SpawnBubbleWithCassette(List<MediaFile> mediaFiles, string cityName, GameObject cassettePrefab){

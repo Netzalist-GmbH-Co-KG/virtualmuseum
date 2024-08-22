@@ -18,7 +18,8 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         [SerializeField] private GameObject dialectButtonPrefab;
 
         private readonly Dictionary<string, GameObject> _buttons = new();
-        public UnityEvent<DisplayLocationTimeRowEvent> onButtonClick;
+        public UnityEvent<DisplayLocationTimeRowEvent> onTimeRowButtonClick;
+        public UnityEvent onDespawnAllItems;
         public UnityEvent<ToggleButtonEvent> onWallButtonClick;
         public UnityEvent<ToggleButtonEvent> onDialectButtonClick;
         
@@ -116,6 +117,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         }
 
         public void ClearButtons(){
+            onDespawnAllItems.Invoke();
             foreach (var button in _buttons.Values)
             {
                 Destroy(button);
@@ -128,8 +130,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected);
             var locationTimeRow = _locationTimeRows.FirstOrDefault(row => row.Label == evt.Name);
             if(locationTimeRow != null)
-                onButtonClick.Invoke(new DisplayLocationTimeRowEvent(locationTimeRow, !evt.IsSelected));
+                onTimeRowButtonClick.Invoke(new DisplayLocationTimeRowEvent(locationTimeRow, !evt.IsSelected));
         }
-        
     }
 }
