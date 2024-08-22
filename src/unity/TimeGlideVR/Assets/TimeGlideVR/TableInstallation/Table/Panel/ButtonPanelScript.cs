@@ -47,6 +47,14 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             return new Vector3(-1.5f + column * 0.2f, 0.031f, topOffset - row * 0.1752f);
         }
 
+        public void ClearButtons(){
+            foreach (var button in _buttons.Values)
+            {
+                Destroy(button);
+            }
+            _buttons.Clear();
+        }
+
         private void HandleButtonClick(ToggleButtonEvent evt)
         {
             Debug.Log("Panel Button Click on: " + evt.Name);

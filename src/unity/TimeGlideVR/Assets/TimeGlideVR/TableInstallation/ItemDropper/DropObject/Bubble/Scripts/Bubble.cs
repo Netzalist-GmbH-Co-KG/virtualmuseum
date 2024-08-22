@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Oculus.Platform;
 using UnityEngine;
 
 namespace TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts
@@ -17,10 +18,15 @@ namespace TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts
         private bool _popped = false;
 
         void Awake(){
-
             _bubbleObject = transform.GetChild(0).gameObject;
             _rbInBubble = _bubbleObject.transform.GetChild(0).GetComponent<Rigidbody>();
 
+            _meshRenderer = _bubbleObject.GetComponent<MeshRenderer>();
+            _popParticles = _bubbleObject.GetComponent<ParticleSystem>();
+            _audioSource = _bubbleObject.GetComponent<AudioSource>();   
+        }
+
+        public void SetObjectInBubble(){
             if(_bubbleObject.transform.GetChild(0).childCount > 0){
                 ObjectInBubble = _bubbleObject.transform.GetChild(0)
                     .GetChild(0).gameObject;
@@ -30,10 +36,6 @@ namespace TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts
                     rb.isKinematic = true;
                 }
             }
-        
-            _meshRenderer = _bubbleObject.GetComponent<MeshRenderer>();
-            _popParticles = _bubbleObject.GetComponent<ParticleSystem>();
-            _audioSource = _bubbleObject.GetComponent<AudioSource>();
 
             StartRotation();
         }
@@ -71,7 +73,12 @@ namespace TimeGlideVR.TableInstallation.ItemDropper.Bubble.Scripts
             Destroy(gameObject, 2f);
         
             if(!ObjectInBubble) return;
-            ObjectInBubble.transform.parent = null;
+            if(transform.parent){
+                ObjectInBubble.transform.parent = transform.parent; // set the parent to the point on the map so the cassette can disappear with it
+            } else {
+                ObjectInBubble.transform.parent = null;
+            }
+            
             if(ObjectInBubble.GetComponent<Rigidbody>()){
                 ObjectInBubble.GetComponent<Rigidbody>().isKinematic = false;
             }

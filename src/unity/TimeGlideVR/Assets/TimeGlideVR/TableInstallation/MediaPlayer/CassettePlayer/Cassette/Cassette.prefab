@@ -360,6 +360,7 @@ GameObject:
   - component: {fileID: 3562664966194787014}
   - component: {fileID: 5370453479130947969}
   - component: {fileID: 6449455130746926885}
+  - component: {fileID: 7591166119474920216}
   m_Layer: 0
   m_Name: Cassette
   m_TagString: CollisionIgnore
@@ -654,7 +655,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  objectToSpawn: {fileID: 8147861230455996878, guid: d5fd8b9dcc3c23344ad979504244fae9, type: 3}
+  objectToSpawn: {fileID: 0}
   invokeEventOnInsert: 1
 --- !u!114 &5370453479130947969
 MonoBehaviour:
@@ -783,6 +784,24 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &7591166119474920216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890201679229519820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6f5de766bf7e74c981d10f04880b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyObject: 0
+  spawnParent: 1
+  childPositionDepth: 2
+  parentObject: {fileID: 8147861230455996878, guid: d5fd8b9dcc3c23344ad979504244fae9, type: 3}
+  useAwakePosition: 1
+  useAwakeScale: 0
 --- !u!1 &5590109977237184814
 GameObject:
   m_ObjectHideFlags: 0
