@@ -23,7 +23,7 @@ public class TVScript : MonoBehaviour
     private MediaFile _currentMediaFile;
     void Start()
     {
-        Debug.Log("TVScript Start");
+        Debug.Log("TVScript SlideUp");
         try
         {
             _mediaTypeUnityEvents = FindObjectOfType<MediaTypeUnityEvents>(true);

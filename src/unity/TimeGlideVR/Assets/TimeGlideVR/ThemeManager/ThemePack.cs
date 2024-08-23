@@ -12,6 +12,7 @@ namespace TimeGlideVR.ThemeManager
         Lid,
         LiftFrame,
         CinemaDoor,
+        MainButton,
     }
 
     public class ThemePack : MonoBehaviour
@@ -24,6 +25,7 @@ namespace TimeGlideVR.ThemeManager
         [SerializeField] public Material lidMaterial;
         [SerializeField] public Material liftFrameMaterial;
         [SerializeField] public Material cinemaDoorMaterial;
+        [SerializeField] public Material mainButtonMaterial;
 
         public Material GetThemeItem(ThemedMaterials themeItemName)
         {
@@ -37,6 +39,7 @@ namespace TimeGlideVR.ThemeManager
                 ThemedMaterials.Lid => lidMaterial,
                 ThemedMaterials.LiftFrame => liftFrameMaterial,
                 ThemedMaterials.CinemaDoor => cinemaDoorMaterial,
+                ThemedMaterials.MainButton => mainButtonMaterial,
                 _ => null
             };
         }

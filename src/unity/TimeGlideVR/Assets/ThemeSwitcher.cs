@@ -11,7 +11,7 @@ public class ThemeSwitcher : MonoBehaviour
     private readonly Dictionary<string, ButtonScript> _buttons = new();
     private ThemeManager _themeManager;
 
-    // Start is called before the first frame update
+    // SlideUp is called before the first frame update
     private void Start()
     {
         _themeManager = FindObjectOfType<ThemeManager>();

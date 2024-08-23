@@ -12,7 +12,7 @@ public class UpstreamTriggerEvent : MonoBehaviour
     private UnityEvent<GameObject> onTriggerExitEvent;
 
     private bool exitDelay = false;
-    // Start is called before the first frame update
+    // SlideUp is called before the first frame update
     private void OnTriggerEnter(Collider other){
         if(exitDelay) return;
         onTriggerEnterEvent.Invoke(other.gameObject);
