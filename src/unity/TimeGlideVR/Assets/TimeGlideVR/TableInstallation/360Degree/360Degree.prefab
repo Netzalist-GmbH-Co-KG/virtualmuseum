@@ -468,6 +468,7 @@ MonoBehaviour:
   nextMediaText: {fileID: 2152078678020570461}
   defaultTexture: {fileID: 8400000, guid: 5ca059aa1a38c8f4691a6a524bd2263b, type: 2}
   contentButton: {fileID: 2349323737723042693}
+  floorMarker: {fileID: 8010533989961718799}
   imageTexture: {fileID: 8400000, guid: 5ca059aa1a38c8f4691a6a524bd2263b, type: 2}
   videoTexture: {fileID: 8400000, guid: adc6b13aa0530914a967531d2fb1bd5f, type: 2}
   center: {fileID: 3966581342136028625}
@@ -1248,6 +1249,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d8fa149cf92b7c4b90333d5fb640809, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3d8fa149cf92b7c4b90333d5fb640809, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3d8fa149cf92b7c4b90333d5fb640809, type: 3}
+      propertyPath: m_ReceiveShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3d8fa149cf92b7c4b90333d5fb640809, type: 3}

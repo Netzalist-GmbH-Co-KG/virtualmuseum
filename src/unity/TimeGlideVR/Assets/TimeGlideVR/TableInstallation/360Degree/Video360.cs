@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using TimeGlideVR.Server.Data;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Video;
@@ -18,6 +16,7 @@ namespace TimeGlideVR.TableInstallation._360Degree
         [SerializeField] private TextMeshPro nextMediaText;
         [SerializeField] private Texture defaultTexture;
         [SerializeField] private GameObject contentButton;
+        [SerializeField] private GameObject floorMarker;
         
         private AudioSource _audioSource;
         private MeshRenderer _videoScreenRenderer;
@@ -99,11 +98,16 @@ namespace TimeGlideVR.TableInstallation._360Degree
                 if (_currentMediaFile is null)
                 {
                     _transparency = 0.0f;
-                    contentButton.SetActive(false);
+                    if(contentButton.activeSelf)
+                        contentButton.SetActive(false);
+                    if(floorMarker.activeSelf)
+                        floorMarker.SetActive(false);
                 }
                 else
                 {
                     contentButton.SetActive(_mediaFiles.Count > 1);
+                    if(!floorMarker.activeSelf)
+                        floorMarker.SetActive(true);
                     var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(
                         new Vector3(player.position.x, 0, player.position.z),
                         new Vector3(center.position.x, 0, center.position.z));

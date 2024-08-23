@@ -53,7 +53,10 @@ MonoBehaviour:
   buttonPrefab: {fileID: 1488446960747116550, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
   wallButtonPrefab: {fileID: 5398177303494326546}
   dialectButtonPrefab: {fileID: 9182343516375140796}
-  onButtonClick:
+  onTimeRowButtonClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onDespawnAllItems:
     m_PersistentCalls:
       m_Calls: []
   onWallButtonClick:
@@ -1629,6 +1632,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f3e8d38736a2d154586bb0017361b3a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: f3e8d38736a2d154586bb0017361b3a2, type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f3e8d38736a2d154586bb0017361b3a2, type: 3}

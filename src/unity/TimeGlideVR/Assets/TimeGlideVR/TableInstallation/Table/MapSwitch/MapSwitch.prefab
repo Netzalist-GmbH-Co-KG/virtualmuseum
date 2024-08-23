@@ -126,6 +126,22 @@ PrefabInstance:
       propertyPath: m_text
       value: "Urkundliche Ersterw\xE4hnungen"
       objectReference: {fileID: 0}
+    - target: {fileID: 5609620111151525631, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609620111151525631, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195751318589864047, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195751318589864047, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
@@ -451,6 +467,22 @@ PrefabInstance:
     - target: {fileID: 4976455220338619502, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
       propertyPath: m_fontSizeBase
       value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609620111151525631, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609620111151525631, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195751318589864047, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195751318589864047, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
       propertyPath: callDeactivateOnDisable
@@ -792,6 +824,22 @@ PrefabInstance:
     - target: {fileID: 4976455220338619502, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
       propertyPath: m_text
       value: "Dialekte in Th\xFCringen"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609620111151525631, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609620111151525631, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195751318589864047, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195751318589864047, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6887664544019329749, guid: 7c4bb1f945996e340bb97f91fb64ecae, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size

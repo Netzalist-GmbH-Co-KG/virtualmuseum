@@ -106,8 +106,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             }
 
             _tableConfiguration = await _configurationClient.GetTableConfiguration(firstTable.Value);
-            _dataLoaded = true;
             Debug.Log($"Configuration loaded: {_tableConfiguration.LocationTimeRows.Count} rows");
+            _dataLoaded = true;
         }
 
         private void InitializeDummyCoordinates()
@@ -233,11 +233,10 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 dropObject.Init(label, null, despawnHeight, distance);
                 newDropObject.transform.localPosition = spawnLocation;
                 newDropObject.transform.parent = null; // this is so deleting the "root" in ClearItems or above wont delete the whole installation
-                List<Transform> dictList = new List<Transform>();
-                dictList.Add(newDropObject.transform);
+                var dictList = new List<Transform> { newDropObject.transform };
                 if(mediaFiles.Count > 0) {
                     var cassetteTransform = SpawnBubbleWithCassette(mediaFiles, label, cassettePrefab);
-                    if(cassetteTransform) dictList.Add(cassetteTransform);
+                    dictList.AddRange(cassetteTransform);
                 }
                 
                 _spawnedItems.Add(label, dictList);
@@ -251,27 +250,29 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             
             foreach (var item in _spawnedItems.Values)
             {
-                if (item != null && item.Count != 0){
+                if (item == null || item.Count == 0) continue;
+                try
+                {
                     foreach(var t in item){ // at max 2 items per city, the item with label and the bubble/cassette
-                        if(t.root.name == "FullInstallation") {
-                            Destroy(t.gameObject);
-                            continue;
-                        }
-                        Destroy(t.root.gameObject);
+                        Destroy(t.gameObject);
                     }
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.ToString());
                 }
             }
             _spawnedItems.Clear();
         }
 
-        public Transform SpawnBubbleWithCassette(List<MediaFile> mediaFiles, string cityName, GameObject cassettePrefab){
+        public List<Transform> SpawnBubbleWithCassette(List<MediaFile> mediaFiles, string cityName, GameObject cassettePrefab){
             var bubble = Instantiate(bubblePrefab);
             var insideBubbleReference = bubble.transform.GetChild(0).GetChild(0);
             var cas = Instantiate(cassettePrefab, insideBubbleReference.transform);
             cas.transform.localPosition = Vector3.zero;
             cas.GetComponent<Cassette>().Init(mediaFiles, cityName);
             bubblePlacerReference.PlaceBubble(bubble.transform, cas);
-            return cas.transform;
+            return new List<Transform> { cas.transform, bubble.transform };
         }
 
         public void ClearItems()
