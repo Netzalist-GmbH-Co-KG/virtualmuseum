@@ -15,23 +15,22 @@ public class PresentationMediaManager : MonoBehaviour
     [SerializeField] private string presentationUrl;
     [SerializeField] private bool isPlaying = false;
     private float timer = 0;
-    public bool started = false;
-
+    public bool playing = false;
 
     private void Update() {
         //increment timer and call PlayMediaAtTime on all streams with given timer
-        if(!started) return;
+        if(!playing) return;
         timer += Time.deltaTime; 
         foreach(var stream in streams) {
             stream.PlayMediaAtTime(timer);
         }
     }
 
-
     public void SetPresentationUrlAndGetStreams(string url) {
         presentationUrl = url;
         GetAllStreams();
     }
+
     private async void GetAllStreams(){
         //TODO get all streams from server and set up their respective dependencies
         //TODO this means spawning screens and audio sources at the required positions and linking them to their respective streams
@@ -39,22 +38,24 @@ public class PresentationMediaManager : MonoBehaviour
         // 5 3 1 2 4
         //     ^
         //this being the middle right in front of the user and the other screens curving around the user
+        //screen spawning could work using this transforms position and rotating 
+        //around it and spawning a screen using that forward vector with a distance param
     }
 
     public void GoBackSeconds(float seconds = 10){
         timer -= seconds;
-        //TODO update all streams to play at new time -> bool to tell all streams that time has been changed and players should be updated
+        //TODO update all streams to play at new time -> in stream call ChangedTimeForcefully
     }
 
     public void GoForwardSeconds(float seconds = 10){
         timer += seconds;
-        //TODO update all streams to play at new time -> bool to tell all streams that time has been changed and players should be updated
+        //TODO update all streams to play at new time -> in stream call ChangedTimeForcefully
     }
 
     public void ResetPresentationToStart(){
         timer = 0;
-        started = false;
-        //TODO update all streams to play at new time -> bool to tell all streams that time has been changed and players should be updated
+        playing = false;
+        //TODO update all streams to play at new time -> in stream call ChangedTimeForcefully with bool false
     }
 
     public void Reset() {
@@ -62,30 +63,34 @@ public class PresentationMediaManager : MonoBehaviour
         presentationUrl = null;
         streams = new List<Stream>();
         timer = 0;
-        started = false;
+        playing = false;
     }
 
     
 }
 
 public class Stream {
-    public List<MediaStreamData> mediaStreamDatas = new List<MediaStreamData>();
-    private bool hasTimeBeenChangedByUser = false;
+    public List<MediaStreamData> mediaStreamData = new List<MediaStreamData>(3);
+    //mediaStreamData is linked to a screen by its position in the list: 1 being the middle, 2 being top and 3 being bottom
 
-    public Stream(List<MediaStreamData> mediaStreamDatas = null) {
-        if (mediaStreamDatas != null) {
-            this.mediaStreamDatas = mediaStreamDatas;
-            foreach(var mediaStreamData in mediaStreamDatas) {
-                mediaStreamData.streamIBelongTo = this;
+    public Stream(List<MediaStreamData> mediaStreamData = null) {
+        if (mediaStreamData != null) {
+            this.mediaStreamData = mediaStreamData;
+            foreach(var data in mediaStreamData) {
+                data.streamIBelongTo = this;
             }
         }
     }
 
     public void PlayMediaAtTime(float timer) {
-        foreach(var mediaStreamData in mediaStreamDatas) {
+        foreach(var data in mediaStreamData) {
             //TODO check if hasTimeBeenChangedByUser is true and stop media, set videoplayers to new time and start them again
-            mediaStreamData.TryPlayMedia(timer);
+            data.TryPlayMedia(timer);
         }
+    }
+
+    public void ChangedTimeForcefully(bool startAfterwards = true) {
+        //TODO stop all media, set their times and start them again
     }
 }
 
@@ -110,6 +115,7 @@ public class MediaStreamData {
     }
 
     public void TryPlayMedia(float timer){
+        //TODO if Mediafile is null, return
         //TODO if videoPlayer is not null, play video
         //TODO if _audioSource is not null, play audio
         //TODO check if this media was played in the last frame, if not initiate transition for showing screen
