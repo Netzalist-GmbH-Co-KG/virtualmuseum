@@ -18,5 +18,11 @@ namespace TimeGlideVR.Server.Data
         public string? Description { get; set; }
         public string? Type { get; set; }
         public string? Url { get; set; }
+
+        //slide show relevant
+        public string? Stream { get; set; }
+        public string? StartTime { get; set; }
+        public string? FadeInEffect { get; set; }
+        public string? FadeOutEffect { get; set; }
     }
 }
