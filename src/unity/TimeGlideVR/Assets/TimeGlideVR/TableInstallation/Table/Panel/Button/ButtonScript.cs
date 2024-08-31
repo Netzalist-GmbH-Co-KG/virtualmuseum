@@ -13,30 +13,26 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
         private Light lightComponent;
         private AudioSource _clickSound;
         private TextMeshPro _label;
-        private string labelText = null;
+        public string LabelText { get; set; } = null;
         
         [SerializeField]
         public UnityEvent<ToggleButtonEvent> onClick;
-        [SerializeField]
-        public UnityEvent<ToggleButtonEvent> onDeactivate;
-        [SerializeField]
-        private bool callDeactivateOnDisable = false;
 
         private void Awake()
         {
             _label = GetComponentInChildren<TextMeshPro>();
             _clickSound = GetComponent<AudioSource>();
-            if(labelText != null)
-                _label.text = labelText;
+            if(LabelText != null)
+                _label.text = LabelText;
             else
-                labelText = _label.text;
+                LabelText = _label.text;
         }
 
         public void Init(string label)
         {
-            labelText = label;
+            LabelText = label;
             if(_label != null)
-                _label.text = labelText;
+                _label.text = LabelText;
         }
         
         public void SetSelected(bool selected)
@@ -49,29 +45,11 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
         {
             _selected = !_selected;
             lightComponent.gameObject.SetActive(_selected);
-            
 
             if(!_clickSound.isPlaying)
                 _clickSound.Play();
 
-            if(_selected == false){
-                Deactivate();
-                return;
-            } 
-
-            onClick.Invoke(new ToggleButtonEvent(labelText, _selected));
+            onClick.Invoke(new ToggleButtonEvent(LabelText, _selected));
         }
-
-        public void Deactivate(){
-            _selected = false;
-            lightComponent.gameObject.SetActive(_selected);
-            onDeactivate.Invoke(new ToggleButtonEvent(labelText, _selected));
-        }
-
-        private void OnDisable() {
-            if(callDeactivateOnDisable)
-                Deactivate();
-        }
-        
     }
 }

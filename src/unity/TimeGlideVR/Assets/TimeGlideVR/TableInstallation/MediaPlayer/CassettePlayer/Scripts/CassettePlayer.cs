@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Oculus.Interaction;
@@ -23,6 +24,7 @@ public class CassettePlayer : MonoBehaviour
     private bool cassetteInserted = false;
     private GameObject cassetteReference;
     private MediaTypeUnityEvents mediaTypeUnityEvents;
+    private CasettePlayerStatus casettePlayerStatus;
 
     private void Update() {
         if(cassetteInserted && cassetteReference == null){
@@ -56,6 +58,7 @@ public class CassettePlayer : MonoBehaviour
 
     public void RemoveCassette(){
         cassetteInserted = false;
+        casettePlayerStatus.Open();
         if(cassetteReference) cassetteReference.transform.parent = null;
         ejectedEvent.Invoke();
         Eject();
@@ -74,14 +77,15 @@ public class CassettePlayer : MonoBehaviour
             if(rb){
                 rb.isKinematic = false;
                 Vector3 dir = (ejectionDirection.transform.position - cassetteReference.transform.position).normalized;
-                rb.AddForce(dir * 5, ForceMode.Impulse);
+                rb.AddForce(dir * 2, ForceMode.Impulse);
             }
             cassetteReference.TryGetComponent<FeatherFall>(out var featherFall);
             if(featherFall) featherFall.enabled = true;
             TryDestroySpawnedMedia();
             cassetteReference = null;
         }
-        mediaEventAudioSource.Stop();
+        if(mediaEventAudioSource!=null && mediaEventAudioSource.isPlaying)
+            mediaEventAudioSource.Stop();
         Debug.Log("Ejected cassette");
     }
 
@@ -93,6 +97,7 @@ public class CassettePlayer : MonoBehaviour
             i += Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
+        casettePlayerStatus.Close();
         animateInsertFinishedEvent.Invoke();
     }
 
@@ -177,5 +182,10 @@ public class CassettePlayer : MonoBehaviour
         if(cassette){
             cassette.DestroyObject();
         }
+    }
+
+    private void Start()
+    {
+        casettePlayerStatus = GetComponentInChildren<CasettePlayerStatus>(true);
     }
 }

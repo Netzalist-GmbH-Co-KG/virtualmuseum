@@ -15,7 +15,9 @@ namespace TimeGlideVR.TableInstallation._360Degree
         [SerializeField] private TextMeshPro currentMediaText;
         [SerializeField] private TextMeshPro nextMediaText;
         [SerializeField] private Texture defaultTexture;
-
+        [SerializeField] private GameObject contentButton;
+        [SerializeField] private GameObject floorMarker;
+        
         private AudioSource _audioSource;
         private MeshRenderer _videoScreenRenderer;
         private Material _videoScreenMaterial;
@@ -84,6 +86,7 @@ namespace TimeGlideVR.TableInstallation._360Degree
                     _audioSource.Stop();
             _playingVideo = false;
             _mediaFiles.Clear();
+            contentButton.SetActive(false);
             ClearScreen();
         }
 
@@ -92,23 +95,38 @@ namespace TimeGlideVR.TableInstallation._360Degree
             try
             {
                 if (player is null) return;
-                var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(
-                    new Vector3(player.position.x, 0, player.position.z),
-                    new Vector3(center.position.x, 0, center.position.z));
-                if (horizontalDistanceOfPlayerFromCenter > 3)
+                if (_currentMediaFile is null)
                 {
-                    // 90% transparency
-                    _transparency = 0.4f;
-                }
-                else if (horizontalDistanceOfPlayerFromCenter is < 3 and > 1)
-                {
-                    // gradually increase transparency from 90% to 0%
-                    _transparency = 0.4f + (3 - horizontalDistanceOfPlayerFromCenter) * 0.3f;
+                    _transparency = 0.0f;
+                    if(contentButton.activeSelf)
+                        contentButton.SetActive(false);
+                    if(floorMarker.activeSelf)
+                        floorMarker.SetActive(false);
                 }
                 else
                 {
-                    // 0% transparency
-                    _transparency = 1;
+                    contentButton.SetActive(_mediaFiles.Count > 1);
+                    if(!floorMarker.activeSelf)
+                        floorMarker.SetActive(true);
+                    var horizontalDistanceOfPlayerFromCenter = Vector3.Distance(
+                        new Vector3(player.position.x, 0, player.position.z),
+                        new Vector3(center.position.x, 0, center.position.z));
+
+                    if (horizontalDistanceOfPlayerFromCenter > 3)
+                    {
+                        // 90% transparency
+                        _transparency = 0.1f;
+                    }
+                    else if (horizontalDistanceOfPlayerFromCenter is < 3 and > 1)
+                    {
+                        // gradually increase transparency from 90% to 0%
+                        _transparency = 0.4f + (3 - horizontalDistanceOfPlayerFromCenter) * 0.3f;
+                    }
+                    else
+                    {
+                        // 0% transparency
+                        _transparency = 1;
+                    }
                 }
 
                 SetTransparency();
@@ -121,14 +139,12 @@ namespace TimeGlideVR.TableInstallation._360Degree
 
         private void SetTransparency()
         {
-            if (!videoScreen.activeSelf) return;
-
             var color = _videoScreenMaterial.color;
             color.a = _transparency;
             _videoScreenMaterial.color = color;
         
             var doorColor = _doorMaterial.color;
-            doorColor.a = _transparency < 0.5f ? 0.1f : _transparency;
+            doorColor.a = _transparency < 0.5f ? 0.0f : _transparency;
             _doorMaterial.color = doorColor;
         }
 
