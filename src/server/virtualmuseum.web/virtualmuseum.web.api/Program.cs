@@ -45,8 +45,6 @@ builder.Services.AddRadzenComponents();
 
 var domain = $"https://{builder.Configuration["Auth0:Domain"]}/";
 
-builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
-
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

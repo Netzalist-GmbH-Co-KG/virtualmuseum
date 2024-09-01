@@ -7,7 +7,6 @@ namespace virtualmuseum.web.api.Api;
 
 [ApiController]
 [Route("api")]
-[Authorize]
 public class ConfigurationController : Controller
 {
     private readonly IConfigurationRepository _configurationRepository;

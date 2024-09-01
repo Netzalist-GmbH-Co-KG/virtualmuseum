@@ -2,7 +2,6 @@
 @using virtualmuseum.web.api.Services
 @inject ICustomRoleService CustomRoleService
 @attribute [Authorize]
-
 <h3>Api Keys</h3>
 @if (!CustomRoleService.HasRole("Administrator"))
 {
