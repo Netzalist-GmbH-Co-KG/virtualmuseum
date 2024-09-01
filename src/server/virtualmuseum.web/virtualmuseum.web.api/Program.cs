@@ -27,6 +27,7 @@ builder.Services.Configure<ReleaseServiceConfig>(builder.Configuration.GetSectio
 builder.Services.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
 builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddSingleton<IReleaseService, ReleaseService>();
+builder.Services.AddTransient<ICustomRoleService, CustomRoleService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -92,24 +93,23 @@ builder.Services.AddAuthentication(options =>
                 return Task.CompletedTask;
             }
         };
-    });
-    // .AddJwtBearer(options =>
-    // {
-    //     options.Authority = domain;
-    //     options.Audience = builder.Configuration["Auth0:Audience"];
-    //     options.TokenValidationParameters = new TokenValidationParameters
-    //     {
-    //         NameClaimType = ClaimTypes.NameIdentifier
-    //     };
-    // });
-
-
-    builder.Services.AddAuthorization(options =>
+    })
+    .AddJwtBearer(options =>
     {
-        options.AddPolicy("Administrator", policy => policy.RequireClaim(ClaimTypes.Role, "Administrator"));
-        options.AddPolicy("read:messages", policy => policy.Requirements.Add(new
-            HasScopeRequirement("read:messages", domain)));
+        options.Authority = domain;
+        options.Audience = builder.Configuration["Auth0:Audience"];
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = ClaimTypes.NameIdentifier
+        };
     });
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Administrator", policy => policy.RequireClaim(ClaimTypes.Role, "Administrator"));
+
+});
 
 
 builder.Services.AddHttpContextAccessor();

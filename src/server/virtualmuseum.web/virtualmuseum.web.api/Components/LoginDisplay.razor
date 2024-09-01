@@ -13,14 +13,4 @@
 
 @code {
     private CustomAuthenticationStateProvider CustomAuthStateProvider => (CustomAuthenticationStateProvider)AuthStateProvider;
-
-    private void BeginSignIn()
-    {
-        Navigation.NavigateTo("login", true);
-    }
-
-    private void BeginSignOut()
-    {
-        Navigation.NavigateTo("logout", true);
-    }
 }

@@ -1,9 +1,10 @@
 ﻿@page "/ApiKeys"
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@using virtualmuseum.web.api.Services
+@inject ICustomRoleService CustomRoleService
 @attribute [Authorize]
-<h3>Api Keys</h3>
 
-@if (!isAdmin)
+<h3>Api Keys</h3>
+@if (!CustomRoleService.HasRole("Administrator"))
 {
     <div class="rounded-2 alert-danger p-3 mt-5 mb-5" style="border: gray 1px solid;">
         <h4>Access Denied</h4>
@@ -19,39 +20,4 @@ else
         <p>An dieser Stelle können Sie künftig API Keys erstellen.</p>
         <p>API Keys werden benötigt, um den einzelnen Geräten (Quest3) Zugang zu den hier konfigurierten Daten zu erlauben.</p>
     </div>
-
-    <div>
-        <h4>User Roles @isAdmin</h4>
-        @if (roles != null)
-        {
-            @foreach (var role in roles)
-            {
-                <p>@role</p>
-            }
-        }
-        else
-        {
-            <p>No roles found.</p>
-        }
-    </div>
-}
-
-@code {
-    private IEnumerable<string> roles;
-    private bool isAdmin;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity.IsAuthenticated)
-        {
-            roles = user.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
-                .Select(c => c.Value);
-        }
-        
-        isAdmin = user.IsInRole("Administrator");
-    }
 }

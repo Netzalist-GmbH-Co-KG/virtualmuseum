@@ -1,21 +1,34 @@
 ﻿@page "/User"
-@rendermode InteractiveServer
 @using virtualmuseum.web.api.Services
+@rendermode InteractiveServer
 @inject IUserRoleService UserRoleService
+@inject ICustomRoleService CustomRoleService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+
 @attribute [Authorize]
 
-<h3>Benutzerverwaltung</h3>
+<h3>Benutzerverwaltung!</h3>
 
-<table class="table">
-    <thead>
+@if (!CustomRoleService.HasRole("Administrator"))
+{
+    <div class="rounded-2 alert-danger p-3 mt-5 mb-5" style="border: gray 1px solid;">
+        <h4>Access Denied</h4>
+        <p>&nbsp;</p>
+        <p>Sorry, you are not authorized to access this page.</p>
+    </div>
+}
+else
+{
+
+    <table class="table">
+        <thead>
         <tr>
             <th>Benutzer-ID</th>
             <th>Benutzername</th>
             <th>Rolle</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var user in _users)
         {
             <tr>
@@ -30,8 +43,9 @@
                 </td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}
 
 @code {
     private List<UserRole> _users = new List<UserRole>();

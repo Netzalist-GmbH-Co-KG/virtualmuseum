@@ -1,13 +1,28 @@
 ﻿@page "/Help"
+@using virtualmuseum.web.api.Services
 @attribute [Authorize]
+@inject ICustomRoleService CustomRoleService
 <h3>Help</h3>
-<div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
-    <h4>Dokumentation</h4>
-    <p>&nbsp;</p>
-    <p>
-    An dieser Stelle wird künftig die Dokumentation zu finden sein.
-    </p>
-</div>
+
+@if (!CustomRoleService.HasRole("Administrator") && !CustomRoleService.HasRole("Contributor"))
+{
+    <div class="rounded-2 alert-danger p-3 mt-5 mb-5" style="border: gray 1px solid;">
+        <h4>Access Denied</h4>
+        <p>&nbsp;</p>
+        <p>Sorry, you are not authorized to access this page.</p>
+    </div>
+}
+else
+{
+    <div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
+        <h4>Dokumentation</h4>
+        <p>&nbsp;</p>
+        <p>
+            An dieser Stelle wird künftig die Dokumentation zu finden sein.
+        </p>
+    </div>
+}
+
 @code {
     
 }
