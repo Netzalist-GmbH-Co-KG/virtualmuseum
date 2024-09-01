@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using virtualmuseum.web.api.Services
 
+@inject ICustomRoleService CustomRoleService
 <PageTitle>Home</PageTitle>
 
 <h3>TimeGlideVR Administration</h3>
@@ -8,9 +10,19 @@
     <h4>Willkommen</h4>
     <p>&nbsp;</p>
     <p>
-    Dies ist die Administration Oberfläche zur Verwaltung der
-    TimeGlideVR Anwendung.
+        Dies ist die Administration Oberfläche zur Verwaltung der
+        TimeGlideVR Anwendung.
     </p>
+
+    @if(CustomRoleService.HasRole("Unauthorized"))
+    {
+        <hr/>
+        <h4>Hinweis</h4>
+        <p>
+            Ihr Benutzerkonto wurde noch nicht freigeschaltet. Bitte wenden Sie sich an den Administrator.
+        </p>
+    }
+    
 </div>
 
 
