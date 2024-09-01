@@ -5,8 +5,8 @@
 
 @inject IReleaseService ReleaseService
 @inject NavigationManager NavigationManager
-
-<h3>ReleasesComponent</h3>
+@attribute [Authorize]
+<h3>Releases</h3>
 <div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
     <h4>Hinweise zur Installation</h4>
     <p>Hier finden sie alle veröffentlichten Versionen der App.</p>

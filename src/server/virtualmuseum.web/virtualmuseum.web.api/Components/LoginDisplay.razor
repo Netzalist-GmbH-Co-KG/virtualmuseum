@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        <a href="/logout">@($"{CustomAuthStateProvider.GetUsername()} ({CustomAuthStateProvider.GetRole()}) abmelden")</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="login/">Anmelden</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private CustomAuthenticationStateProvider CustomAuthStateProvider => (CustomAuthenticationStateProvider)AuthStateProvider;
+
+    private void BeginSignIn()
+    {
+        Navigation.NavigateTo("login", true);
+    }
+
+    private void BeginSignOut()
+    {
+        Navigation.NavigateTo("logout", true);
+    }
+}

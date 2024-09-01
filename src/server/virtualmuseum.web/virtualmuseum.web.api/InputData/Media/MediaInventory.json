@@ -1,0 +1,108 @@
+﻿{
+  "Files": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "FileName": "Schloss Wilhelmsburg/20240805_125652_717.jpg",
+      "Name": "Schloss Wilhelmsburg",
+      "Url": "https://timeglide-vr.b-cdn.net/20240805_125652_717.jpg",
+      "Type": "3Djpg",
+      "Description": "Im Schoss Wilhelmsburg"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "FileName": "Schloss Wilhelmsburg/Wilhelmsburg_aussen.jpg",
+      "Name": "Im Hof",
+      "Url": "https://timeglide-vr.b-cdn.net/Wilhelmsburg_aussen.jpg",
+      "Type": "3Djpg",
+      "Description": "Im Hof"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Schloss Wilhelmsburg/Intro3.mp4",
+      "Name":"Einführungsvideo",
+      "Url": "https://timeglide-vr.b-cdn.net/Intro.mp4",
+      "Type": "3Dmp4",
+      "Description": "Einführunsvideo zur App"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Arnstadt/Arnstadt-Header.jpg",
+      "Name":"Panorama Bild von Arnstadt",
+      "Url": "https://timeglide-vr.b-cdn.net/Arnstadt-Header.jpg",
+      "Type": "2Djpg",
+      "Description": "Arnstadt Panorama"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Arnstadt/Museum_Arnstadt.mp3",
+      "Name":"Informationen zu Arnstadt",
+      "Url": "https://timeglide-vr.b-cdn.net/Museum_Arnstadt.mp3",
+      "Type": "Audio",
+      "Description": "Informationen zu Arnstadt"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof/IMG_20240609_110734_00_374.jpg",
+      "Name":"Im Tropical Island",
+      "Url": "https://timeglide-vr.b-cdn.net/IMG_20240609_110734_00_374.jpg",
+      "Type": "3Djpg",
+      "Description": "Im Tropical Island"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof/Spaziergang1.jpg",
+      "Name":"Mit dem Hund unterwegs 1",
+      "Url": "https://timeglide-vr.b-cdn.net/Spaziergang1.jpg",
+      "Type": "3Djpg",
+      "Description": "Mit dem Hund unterwegs"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof/Spaziergang2.jpg",
+      "Name":"Mit dem Hund unterwegs 2",
+      "Url": "https://timeglide-vr.b-cdn.net/Spaziergang2.jpg",
+      "Type": "3Djpg",
+      "Description": "Mit dem Hund unterwegs"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof/Spaziergang3.jpg",
+      "Name":"Mit dem Hund unterwegs 3",
+      "Url": "https://timeglide-vr.b-cdn.net/Spaziergang3.jpg",
+      "Type": "3Djpg",
+      "Description": "Mit dem Hund unterwegs"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof/Spaziergang4.jpg",
+      "Name":"Mit dem Hund unterwegs 4",
+      "Url": "https://timeglide-vr.b-cdn.net/Spaziergang4.jpg",
+      "Type": "3Djpg",
+      "Description": "Mit dem Hund unterwegs"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof/Spaziergang5.jpg",
+      "Name":"Mit dem Hund unterwegs zu Hause",
+      "Url": "https://timeglide-vr.b-cdn.net/Spaziergang5.jpg",
+      "Type": "3Djpg",
+      "Description": "Mit dem Hund unterwegs"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof historisch/NuesshlehofUm1890.jpg",
+      "Name":"Der Nüssleshof um 1890",
+      "Url": "https://timeglide-vr.b-cdn.net/NuesshlehofUm1890.jpg",
+      "Type": "2Djpg",
+      "Description": "Nüßleshof um 1890"
+    },
+    {
+      "Id": "00000000-0000-0000-0000-000000000001",
+      "FileName": "Nüßleshof historisch/AltesPostamtInFambach.jpg",
+      "Name":"Altes Postamt in Fambach",
+      "Url": "https://timeglide-vr.b-cdn.net/AltesPostamtInFambach.jpg",
+      "Type": "2Djpg",
+      "Description": "Altes Postamt in Fambach"
+    },
+  ]
+}

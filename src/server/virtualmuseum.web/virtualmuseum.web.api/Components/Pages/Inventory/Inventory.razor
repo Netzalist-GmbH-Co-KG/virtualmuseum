@@ -1,6 +1,7 @@
 ﻿@rendermode InteractiveServer
 
 @page "/Inventory"
+@attribute [Authorize]
 @using virtualmuseum.web.data
 @using virtualmuseum.web.api.Services
 @inject IConfigurationRepository ConfigurationRepository
@@ -11,16 +12,6 @@
     <RadzenTree Data=@_rooms Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange">
         <RadzenTreeLevel Text="@GetTextForNode"/>
     </RadzenTree>
-    @* *@
-    @* <p>&nbsp;</p> *@
-    @* <div class="small font-monospace bg-black text-white"> *@
-    @*     <ul> *@
-    @*         @foreach (var message in _debugMessages) *@
-    @*         { *@
-    @*             <li>@message</li> *@
-    @*         } *@
-    @*     </ul> *@
-    @* </div> *@
 </div>
 
 @code {
@@ -47,11 +38,11 @@
         Log($"Getting text for: {data.GetType()}");
         return data.GetType() switch
         {
-            { } t when t == typeof(Room) => ((Room)data).Label,
-            { } t when t == typeof(InventoryPlacement) => ((InventoryPlacement)data).InventoryItem.Label,
-            { } t when t == typeof(LocationTimeRow) => ((LocationTimeRow)data).Label,
-            { } t when t == typeof(GeoEvent) => ((GeoEvent)data).Label,
-            { } t when t == typeof(MediaFile) => ((MediaFile)data).Name,
+            { } t when t == typeof(Room) => ((Room)data).Label!,
+            { } t when t == typeof(InventoryPlacement) => ((InventoryPlacement)data).InventoryItem!.Label!,
+            { } t when t == typeof(LocationTimeRow) => ((LocationTimeRow)data).Label!,
+            { } t when t == typeof(GeoEvent) => ((GeoEvent)data).Label!,
+            { } t when t == typeof(MediaFile) => ((MediaFile)data).Name!,
             _ => "Unknown"
         };
     }

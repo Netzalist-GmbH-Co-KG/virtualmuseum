@@ -1,11 +1,55 @@
 ﻿@page "/User"
-<h3>Benutzer</h3>
-<div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
-    <h4>Benutzerverwaltung</h4>
-    <p>&nbsp;</p>
-    <p>An dieser Stelle können Sie künftig die Rechte von Benutzern verwalten.</p>
-    <p>So können verschiedene Personen bei der Erweiterung des "Inventars" helfen.</p>
-</div>
+@rendermode InteractiveServer
+@using virtualmuseum.web.api.Services
+@inject IUserRoleService UserRoleService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+<h3>Benutzerverwaltung</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Benutzer-ID</th>
+            <th>Benutzername</th>
+            <th>Rolle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in _users)
+        {
+            <tr>
+                <td>@user.UserId</td>
+                <td>@user.Username</td>
+                <td>
+                    <select @onchange="@(e => UpdateUserRole(user.UserId, e.Value.ToString()))">
+                        <option value="Unauthorized" selected="@(user.Role == "Unauthorized")">Unauthorized</option>
+                        <option value="Contributor" selected="@(user.Role == "Contributor")">Contributor</option>
+                        <option value="Administrator" selected="@(user.Role == "Administrator")">Administrator</option>
+                    </select>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 @code {
-    
+    private List<UserRole> _users = new List<UserRole>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUsers();
+    }
+
+    private async Task LoadUsers()
+    {
+        _users = await UserRoleService.GetAllUserRolesAsync();
+    }
+
+    private async Task UpdateUserRole(string userId, string newRole)
+    {
+        await UserRoleService.SetUserRoleAsync(userId, newRole);
+        await LoadUsers();
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    }
 }
