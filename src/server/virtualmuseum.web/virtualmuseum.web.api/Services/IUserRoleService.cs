@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using virtualmuseum.web.api.Data;
 using virtualmuseum.web.data;
 
 namespace virtualmuseum.web.api.Services

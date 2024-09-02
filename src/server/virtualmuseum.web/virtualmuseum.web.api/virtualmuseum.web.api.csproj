@@ -34,6 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Components\Pages\Inventory\Components\" />
       <Folder Include="db\" />
     </ItemGroup>
 

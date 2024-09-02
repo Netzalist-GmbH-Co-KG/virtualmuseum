@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using virtualmuseum.web.api.Services;
 
@@ -10,9 +11,11 @@ using virtualmuseum.web.api.Services;
 namespace virtualmuseum.web.api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240901143052_AddedMultimediaPresentation")]
+    partial class AddedMultimediaPresentation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -78,6 +81,10 @@ namespace virtualmuseum.web.api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ItemIDs")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -96,9 +103,6 @@ namespace virtualmuseum.web.api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("MediaFileId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("MultimediaPresentationId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SequenceNumber")

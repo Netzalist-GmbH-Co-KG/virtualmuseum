@@ -11,7 +11,6 @@ using virtualmuseum.web.api.Components;
 using virtualmuseum.web.api.Services;
 using virtualmuseum.web.api.Services.Configuration;
 using Microsoft.EntityFrameworkCore;
-using virtualmuseum.web.api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +23,11 @@ builder.Configuration
 
 builder.Services.Configure<ReleaseServiceConfig>(builder.Configuration.GetSection("ReleaseService"));
 
-builder.Services.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
+builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
 builder.Services.AddTransient<IMediaService, MediaService>();
 builder.Services.AddSingleton<IReleaseService, ReleaseService>();
 builder.Services.AddTransient<ICustomRoleService, CustomRoleService>();
+builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); 
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

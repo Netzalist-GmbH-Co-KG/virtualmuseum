@@ -2,5 +2,5 @@
 
 public class MediaInventory
 {
-    public List<MediaFile> Files { get; set; }
+    public List<MediaFile> Files { get; set; } = [];
 }

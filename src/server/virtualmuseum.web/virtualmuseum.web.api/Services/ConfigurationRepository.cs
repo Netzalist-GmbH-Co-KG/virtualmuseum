@@ -7,14 +7,17 @@ namespace virtualmuseum.web.api.Services;
 
 public class ConfigurationRepository : IConfigurationRepository
 {
+    private readonly IApplicationDbContext _applicationDbContext;
+
     // private readonly Guid _dummyRoomId = Guid.Parse("00000000-0000-0000-0000-000000000000");
     // private readonly Guid _dummyTableId = Guid.Parse("00000000-0000-0000-0000-000000000001");
     private readonly List<Room> _rooms = [];
     private readonly Dictionary<Guid, TopographicalTableConfiguration> _tableConfigurations = new();
     private readonly List<MediaFile> _mediaFiles = [];
 
-    public ConfigurationRepository()
+    public ConfigurationRepository(IApplicationDbContext applicationDbContext)
     {
+        _applicationDbContext = applicationDbContext;
         InitializeMediaFiles();
         InitializeTableConfigurations();
         InitializeRooms();
@@ -27,6 +30,23 @@ public class ConfigurationRepository : IConfigurationRepository
         Description = r.Description,
         InventoryPlacements = [],
     }).ToList();
+
+    public List<MultimediaPresentation> GetAllMultimediaPresentations()
+    {
+        return _applicationDbContext
+            .MultimediaPresentations
+            .ToList();
+    }
+
+    public List<PresentationItem> GetAllPresentationItems(Guid multimediaPresentationId)
+    {
+        return _applicationDbContext
+            .PresentationItems
+            .ToList()
+            .Where(i => i.MultimediaPresentationId == multimediaPresentationId)
+            .ToList();
+
+    }
 
     public Room GetRoom(Guid id) => _rooms.First(r => r.Id == id);
     public TopographicalTableConfiguration GetTopographicalTableConfiguration(Guid id) => _tableConfigurations[id];
@@ -41,21 +61,7 @@ public class ConfigurationRepository : IConfigurationRepository
 
     private void InitializeTableConfigurations()
     {
-        using var file = new StreamReader("InputData/Config/TopographicalTables.json", Encoding.UTF8);
-        var config = JsonConvert.DeserializeObject<TopographicalTables>(file.ReadToEnd());
 
-        if (config == null) return;
-        foreach (var table in config.Tables)
-        {
-            _tableConfigurations.Add(table.Id, table);
-            foreach (var geoEvent in table.LocationTimeRows.SelectMany(timeRow => timeRow.GeoEvents))
-            {
-                geoEvent.MediaFiles = _mediaFiles
-                    .Where(m=>
-                        m.FileName?.Split("/").Contains(geoEvent.Label ?? "quetrd") ?? false)
-                    .ToList();
-            }
-        }
     }
     
     private void InitializeMediaFiles()
