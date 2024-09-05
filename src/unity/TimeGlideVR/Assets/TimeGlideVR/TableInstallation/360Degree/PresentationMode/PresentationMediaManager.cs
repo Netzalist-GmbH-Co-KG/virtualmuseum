@@ -8,12 +8,9 @@ using UnityEngine.Video;
 
 public class PresentationMediaManager : MonoBehaviour
 {
-    [SerializeField] private GameObject screenPrefab;
-    [SerializeField] private GameObject audioPrefab;
     [SerializeField] private UnityEvent<string> startStreamEvent;
     [SerializeField] private List<Stream> streams = new List<Stream>();
     [SerializeField] private string presentationUrl;
-    [SerializeField] private bool isPlaying = false;
     private float timer = 0;
     public bool playing = false;
 
@@ -35,11 +32,10 @@ public class PresentationMediaManager : MonoBehaviour
         //TODO get all streams from server and set up their respective dependencies
         //TODO this means spawning screens and audio sources at the required positions and linking them to their respective streams
         //Streams should be assigned to screens like this (numbers indicating the number of the stream)
-        // 5 3 1 2 4
-        //     ^
-        //this being the middle right in front of the user and the other screens curving around the user
-        //screen spawning could work using this transforms position and rotating 
-        //around it and spawning a screen using that forward vector with a distance param
+        // 0 1 2 3 4 - Row 0
+        // 0 1 2 3 4 - Row 1
+        // 0 1 2 3 4 - Row 2
+        //2 being the middle right in front of the user and the other screens curving around the user
     }
 
     public void GoBackSeconds(float seconds = 10){
