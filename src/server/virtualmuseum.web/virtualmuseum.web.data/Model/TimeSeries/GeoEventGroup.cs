@@ -9,6 +9,7 @@ namespace virtualmuseum.web.data;
 public class GeoEventGroup
 {
     public Guid Id { get; set; }
+    public Guid TimeSeriesId { get; set; }
     public string? Label { get; set; }
     public string? Description { get; set; }
 

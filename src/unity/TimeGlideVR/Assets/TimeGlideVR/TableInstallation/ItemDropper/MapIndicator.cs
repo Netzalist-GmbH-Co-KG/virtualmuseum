@@ -69,7 +69,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             if (!_dataLoaded)
                 yield return new WaitForSeconds(1);
 
-            _buttonPanelScript.Init(_tableConfiguration.GeoEventGroups);
+            _buttonPanelScript.Init(_tableConfiguration.TimeSeries[0].GeoEventGroups);
             yield return null;
         }
 
@@ -103,7 +103,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             }
 
             _tableConfiguration = await _configurationClient.GetTopographicalTableConfiguration(firstTable.Id);
-            Debug.Log($"Configuration loaded: {_tableConfiguration.GeoEventGroups.Count} rows");
+            Debug.Log($"Configuration loaded: {_tableConfiguration.TimeSeries.Count} rows");
             _dataLoaded = true;
         }
 
@@ -126,16 +126,26 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             _cityCoordinates.Add("Schmalkalden", new Vector2(50.716f, 10.451f));
             _cityCoordinates.Add("Bad Salzungen", new Vector2(50.812f, 10.222f));
 
-            _tableConfiguration.GeoEventGroups = new List<GeoEventGroup>()
+            _tableConfiguration.TimeSeries = new List<TimeSeries>
             {
-                new GeoEventGroup
+                new TimeSeries
                 {
-                    Label = "Testdaten",
-                    GeoEvents = _cityCoordinates
-                        .Select(c => new GeoEvent
-                            { Name = c.Key, Latitude = c.Value.y, Longitude = c.Value.y }).ToList()
+                    Id = Guid.NewGuid(),
+                    Name = "Testdaten",
+                    Description = "Testdaten",
+                    GeoEventGroups = new List<GeoEventGroup>
+                    {
+                        new GeoEventGroup
+                        {
+                            Label = "Testdaten",
+                            GeoEvents = _cityCoordinates
+                                .Select(c => new GeoEvent
+                                    { Name = c.Key, Latitude = c.Value.y, Longitude = c.Value.y }).ToList()
+                        }
+                    }
                 }
             };
+
             _dataLoaded = true;
         }
 

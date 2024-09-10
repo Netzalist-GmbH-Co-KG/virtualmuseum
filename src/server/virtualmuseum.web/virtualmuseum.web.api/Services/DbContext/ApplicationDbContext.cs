@@ -18,9 +18,10 @@ namespace virtualmuseum.web.api.Services
         public DbSet<Room> Rooms { get; set; } = null!;
         public DbSet<InventoryItem> InventoryItems { get; set; } = null!;
         public DbSet<TopographicalTable> TopographicalTables { get; set; } = null!;
-        public DbSet<TopographicalTableGeoEventGroup> TopographicalTableGeoEventGroups { get; set; } = null!;
+        public DbSet<TopographicalTableTimeSeries> TopographicalTableGeoEventGroups { get; set; } = null!;
         
-        // TimeRows
+        // TimeSeries
+        public DbSet<TimeSeries> TimeSeries { get; set; } = null!;
         public DbSet<GeoEventGroup> GeoEventGroups { get; set; } = null!;
         public DbSet<GeoEvent> GeoEvents { get; set; } = null!;
         
