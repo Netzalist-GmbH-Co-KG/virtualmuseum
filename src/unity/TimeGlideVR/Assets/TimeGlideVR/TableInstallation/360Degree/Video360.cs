@@ -17,6 +17,7 @@ namespace TimeGlideVR.TableInstallation._360Degree
         [SerializeField] private Texture defaultTexture;
         [SerializeField] private GameObject contentButton;
         [SerializeField] private GameObject floorMarker;
+        [SerializeField] private List<GameObject> objectsToHide = new ();
         
         private AudioSource _audioSource;
         private MeshRenderer _videoScreenRenderer;
@@ -67,6 +68,7 @@ namespace TimeGlideVR.TableInstallation._360Degree
                 if(_audioSource.isPlaying)
                     _audioSource.Stop();
         
+            ShowHiddenObjects();
             SetTexture(defaultTexture);
         }
     
@@ -187,9 +189,11 @@ namespace TimeGlideVR.TableInstallation._360Degree
                     // LoadImageFromUrl(_currentMediaFile.Url);
                     break;
                 case "3djpg":
+                    HideHiddenObjects();
                     LoadImageFromUrl(_currentMediaFile.Url);
                     break;
                 case "3dmp4":
+                    HideHiddenObjects();
                     LoadVideoFromUrl(_currentMediaFile.Url);
                     break;
                 case "audio":
@@ -200,6 +204,21 @@ namespace TimeGlideVR.TableInstallation._360Degree
             }
 
             DisplayLabel();
+        }
+
+        private void HideHiddenObjects()
+        {
+            foreach (var objectToHide in objectsToHide)
+            {
+                objectToHide.SetActive(false);
+            }
+        }
+        private void ShowHiddenObjects()
+        {
+            foreach (var objectToHide in objectsToHide)
+            {
+                objectToHide.SetActive(true);
+            }
         }
 
         private void LoadAudioFromUrl(string url)
