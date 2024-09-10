@@ -5,6 +5,8 @@ namespace virtualmuseum.web.api.Services;
 public interface IConfigurationRepository
 {
     List<Room> GetAllRooms();
+    List<MultimediaPresentation> GetAllMultimediaPresentations();
+    List<PresentationItem> GetAllPresentationItems(Guid multimediaPresentationId);
     Room GetRoom(Guid id);
     TopographicalTableConfiguration GetTopographicalTableConfiguration(Guid id);
 }

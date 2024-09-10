@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using virtualmuseum.web.api.Services
+@inject ICustomRoleService CustomRoleService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">TimeGlideVR</a>
     </div>
@@ -13,27 +16,38 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Start
             </NavLink>
         </div>
-
+        
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Inventory">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Inventar
-            </NavLink>
+            @if (CustomRoleService.HasRole("Contributor") || CustomRoleService.HasRole("Administrator"))
+            {
+                <NavLink class="nav-link" href="Inventory">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Inventar
+                </NavLink>
+                <NavLink class="nav-link" href="MultiMediaPresentation">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Präsentationen
+                </NavLink>
 
-            <NavLink class="nav-link" href="ReleasesComponent">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> ReleasesComponent
-            </NavLink>
-            
-            <NavLink class="nav-link" href="User">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Benutzer
-            </NavLink>
+                <NavLink class="nav-link" href="Releases">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Releases
+                </NavLink>
+            }
+            @if (CustomRoleService.HasRole("Administrator"))
+            {
 
-            <NavLink class="nav-link" href="ApiKeys">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> API Keys
-            </NavLink>
-                        <NavLink class="nav-link" href="Help">
-                            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Dokumentation
-                        </NavLink>
+                <NavLink class="nav-link" href="User">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Benutzer
+                </NavLink>
 
+                <NavLink class="nav-link" href="ApiKeys">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> API Keys
+                </NavLink>
+            }
+            @if (CustomRoleService.HasRole("Contributor") || CustomRoleService.HasRole("Administrator"))
+            {
+                <NavLink class="nav-link" href="Help">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Dokumentation
+                </NavLink>
+            }
         </div>
     </nav>
 </div>

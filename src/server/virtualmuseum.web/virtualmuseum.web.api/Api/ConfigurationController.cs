@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using virtualmuseum.web.api.Services;
 using virtualmuseum.web.data;
 
@@ -46,6 +47,7 @@ public class ConfigurationController : Controller
     }
     
     [HttpGet("topographical-table/{id}")]
+    [Authorize("read:messages")]
     public TopographicalTableConfiguration GetTopographicalTableConfiguration(Guid id)
     {
         try
