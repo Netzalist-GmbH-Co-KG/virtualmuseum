@@ -11,6 +11,7 @@ using virtualmuseum.web.api.Components;
 using virtualmuseum.web.api.Services;
 using virtualmuseum.web.api.Services.Configuration;
 using Microsoft.EntityFrameworkCore;
+using virtualmuseum.web.api.Services.ConfigurationRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 

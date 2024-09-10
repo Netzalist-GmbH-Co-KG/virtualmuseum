@@ -1,4 +1,6 @@
-﻿namespace virtualmuseum.web.data;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace virtualmuseum.web.data;
 
 /// <summary>
 /// A room defines one virtual setting within the museum.
@@ -7,9 +9,11 @@
 public class Room
 {
     public Guid Id { get; set; }
+    public Guid TenantId { get; set; }
     public string? Label { get; set; }
     public string? Description { get; set; }
-    public string ResourceUrl => "/api/rooms/" + Id;
-    public List<MediaFile> MediaFiles { get; set; } = [];
-    public List<InventoryPlacement> InventoryPlacements { get; set; } = [];
+    
+    // ---------
+    [NotMapped]
+    public List<InventoryItem> InventoryItems { get; set; } = [];
 }

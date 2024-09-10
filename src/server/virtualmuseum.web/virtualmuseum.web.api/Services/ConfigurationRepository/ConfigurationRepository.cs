@@ -1,0 +1,120 @@
+﻿using System.Linq.Dynamic.Core;
+using virtualmuseum.web.data;
+
+namespace virtualmuseum.web.api.Services.ConfigurationRepository;
+
+public class ConfigurationRepository : IConfigurationRepository
+{
+    private readonly IApplicationDbContext _applicationDbContext;
+
+    public ConfigurationRepository(IApplicationDbContext applicationDbContext)
+    {
+        _applicationDbContext = applicationDbContext;
+    }
+
+    public List<MultimediaPresentation> GetAllMultimediaPresentations()
+    {
+        return _applicationDbContext
+            .MultimediaPresentations
+            .Select(p => new MultimediaPresentation
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                PresentationItems = _applicationDbContext.PresentationItems
+                    .Where(item => item.MultimediaPresentationId == p.Id)
+                    .ToList()
+            })
+            .ToList();
+    }
+
+    // TENANTS
+    public List<Tenant> GetTenants()
+    {
+        return _applicationDbContext.Tenants
+            .ToList()
+            .Select(GetTenant)
+            .ToList();
+    }
+    
+    private Tenant GetTenant(Tenant tenant)
+    {
+        tenant.Rooms = _applicationDbContext.Rooms
+            .Where(r => r.TenantId.ToString() == tenant.Id.ToString())
+            .Select(r=>r.Id)
+            .ToList()
+            .Select(GetRoom)
+            .ToList();
+        
+        return tenant;
+    }
+    
+    private Room GetRoom(Guid roomId)
+    {
+        var room = _applicationDbContext.Rooms
+            .FirstOrDefault(r => r.Id.ToString() == roomId.ToString());
+        if (room == null) throw new FileNotFoundException();
+        
+        room.InventoryItems = _applicationDbContext.InventoryItems
+            .Where(item => item.RoomId.ToString() == roomId.ToString())
+            .ToList();
+        return room;
+    }
+
+    public TopographicalTable GetTopographicalTableConfiguration(Guid topographicalTableId)
+    {
+        var table = _applicationDbContext.TopographicalTables
+            .FirstOrDefault(t => t.Id.ToString() == topographicalTableId.ToString());
+        if (table == null) throw new FileNotFoundException();
+        
+        var mappedGroups = _applicationDbContext.TopographicalTableGeoEventGroups
+            .Where(g => g.TopographicalTableId.ToString() == topographicalTableId.ToString())
+            .ToList();
+
+        var geoEventGroups = mappedGroups
+            .SelectMany(tgeg => _applicationDbContext.GeoEventGroups
+                .Where(geg => geg.Id.ToString() == tgeg.GeoEventGroupId.ToString())
+                .ToList())
+            .ToList();
+        
+        var fullGroups = geoEventGroups
+            .Select(GetGeoEvents)
+            .ToList();
+
+        table.GeoEventGroups = fullGroups;
+        
+        return table;
+    }
+
+    private GeoEventGroup GetGeoEvents(GeoEventGroup geoEventGroup)
+    {
+        geoEventGroup.GeoEvents = _applicationDbContext.GeoEvents
+            .Where(ge => ge.GeoEventGroupId.ToString() == geoEventGroup.Id.ToString())
+            .ToList();
+        
+        return geoEventGroup;
+    }
+    
+    public MultimediaPresentation GetMultiMediaPresentation(Guid multimediaPresentationId)
+    {
+        var presentation = _applicationDbContext.MultimediaPresentations
+            .FirstOrDefault(p => p.Id.ToString() == multimediaPresentationId.ToString());
+        if (presentation == null) throw new FileNotFoundException();
+        
+        presentation.PresentationItems = _applicationDbContext.PresentationItems
+            .Where(item => item.MultimediaPresentationId.ToString() == multimediaPresentationId.ToString())
+            .ToList()
+            .Select(GetPresentationItem)
+            .ToList();
+        
+        return presentation;
+    }
+    
+    private PresentationItem GetPresentationItem(PresentationItem item)
+    {
+        item.MediaFile = _applicationDbContext.MediaFiles
+            .FirstOrDefault(m => item.MediaFileId.ToString() == m.Id.ToString());
+        
+        return item;
+    }
+}
