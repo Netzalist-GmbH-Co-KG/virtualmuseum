@@ -69,7 +69,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             if (!_dataLoaded)
                 yield return new WaitForSeconds(1);
 
-            _buttonPanelScript.Init(_tableConfiguration.TimeSeries[0].GeoEventGroups);
+            _buttonPanelScript.Init(_tableConfiguration.TimeSeries[0].GeoEventGroups, _tableConfiguration.TimeSeries[1].GeoEventGroups);
             yield return null;
         }
 

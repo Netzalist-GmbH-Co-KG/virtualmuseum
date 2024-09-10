@@ -23,6 +23,7 @@ namespace TimeGlideVR.TableInstallation.Table
         
         public void SetMap(int index){
             if(maps==null || index < 0 || index >= maps.Length) return;
+            if (index == 4) index = 3;
             currentMapIndex = index;
             for(var i = 0; i < maps.Length; i++){
                 maps[i].SetActive(i == currentMapIndex);
@@ -50,14 +51,20 @@ namespace TimeGlideVR.TableInstallation.Table
                 "Stadtbefestigungen von Schmalkalden" => 1,
                 "Dialekte in Thüringen" => 2,
                 "Urkundliche Ersterwähnungen" => 3,
+                "Größte Städte um 1600" => 4,
                 _ => 0
             };
             SetMap(map);
 
             switch (map)
             {
+                case 4:
+                    _buttonPanelScript.DisplayButtonsGroessteStaedte();
+                    fortificationsButtons.SetActive(false);
+                    dialectsButtons.SetActive(false);
+                    break;
                 case 3:
-                    _buttonPanelScript.DisplayButtons();
+                    _buttonPanelScript.DisplayButtonsErstErwaehnung();
                     fortificationsButtons.SetActive(false);
                     dialectsButtons.SetActive(false);
                     break;
