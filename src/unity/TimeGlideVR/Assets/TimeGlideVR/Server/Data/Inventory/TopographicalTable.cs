@@ -12,6 +12,6 @@ namespace TimeGlideVR.Server.Data.Inventory
     public class TopographicalTable
     {
         public Guid Id { get; set; }
-        public List<GeoEventGroup> GeoEventGroups { get; set; } = new();
+        public List<TimeSeries> TimeSeries { get; set; } = new();
     }
 }

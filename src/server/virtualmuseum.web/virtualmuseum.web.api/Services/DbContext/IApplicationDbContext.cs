@@ -13,9 +13,10 @@ public interface IApplicationDbContext
     DbSet<Room> Rooms { get; set; } 
     DbSet<InventoryItem> InventoryItems { get; set; }
     DbSet<TopographicalTable> TopographicalTables { get; set; }
-    DbSet<TopographicalTableGeoEventGroup> TopographicalTableGeoEventGroups { get; set; } 
+    DbSet<TopographicalTableTimeSeries> TopographicalTableGeoEventGroups { get; set; } 
         
-    // TimeRows
+    // TimeSeries
+    DbSet<TimeSeries> TimeSeries { get; set; }
     DbSet<GeoEventGroup> GeoEventGroups { get; set; }
     DbSet<GeoEvent> GeoEvents { get; set; }
         

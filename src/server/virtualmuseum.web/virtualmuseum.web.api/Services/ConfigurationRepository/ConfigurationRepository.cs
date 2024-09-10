@@ -67,23 +67,33 @@ public class ConfigurationRepository : IConfigurationRepository
             .FirstOrDefault(t => t.Id.ToString() == topographicalTableId.ToString());
         if (table == null) throw new FileNotFoundException();
         
-        var mappedGroups = _applicationDbContext.TopographicalTableGeoEventGroups
+        var tableTimeSeries = _applicationDbContext.TopographicalTableGeoEventGroups
             .Where(g => g.TopographicalTableId.ToString() == topographicalTableId.ToString())
             .ToList();
 
-        var geoEventGroups = mappedGroups
-            .SelectMany(tgeg => _applicationDbContext.GeoEventGroups
-                .Where(geg => geg.Id.ToString() == tgeg.GeoEventGroupId.ToString())
-                .ToList())
+        var timeSeries = _applicationDbContext.TimeSeries
+            .Where(ts => tableTimeSeries
+                .Select(tgeg => tgeg.TimeSeriesId.ToString())
+                .Contains(ts.Id.ToString()))
             .ToList();
         
-        var fullGroups = geoEventGroups
-            .Select(GetGeoEvents)
+        var fullTimeSeries = timeSeries
+            .Select(GetTimeSeries)
             .ToList();
-
-        table.GeoEventGroups = fullGroups;
+        
+        table.TimeSeries = fullTimeSeries;
         
         return table;
+    }
+
+    private TimeSeries GetTimeSeries(TimeSeries timeSeries)
+    {
+        timeSeries.GeoEventGroups = _applicationDbContext.GeoEventGroups
+            .Where(geg => geg.TimeSeriesId.ToString() == timeSeries.Id.ToString())
+            .ToList()
+            .Select(GetGeoEvents)
+            .ToList();
+        return timeSeries;
     }
 
     private GeoEventGroup GetGeoEvents(GeoEventGroup geoEventGroup)
