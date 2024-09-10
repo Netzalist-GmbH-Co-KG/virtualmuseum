@@ -14,6 +14,6 @@ public class MediaFile
     public string? Name { get; set; }
     public string? Description { get; set; }
     public int DurationInSeconds { get; set; }
-    public string? Type { get; set; }
+    public MediaType Type { get; set; }
     public string? Url { get; set; }
 }
