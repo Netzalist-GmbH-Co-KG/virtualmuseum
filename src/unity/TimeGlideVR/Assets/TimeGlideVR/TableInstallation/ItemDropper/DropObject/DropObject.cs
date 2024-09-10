@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
-using TimeGlideVR.Server.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;

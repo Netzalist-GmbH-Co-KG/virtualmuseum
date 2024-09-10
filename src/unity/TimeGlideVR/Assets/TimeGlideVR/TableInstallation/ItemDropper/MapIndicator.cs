@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeGlideVR.Debugging;
 using TimeGlideVR.Server;
-using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.Inventory;
+using TimeGlideVR.Server.Data.Media;
+using TimeGlideVR.Server.Data.TimeRows;
 using TimeGlideVR.Server.WebClient;
 using TimeGlideVR.TableInstallation.Table.Panel;
-using TimeGlideVR.TableInstallation.Table.Panel.Button;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace TimeGlideVR.TableInstallation.ItemDropper
@@ -33,7 +32,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         private ButtonPanelScript _buttonPanelScript;
 
         private readonly Dictionary<string, List<Transform>> _spawnedItems = new();
-        private TopographicalTableConfiguration _tableConfiguration;
+        private TopographicalTable _tableConfiguration;
         private readonly Dictionary<string, Vector2> _cityCoordinates = new();
         private IConfigurationClient _configurationClient;
         private bool _dataLoaded;
@@ -70,22 +69,22 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             if (!_dataLoaded)
                 yield return new WaitForSeconds(1);
 
-            _buttonPanelScript.Init(_tableConfiguration.LocationTimeRows);
+            _buttonPanelScript.Init(_tableConfiguration.GeoEventGroups);
             yield return null;
         }
 
         private async Task LoadConfiguration()
         {
             Debug.Log("Loading configuration...");
-            var rooms = await _configurationClient.GetRooms();
-            if (rooms.Count == 0)
+            var tenants = await _configurationClient.GetTenants();
+            if (tenants.Count == 0)
             {
-                Debug.Log("No rooms found, initializing dummy coordinates...");
+                Debug.Log("No tenants found, initializing dummy coordinates...");
                 InitializeDummyCoordinates();
                 return;
             }
 
-            var firstRoom = rooms.FirstOrDefault();
+            var firstRoom = tenants[0].Rooms.FirstOrDefault();
             if (firstRoom == null)
             {
                 Debug.Log("No rooms found, initializing dummy coordinates...");
@@ -93,20 +92,18 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 return;
             }
 
-            var roomDetails = await _configurationClient.GetRoom(firstRoom.Id);
-            var firstTable = roomDetails?
-                .InventoryPlacements.FirstOrDefault()?
-                .InventoryItem?.Id;
+            var firstTable = firstRoom?
+                .InventoryItems.FirstOrDefault(i => i.InventoryType == InventoryType.TopographicalTable);
 
-            if (!firstTable.HasValue)
+            if (firstTable == null)
             {
                 Debug.Log("No tables found, initializing dummy coordinates...");
                 InitializeDummyCoordinates();
                 return;
             }
 
-            _tableConfiguration = await _configurationClient.GetTableConfiguration(firstTable.Value);
-            Debug.Log($"Configuration loaded: {_tableConfiguration.LocationTimeRows.Count} rows");
+            _tableConfiguration = await _configurationClient.GetTopographicalTableConfiguration(firstTable.Id);
+            Debug.Log($"Configuration loaded: {_tableConfiguration.GeoEventGroups.Count} rows");
             _dataLoaded = true;
         }
 
@@ -129,14 +126,14 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             _cityCoordinates.Add("Schmalkalden", new Vector2(50.716f, 10.451f));
             _cityCoordinates.Add("Bad Salzungen", new Vector2(50.812f, 10.222f));
 
-            _tableConfiguration.LocationTimeRows = new List<LocationTimeRow>()
+            _tableConfiguration.GeoEventGroups = new List<GeoEventGroup>()
             {
-                new LocationTimeRow
+                new GeoEventGroup
                 {
                     Label = "Testdaten",
                     GeoEvents = _cityCoordinates
                         .Select(c => new GeoEvent
-                            { Label = c.Key, Latitude = c.Value.y, Longitude = c.Value.y }).ToList()
+                            { Name = c.Key, Latitude = c.Value.y, Longitude = c.Value.y }).ToList()
                 }
             };
             _dataLoaded = true;
@@ -154,7 +151,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 Id = Guid.NewGuid(),
                 Description = "Eine kleine Beschreibung",
                 Name = "Einführung in TimeglideVR",
-                Type = "3dmp4",
+                Type = MediaType.Video360Degree,
                 Url = "https://timeglide-vr.b-cdn.net/Intro.mp4"
 
             };
@@ -172,8 +169,15 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 batchCount++;
                 try
                 {
-                    SpawnOrDespawnItem(geoEvent.Label,
-                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude), geoEvent.MediaFiles);
+                    var mediaFiles = 
+                        geoEvent.MultiMediaPresentation == null
+                         ? new List<MediaFile>()
+                         : geoEvent.MultiMediaPresentation?
+                            .PresentationItems
+                            .Select(pi => pi.MediaFile)
+                            .ToList();
+                    SpawnOrDespawnItem(geoEvent.Name,
+                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude), mediaFiles);
                 }
                 catch (Exception e)
                 {

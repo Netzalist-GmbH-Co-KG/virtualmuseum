@@ -1,13 +1,14 @@
 ﻿using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.TimeRows;
 
 namespace TimeGlideVR.TableInstallation.Table.Panel
 {
     public class DisplayLocationTimeRowEvent
     {
-        public LocationTimeRow Row;
+        public GeoEventGroup Row;
         public bool RemoveRow = false;
 
-        public DisplayLocationTimeRowEvent(LocationTimeRow row, bool removeRow)
+        public DisplayLocationTimeRowEvent(GeoEventGroup row, bool removeRow)
         {
             Row = row;
             RemoveRow = removeRow;
