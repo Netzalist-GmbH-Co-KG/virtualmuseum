@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.Inventory;
+using TimeGlideVR.Server.Data.Media;
 
 namespace TimeGlideVR.Server.WebClient
 {
     public interface IConfigurationClient
     {
-        Task<TopographicalTableConfiguration> GetTableConfiguration(Guid id);
-        Task<Room> GetRoom(Guid id);
-        Task<List<Room>> GetRooms();
-        Task GetImage(Guid id, ConfigurationClient.ServerRequestCallBack callback = null);
+        Task<List<Tenant>> GetTenants();
+        Task<TopographicalTable> GetTopographicalTableConfiguration(Guid topographicalTableId);
+        Task<MultimediaPresentation> GetMultiMediaPresentation(Guid multimediaPresentationId);
     }
 }

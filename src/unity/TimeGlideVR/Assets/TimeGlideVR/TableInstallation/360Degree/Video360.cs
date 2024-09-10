@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.Media;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -182,21 +182,21 @@ namespace TimeGlideVR.TableInstallation._360Degree
                 ClearScreen();
                 return;
             }
-            switch (_currentMediaFile.Type?.ToLowerInvariant())
+            switch (_currentMediaFile.Type)
             {
-                case "2djpg":
+                case MediaType.Image2D:
                     Debug.Log("360: Ignoring 2djpg media type");
                     // LoadImageFromUrl(_currentMediaFile.Url);
                     break;
-                case "3djpg":
+                case MediaType.Image360Degree:
                     HideHiddenObjects();
                     LoadImageFromUrl(_currentMediaFile.Url);
                     break;
-                case "3dmp4":
+                case MediaType.Video360Degree:
                     HideHiddenObjects();
                     LoadVideoFromUrl(_currentMediaFile.Url);
                     break;
-                case "audio":
+                case MediaType.Audio:
                     LoadAudioFromUrl(_currentMediaFile.Url);
                     break;
                 default:
