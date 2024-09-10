@@ -4,6 +4,7 @@
 @attribute [Authorize]
 @using virtualmuseum.web.data
 @using virtualmuseum.web.api.Services
+@using virtualmuseum.web.api.Services.ConfigurationRepository
 @inject IConfigurationRepository ConfigurationRepository
 @inject ICustomRoleService CustomRoleService
 
@@ -18,78 +19,78 @@ else
 
     <div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
         <h4>Multimedia Präsentationen</h4>
-        <RadzenTree Data=@_multimediaPresentations Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange">
-            <RadzenTreeLevel Text="@GetTextForNode"/>
-        </RadzenTree>
+        @* <RadzenTree Data=@_multimediaPresentations Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange"> *@
+        @*     <RadzenTreeLevel Text="@GetTextForNode"/> *@
+        @* </RadzenTree> *@
     </div>
 }
 
 @code
 {
-    private List<MultimediaPresentation> _multimediaPresentations = [];
-    private object _selectedItem = null!;
-    private List<string> _debugMessages = ["Starting"];
-    
-    protected override Task OnInitializedAsync()
-    {
-        _multimediaPresentations = ConfigurationRepository.GetAllMultimediaPresentations();
-        return base.OnInitializedAsync();
-    }
-    
-    void OnChange()
-    {
-        Log($"Selected: {GetTextForNode(_selectedItem)}");
-    }
-    
-    private void Log(string message)
-    {
-        _debugMessages.Insert(0, message);
-        _debugMessages = _debugMessages.Take(30).ToList();
-    }
-    
-    private string GetTextForNode(object data)
-    {
-        Log($"Getting text for: {data.GetType()}");
-        return data.GetType() switch
-        {
-            { } t when t == typeof(MultimediaPresentation) => ((MultimediaPresentation)data).Name!,
-            { } t when t == typeof(PresentationItem) => ((PresentationItem)data).SequenceNumber!.ToString(),
-            _ => "Unknown"
-        };
-    }
-    
-    void ExpandTree(TreeExpandEventArgs args)
-    {
-        Log($"Expanding: {args.Text}");
-        switch (args.Value.GetType())
-        {
-            case { } t when t == typeof(MultimediaPresentation):
-                var presentation = (MultimediaPresentation)args.Value;
-                var presentationItems = ConfigurationRepository.GetAllPresentationItems(presentation.Id);
-                args.Children.Data = presentationItems;
-                args.Children.Text = GetTextForNode;
-                args.Children.HasChildren = _ => false;
-                args.Children.Template = value => _testFragment(value);
-                break;
-        }
-    }
-    readonly RenderFragment<RadzenTreeItem> _testFragment = (context) => builder =>
-    {
-        builder.OpenComponent<RadzenIcon>(0);
-        var icon = context.Value.GetType() switch
-        {
-            { } t when t == typeof(MultimediaPresentation) => "home",
-            { } t when t == typeof(PresentationItem) => "table_bar",
-            { } t when t == typeof(MediaFile) => "photo_camera",
-            _ => "question"
-        };
-
-
-        builder.AddAttribute(1, "Icon", icon);
-
-        builder.CloseComponent();
-
-        // Append the current item text
-        builder.AddContent(3, context.Text);
-    };
+    // private List<MultimediaPresentation> _multimediaPresentations = [];
+    // private object _selectedItem = null!;
+    // private List<string> _debugMessages = ["Starting"];
+    //
+    // protected override Task OnInitializedAsync()
+    // {
+    //     _multimediaPresentations = ConfigurationRepository.GetAllMultimediaPresentations();
+    //     return base.OnInitializedAsync();
+    // }
+    //
+    // void OnChange()
+    // {
+    //     Log($"Selected: {GetTextForNode(_selectedItem)}");
+    // }
+    //
+    // private void Log(string message)
+    // {
+    //     _debugMessages.Insert(0, message);
+    //     _debugMessages = _debugMessages.Take(30).ToList();
+    // }
+    //
+    // private string GetTextForNode(object data)
+    // {
+    //     Log($"Getting text for: {data.GetType()}");
+    //     return data.GetType() switch
+    //     {
+    //         { } t when t == typeof(MultimediaPresentation) => ((MultimediaPresentation)data).Name!,
+    //         { } t when t == typeof(PresentationItem) => ((PresentationItem)data).SequenceNumber!.ToString(),
+    //         _ => "Unknown"
+    //     };
+    // }
+    //
+    // void ExpandTree(TreeExpandEventArgs args)
+    // {
+    //     Log($"Expanding: {args.Text}");
+    //     switch (args.Value.GetType())
+    //     {
+    //         case { } t when t == typeof(MultimediaPresentation):
+    //             var presentation = (MultimediaPresentation)args.Value;
+    //             var presentationItems = ConfigurationRepository.GetMultiMediaPresentation(presentation.Id);
+    //             args.Children.Data = presentationItems;
+    //             args.Children.Text = GetTextForNode;
+    //             args.Children.HasChildren = _ => false;
+    //             args.Children.Template = value => _testFragment(value);
+    //             break;
+    //     }
+    // }
+    // readonly RenderFragment<RadzenTreeItem> _testFragment = (context) => builder =>
+    // {
+    //     builder.OpenComponent<RadzenIcon>(0);
+    //     var icon = context.Value.GetType() switch
+    //     {
+    //         { } t when t == typeof(MultimediaPresentation) => "home",
+    //         { } t when t == typeof(PresentationItem) => "table_bar",
+    //         { } t when t == typeof(MediaFile) => "photo_camera",
+    //         _ => "question"
+    //     };
+    //
+    //
+    //     builder.AddAttribute(1, "Icon", icon);
+    //
+    //     builder.CloseComponent();
+    //
+    //     // Append the current item text
+    //     builder.AddContent(3, context.Text);
+    // };
 }
