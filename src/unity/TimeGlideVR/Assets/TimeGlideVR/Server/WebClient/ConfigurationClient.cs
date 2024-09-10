@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.Inventory;
+using TimeGlideVR.Server.Data.Media;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -20,25 +21,19 @@ namespace TimeGlideVR.Server.WebClient
             _apiToken = apiToken;
         }
 
-        
-        public async Task<TopographicalTableConfiguration> GetTableConfiguration(Guid id)
+        public async Task<List<Tenant>> GetTenants()
         {
-            return await MakeRequest<TopographicalTableConfiguration>($"{_apiUrl}topographical-table/{id}");
-        }
-        
-        public async Task<Room> GetRoom(Guid id)
-        {
-            return await MakeRequest<Room>($"{_apiUrl}rooms/{id}");
+            return await MakeRequest<List<Tenant>>($"{_apiUrl}tenants");
         }
 
-        public async Task<List<Room>> GetRooms()
+        public async Task<TopographicalTable> GetTopographicalTableConfiguration(Guid topographicalTableId)
         {
-            return await MakeRequest<List<Room>>($"{_apiUrl}rooms");
+            return await MakeRequest<TopographicalTable>($"{_apiUrl}topographical-table/{topographicalTableId}");
         }
 
-        public async Task GetImage(Guid id, ServerRequestCallBack callback = null)
+        public async Task<MultimediaPresentation> GetMultiMediaPresentation(Guid multimediaPresentationId)
         {
-            await RequestBytes($"{_apiUrl}media/{id}/display", callback);
+            return await MakeRequest<MultimediaPresentation>($"{_apiUrl}multimediapresentation/{multimediaPresentationId}");
         }
 
         private async Task<T> MakeRequest<T>(string url) where T : class
@@ -58,24 +53,6 @@ namespace TimeGlideVR.Server.WebClient
 
             var json = request.downloadHandler.text;
             return JsonConvert.DeserializeObject<T>(json);
-        }
-
-        private async Task RequestBytes(string url, ServerRequestCallBack callback = null)
-        {
-            using var request = UnityWebRequest.Get(url);
-            request.SetRequestHeader("Authorization", $"Bearer {_apiToken}");
-
-            var operation = request.SendWebRequest();
-            while (!operation.isDone)
-                await Task.Yield();
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Failed to get image in path: '" + url + "' Are you sure it exists?");
-                Debug.LogError($"Error: {request.error}");
-                return;
-            }
-            callback?.Invoke(request.downloadHandler.data);
         }
     }
 }

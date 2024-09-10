@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.TimeRows;
 using TimeGlideVR.TableInstallation.Table.InfoDisplay;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
 using UnityEngine;
@@ -23,7 +23,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         public UnityEvent<ToggleButtonEvent> onWallButtonClick;
         public UnityEvent<ToggleButtonEvent> onDialectButtonClick;
         
-        private List<LocationTimeRow> _locationTimeRows = new ();
+        private List<GeoEventGroup> _geoEventGroups = new ();
         private List<ButtonScript> _dialectButtons;
         private List<ButtonScript> _wallButtons;
         
@@ -82,15 +82,15 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             }
         }
 
-        public void Init(List<LocationTimeRow> locationTimeRows)
+        public void Init(List<GeoEventGroup> geoEventGroups)
         {
-            Debug.Log($"Initializing ButtonPanel with {locationTimeRows.Count} rows");
-            _locationTimeRows = locationTimeRows;
+            Debug.Log($"Initializing ButtonPanel with {geoEventGroups.Count} rows");
+            _geoEventGroups = geoEventGroups;
         }
 
         public void DisplayButtons()
         {
-            foreach (var timeRow in _locationTimeRows)
+            foreach (var timeRow in _geoEventGroups)
             {
                 AddButton(timeRow.Label);
             }
@@ -128,9 +128,9 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         private void HandleButtonClick(ToggleButtonEvent evt)
         {
             Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected);
-            var locationTimeRow = _locationTimeRows.FirstOrDefault(row => row.Label == evt.Name);
-            if(locationTimeRow != null)
-                onTimeRowButtonClick.Invoke(new DisplayLocationTimeRowEvent(locationTimeRow, !evt.IsSelected));
+            var geoEventGroup = _geoEventGroups.FirstOrDefault(row => row.Label == evt.Name);
+            if(geoEventGroup != null)
+                onTimeRowButtonClick.Invoke(new DisplayLocationTimeRowEvent(geoEventGroup, !evt.IsSelected));
         }
     }
 }

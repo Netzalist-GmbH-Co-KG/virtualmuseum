@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.Inventory;
+using TimeGlideVR.Server.Data.Media;
 using TimeGlideVR.Server.WebClient;
 using UnityEngine;
 
@@ -23,51 +23,20 @@ namespace TimeGlideVR.Server.Cache
             _persistentDirectory = Application.persistentDataPath;
             _webClient = webClient;
         }
-
-        public async Task<TopographicalTableConfiguration> GetTableConfiguration(Guid id)
+        
+        public async Task<List<Tenant>> GetTenants()
         {
-            return await GetCachedItem("table_" + id, async () => await _webClient.GetTableConfiguration(id));
+            return await GetCachedItem("rooms", async () => await _webClient.GetTenants());
         }
 
-        public async Task<Room> GetRoom(Guid id)
+        public async Task<TopographicalTable> GetTopographicalTableConfiguration(Guid topographicalTableId)
         {
-            return await GetCachedItem("room_" + id, async () => await _webClient.GetRoom(id));
+            return await GetCachedItem("table_" + topographicalTableId, async () => await _webClient.GetTopographicalTableConfiguration(topographicalTableId));
         }
 
-        public async Task<List<Room>> GetRooms()
+        public async Task<MultimediaPresentation> GetMultiMediaPresentation(Guid multimediaPresentationId)
         {
-            return await GetCachedItem("rooms", async () => await _webClient.GetRooms());
-        }
-
-        public async Task GetImage(Guid id, ConfigurationClient.ServerRequestCallBack callback = null)
-        {
-            var image = await GetImageFromCache(id)!;
-            if (image != null)
-            {
-                callback?.Invoke(image);
-                return;
-            }
-
-            await _webClient.GetImage(id, callback);
-        }
-
-        [CanBeNull]
-        private async Task<byte[]> GetImageFromCache(Guid id)
-        {
-            try
-            {
-                // Try to load from Disk
-                var filePath = Path.Combine(_persistentDirectory, "image_" + id);
-                if (!File.Exists(filePath)) return null;
-                Debug.Log($"Loaded image from disk: image-{id}");
-                return await File.ReadAllBytesAsync(filePath);
-            }
-            catch (Exception e)
-            {
-                Debug.Log($"Failed to load image from disk: image-{id}: {e}");
-                Debug.LogError(e);
-                return null;
-            }
+            return await GetCachedItem("table_" + multimediaPresentationId, async () => await _webClient.GetMultiMediaPresentation(multimediaPresentationId));
         }
 
         private async Task<T> GetCachedItem<T>(string cacheId, Func<Task<T>> retrieval) where T : class

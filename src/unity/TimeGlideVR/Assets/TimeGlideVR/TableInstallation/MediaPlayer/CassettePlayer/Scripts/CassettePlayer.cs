@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Oculus.Interaction;
+using TimeGlideVR.Server.Data.Media;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -151,20 +152,20 @@ public class CassettePlayer : MonoBehaviour
             //3djpg and 3dmp4
             //2djpg and 2dmp4
             //if any of these are present, sequence them TODO
-            switch(media.Type?.ToLowerInvariant()){
-                case "3djpg":
+            switch(media.Type){
+                case MediaType.Image360Degree:
                     mediaTypeUnityEvents.InvokeThreeSixtyImageEvent(media);
                     break;
-                case "3dmp4":
+                case MediaType.Video360Degree:
                     mediaTypeUnityEvents.InvokeThreeSixtyVideoEvent(media);
                     break; 
-                case "audio":
+                case MediaType.Audio:
                     mediaTypeUnityEvents.InvokeDefaultAudioEvent(media);
                     break;
-                case "2djpg":
+                case MediaType.Image2D:
                     mediaTypeUnityEvents.InvokeDefaultImageEvent(media);
                     break;
-                case "2dmp4":
+                case MediaType.Video2D:
                     mediaTypeUnityEvents.InvokeDefaultVideoEvent(media);
                     break;
             }

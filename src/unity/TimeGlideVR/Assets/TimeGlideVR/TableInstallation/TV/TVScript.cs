@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TimeGlideVR.Server.Data;
+using TimeGlideVR.Server.Data.Media;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -64,9 +64,9 @@ public class TVScript : MonoBehaviour
             HideScreen();
             return;
         }
-        switch (_currentMediaFile.Type?.ToLowerInvariant())
+        switch (_currentMediaFile.Type)
         {
-            case "2djpg":
+            case MediaType.Image2D:
                 Debug.Log("360: Ignoring 2djpg media type");
                 ShowImage(_currentMediaFile);
                 break;

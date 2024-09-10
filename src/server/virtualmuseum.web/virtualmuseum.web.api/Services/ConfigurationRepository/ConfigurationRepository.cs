@@ -91,6 +91,11 @@ public class ConfigurationRepository : IConfigurationRepository
         geoEventGroup.GeoEvents = _applicationDbContext.GeoEvents
             .Where(ge => ge.GeoEventGroupId.ToString() == geoEventGroup.Id.ToString())
             .ToList();
+
+        foreach (var geoEvent in geoEventGroup.GeoEvents.Where(g=>g.MultiMediaPresentationId!=null))
+        {
+            geoEvent.MultiMediaPresentation = GetMultiMediaPresentation(geoEvent.MultiMediaPresentationId!.Value);
+        }
         
         return geoEventGroup;
     }
