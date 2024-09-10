@@ -23,7 +23,9 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         public UnityEvent<ToggleButtonEvent> onWallButtonClick;
         public UnityEvent<ToggleButtonEvent> onDialectButtonClick;
         
-        private List<GeoEventGroup> _geoEventGroups = new ();
+        private List<GeoEventGroup> _geoEventGroupsErstErwaehnung = new ();
+        private List<GeoEventGroup> _geoEventGroupsGroessteStaedte = new();
+        private List<GeoEventGroup> _currentGeoEventGroup = new();
         private List<ButtonScript> _dialectButtons;
         private List<ButtonScript> _wallButtons;
         
@@ -82,15 +84,28 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             }
         }
 
-        public void Init(List<GeoEventGroup> geoEventGroups)
+        public void Init(List<GeoEventGroup> geoEventGroupsErstErwaehnung, List<GeoEventGroup> geoEventGroupsGroessteStaedte)
         {
-            Debug.Log($"Initializing ButtonPanel with {geoEventGroups.Count} rows");
-            _geoEventGroups = geoEventGroups;
+            Debug.Log($"Initializing ButtonPanel with {geoEventGroupsErstErwaehnung.Count} rows");
+            _geoEventGroupsGroessteStaedte = geoEventGroupsGroessteStaedte;
+            _geoEventGroupsErstErwaehnung = geoEventGroupsErstErwaehnung;
+            _currentGeoEventGroup = _geoEventGroupsErstErwaehnung;
         }
 
-        public void DisplayButtons()
+        public void DisplayButtonsErstErwaehnung()
         {
-            foreach (var timeRow in _geoEventGroups)
+            ClearButtons();
+            _currentGeoEventGroup = _geoEventGroupsErstErwaehnung;
+            foreach (var timeRow in _currentGeoEventGroup)
+            {
+                AddButton(timeRow.Label);
+            }
+        }
+        public void DisplayButtonsGroessteStaedte()
+        {
+            ClearButtons();
+            _currentGeoEventGroup = _geoEventGroupsGroessteStaedte;
+            foreach (var timeRow in _currentGeoEventGroup)
             {
                 AddButton(timeRow.Label);
             }
@@ -128,7 +143,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         private void HandleButtonClick(ToggleButtonEvent evt)
         {
             Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected);
-            var geoEventGroup = _geoEventGroups.FirstOrDefault(row => row.Label == evt.Name);
+            var geoEventGroup = _currentGeoEventGroup.FirstOrDefault(row => row.Label == evt.Name);
             if(geoEventGroup != null)
                 onTimeRowButtonClick.Invoke(new DisplayLocationTimeRowEvent(geoEventGroup, !evt.IsSelected));
         }

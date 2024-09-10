@@ -1,4 +1,4 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 9e0cfb0da5921154baf871e1abd63e83
 ModelImporter:
   serializedVersion: 22200
@@ -13,12 +13,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Panel.002
-    second: {fileID: 2353549760649061687, guid: f3e8d38736a2d154586bb0017361b3a2, type: 3}
+    second: {fileID: 2100000, guid: b01504975aa8fa94cbc614b536191408, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Wood.002
-    second: {fileID: 2100000, guid: b411ca8dc0b3301409457c5efc09ed18, type: 2}
+    second: {fileID: 2100000, guid: 0e479d83c724c1e40a78c874bbbe5b78, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
