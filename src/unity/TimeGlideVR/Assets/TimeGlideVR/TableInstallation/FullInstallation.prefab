@@ -1092,6 +1092,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConfigurationManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7586634355858004743, guid: ccf9caa6ee059a94ea1d32899c32eb57, type: 3}
+      propertyPath: apiUrl
+      value: http://timeglide.xr-ai.de:5001/api/
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
