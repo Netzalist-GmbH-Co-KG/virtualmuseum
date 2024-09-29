@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace virtualmuseum.web.data;
+﻿namespace virtualmuseum.web.data.Model.Media;
 
 public enum MediaType
 {

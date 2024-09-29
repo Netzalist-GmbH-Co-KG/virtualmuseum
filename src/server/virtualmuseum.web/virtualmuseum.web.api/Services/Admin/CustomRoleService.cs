@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace virtualmuseum.web.api.Services;
+namespace virtualmuseum.web.api.Services.Admin;
 
 public class CustomRoleService : ICustomRoleService
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
-namespace virtualmuseum.web.api.Controllers
+namespace virtualmuseum.web.api
 {
     public class AuthController : Controller
     {

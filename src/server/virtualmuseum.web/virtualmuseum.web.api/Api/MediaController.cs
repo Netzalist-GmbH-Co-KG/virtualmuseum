@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using virtualmuseum.web.api.Services;
+using virtualmuseum.web.api.Services.MediaService;
 
 namespace virtualmuseum.web.api.Api;
 

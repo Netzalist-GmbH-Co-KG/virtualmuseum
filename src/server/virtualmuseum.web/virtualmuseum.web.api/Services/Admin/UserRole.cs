@@ -1,4 +1,6 @@
-﻿public class UserRole
+﻿namespace virtualmuseum.web.api.Services.Admin;
+
+public class UserRole
 {
     public int Id { get; set; }
     public string UserId { get; set; } // Auth0 User ID

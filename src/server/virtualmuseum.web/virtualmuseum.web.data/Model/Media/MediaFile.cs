@@ -1,4 +1,4 @@
-﻿namespace virtualmuseum.web.data;
+﻿namespace virtualmuseum.web.data.Model.Media;
 
 /// <summary>
 /// A MediaFile represents a file that can be displayed in virtual reality

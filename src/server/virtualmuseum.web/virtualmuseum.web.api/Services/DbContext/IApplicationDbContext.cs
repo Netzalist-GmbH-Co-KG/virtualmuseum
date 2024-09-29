@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using virtualmuseum.web.data;
+using virtualmuseum.web.api.Services.Admin;
+using virtualmuseum.web.data.Model.Inventory;
+using virtualmuseum.web.data.Model.Media;
+using virtualmuseum.web.data.Model.TimeSeries;
 
-namespace virtualmuseum.web.api.Services;
+namespace virtualmuseum.web.api.Services.DbContext;
 
 public interface IApplicationDbContext
 {

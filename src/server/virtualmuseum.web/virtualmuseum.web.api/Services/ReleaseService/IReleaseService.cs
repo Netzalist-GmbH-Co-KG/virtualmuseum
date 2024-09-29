@@ -1,6 +1,6 @@
 ﻿using virtualmuseum.web.api.Services.Model;
 
-namespace virtualmuseum.web.api.Services;
+namespace virtualmuseum.web.api.Services.ReleaseService;
 
 public interface IReleaseService
 {

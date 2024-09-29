@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using virtualmuseum.web.api.Services;
 using virtualmuseum.web.api.Services.ConfigurationRepository;
 using virtualmuseum.web.data;
+using virtualmuseum.web.data.Model.Inventory;
+using virtualmuseum.web.data.Model.Media;
 
 namespace virtualmuseum.web.api.Api;
 

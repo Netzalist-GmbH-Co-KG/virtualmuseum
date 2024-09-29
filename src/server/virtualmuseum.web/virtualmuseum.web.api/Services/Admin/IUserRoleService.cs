@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using virtualmuseum.web.data;
+using virtualmuseum.web.api.Services.DbContext;
 
-namespace virtualmuseum.web.api.Services
+namespace virtualmuseum.web.api.Services.Admin
 {
     public interface IUserRoleService
     {

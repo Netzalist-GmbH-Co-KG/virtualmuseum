@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace virtualmuseum.web.data;
+namespace virtualmuseum.web.data.Model.Inventory;
 
 /// <summary>
 /// The configuration of a virtual topographical table
@@ -11,5 +11,5 @@ public class TopographicalTable
 {
     public Guid Id { get; set; }
     [NotMapped]
-    public List<TimeSeries> TimeSeries { get; set; } = [];
+    public List<TimeSeries.TimeSeries> TimeSeries { get; set; } = [];
 }

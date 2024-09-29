@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using virtualmuseum.web.data.Model.Media;
 
-namespace virtualmuseum.web.data;
+namespace virtualmuseum.web.data.Model.TimeSeries;
 
 public class GeoEvent
 {

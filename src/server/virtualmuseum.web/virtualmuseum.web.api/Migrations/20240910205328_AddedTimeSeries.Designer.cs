@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using virtualmuseum.web.api.Services;
+using virtualmuseum.web.api.Services.DbContext;
 
 #nullable disable
 

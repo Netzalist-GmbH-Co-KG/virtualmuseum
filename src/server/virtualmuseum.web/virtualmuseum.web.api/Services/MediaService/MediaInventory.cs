@@ -1,6 +1,6 @@
-﻿using virtualmuseum.web.data;
+﻿using virtualmuseum.web.data.Model.Media;
 
-namespace virtualmuseum.web.api.Services;
+namespace virtualmuseum.web.api.Services.MediaService;
 
 public class MediaInventory
 {

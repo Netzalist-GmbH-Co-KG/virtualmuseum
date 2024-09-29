@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace virtualmuseum.web.data;
+namespace virtualmuseum.web.data.Model.Inventory;
 
 /// <summary>
 /// A room defines one virtual setting within the museum.

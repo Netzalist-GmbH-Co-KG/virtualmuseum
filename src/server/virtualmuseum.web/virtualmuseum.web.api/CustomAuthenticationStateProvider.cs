@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
-using virtualmuseum.web.api.Services;
+using virtualmuseum.web.api.Services.Admin;
+
+namespace virtualmuseum.web.api;
 
 public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {

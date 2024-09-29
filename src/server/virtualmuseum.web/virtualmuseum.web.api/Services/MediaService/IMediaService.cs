@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace virtualmuseum.web.api.Services;
+namespace virtualmuseum.web.api.Services.MediaService;
 
 public interface IMediaService
 {

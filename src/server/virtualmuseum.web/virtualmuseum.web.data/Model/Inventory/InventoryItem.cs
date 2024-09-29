@@ -1,4 +1,4 @@
-﻿namespace virtualmuseum.web.data;
+﻿namespace virtualmuseum.web.data.Model.Inventory;
 
 /// <summary>
 /// An Inventory Item represents any virtual object in the

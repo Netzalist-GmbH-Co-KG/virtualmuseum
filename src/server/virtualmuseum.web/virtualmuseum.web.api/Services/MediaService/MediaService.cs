@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using virtualmuseum.web.data;
+using virtualmuseum.web.data.Model.Media;
 
-namespace virtualmuseum.web.api.Services;
+namespace virtualmuseum.web.api.Services.MediaService;
 
 public class MediaService : IMediaService
 {    private readonly List<MediaFile> _mediaFiles = [];

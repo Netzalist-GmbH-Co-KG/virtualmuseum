@@ -1,4 +1,4 @@
-﻿namespace virtualmuseum.web.api.Services;
+﻿namespace virtualmuseum.web.api.Services.Admin;
 
 public interface ICustomRoleService
 {
