@@ -40,7 +40,13 @@ public class ConfigurationRepository : IConfigurationRepository
             .Select(GetTenant)
             .ToList();
     }
-    
+
+    public List<MediaFile> GetMediaFiles()
+    {
+        return _applicationDbContext.MediaFiles
+            .ToList();
+    }
+
     private Tenant GetTenant(Tenant tenant)
     {
         tenant.Rooms = _applicationDbContext.Rooms
@@ -131,7 +137,31 @@ public class ConfigurationRepository : IConfigurationRepository
         
         return presentation;
     }
-    
+
+    public void SaveMediaFile(MediaFile? mediaFile)
+    {
+        if (mediaFile == null) return;
+        
+        var existingMediaFile = _applicationDbContext.MediaFiles
+            .FirstOrDefault(m => m.Id == mediaFile.Id);
+        
+        if (existingMediaFile == null)
+        {
+            mediaFile.Id = Guid.NewGuid().ToString();
+            _applicationDbContext.MediaFiles.Add(mediaFile);
+        }
+        else
+        {
+            existingMediaFile.Name = mediaFile.Name;
+            existingMediaFile.Description = mediaFile.Description;
+            existingMediaFile.Url = mediaFile.Url;
+            existingMediaFile.Type = mediaFile.Type;
+            _applicationDbContext.MediaFiles.Update(existingMediaFile);
+        }
+        
+        _applicationDbContext.SaveAllChanges();
+    }
+
     private PresentationItem GetPresentationItem(PresentationItem item)
     {
         item.MediaFile = _applicationDbContext.MediaFiles

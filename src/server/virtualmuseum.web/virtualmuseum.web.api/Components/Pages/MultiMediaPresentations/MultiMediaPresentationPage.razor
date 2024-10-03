@@ -9,17 +9,14 @@
 @inject IConfigurationRepository ConfigurationRepository
 @inject ICustomRoleService CustomRoleService
 
-<h3>Präsentationen</h3>
-
 @if (!CustomRoleService.HasRole("Administrator") && !CustomRoleService.HasRole("Contributor"))
 {
     <AccessDeniedComponent />
 }
 else
 {
-
-    <div class="rounded-2 alert-light p-3 mt-5 mb-5" style="border: gray 1px solid;">
-        <h4>Multimedia Präsentationen</h4>
+    <div class="rounded-2 alert-light p-2 mb-5" style="border: gray 1px solid;">
+        <h4>Multimedia Präsentationen verwalten</h4>
         @* <RadzenTree Data=@_multimediaPresentations Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange"> *@
         @*     <RadzenTreeLevel Text="@GetTextForNode"/> *@
         @* </RadzenTree> *@

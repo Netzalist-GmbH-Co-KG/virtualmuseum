@@ -36,6 +36,20 @@ public class ConfigurationController : Controller, IConfigurationRepository
         }
     }
 
+    [HttpGet("mediafiles")]
+    public List<MediaFile> GetMediaFiles()
+    {
+        try
+        {
+            return _configurationRepository.GetMediaFiles();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error while getting list of media files");
+            return [];
+        }
+    }
+
     [HttpGet("topographical-table/{id}")]
     public TopographicalTable GetTopographicalTableConfiguration(Guid id)
     {
@@ -61,6 +75,19 @@ public class ConfigurationController : Controller, IConfigurationRepository
         {
             _logger.LogError(e, "Error while getting multimedia presentation {multimediaPresentationId}", multimediaPresentationId);
             return new MultimediaPresentation();
+        }
+    }
+
+    [HttpPost("mediafile")]
+    public void SaveMediaFile(MediaFile? mediaFile)
+    {
+        try
+        {
+            _configurationRepository.SaveMediaFile(mediaFile);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error while saving media file {mediaFile}", mediaFile);
         }
     }
 }

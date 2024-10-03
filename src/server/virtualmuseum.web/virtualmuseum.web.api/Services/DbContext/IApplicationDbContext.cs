@@ -27,5 +27,6 @@ public interface IApplicationDbContext
     // Media
     DbSet<MultimediaPresentation> MultimediaPresentations { get; set; } 
     DbSet<PresentationItem> PresentationItems { get; set; } 
-    DbSet<MediaFile> MediaFiles { get; set; } 
+    DbSet<MediaFile> MediaFiles { get; set; }
+    void SaveAllChanges();
 }

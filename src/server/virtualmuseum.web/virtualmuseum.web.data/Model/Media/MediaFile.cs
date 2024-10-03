@@ -1,4 +1,7 @@
-﻿namespace virtualmuseum.web.data.Model.Media;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace virtualmuseum.web.data.Model.Media;
 
 /// <summary>
 /// A MediaFile represents a file that can be displayed in virtual reality
@@ -9,7 +12,9 @@
 /// </summary>
 public class MediaFile
 {
-    public Guid Id { get; set; }
+    [Key]
+    [Column(TypeName = "TEXT")]
+    public string Id { get; set; } = null!;
     public string? FileName { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }

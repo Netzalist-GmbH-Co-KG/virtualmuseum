@@ -7,6 +7,8 @@ namespace virtualmuseum.web.api.Services.ConfigurationRepository;
 public interface IConfigurationRepository
 {
     List<Tenant> GetTenants();
+    List<MediaFile> GetMediaFiles();
     TopographicalTable GetTopographicalTableConfiguration(Guid topographicalTableId);
     MultimediaPresentation GetMultiMediaPresentation(Guid multimediaPresentationId);
+    void SaveMediaFile(MediaFile? mediaFile);
 }

@@ -15,14 +15,14 @@ public class MediaController
         _mediaService = mediaService;
     }
     [HttpGet("media/{id}")]
-    public byte[] Get(Guid id)
+    public byte[] Get(string id)
     {
         return _mediaService.GetMedia(id);
     }
     
     // Return file as a mime type
     [HttpGet("media/{id}/display")]
-    public ActionResult GetDisplay(Guid id)
+    public ActionResult GetDisplay(string id)
     {
         return _mediaService.GetMediaAsFile(id);
     }

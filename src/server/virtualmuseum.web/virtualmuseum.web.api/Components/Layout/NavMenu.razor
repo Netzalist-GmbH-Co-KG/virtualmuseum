@@ -22,10 +22,13 @@
             @if (CustomRoleService.HasRole("Contributor") || CustomRoleService.HasRole("Administrator"))
             {
                 <NavLink class="nav-link" href="Inventory">
-                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Inventar
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Inventar
                 </NavLink>
                 <NavLink class="nav-link" href="MultiMediaPresentation">
-                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Präsentationen
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Präsentationen
+                </NavLink>
+                <NavLink class="nav-link" href="MediaFiles">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Mediendateien
                 </NavLink>
 
                 <NavLink class="nav-link" href="Releases">

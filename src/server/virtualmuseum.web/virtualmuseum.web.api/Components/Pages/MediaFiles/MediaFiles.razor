@@ -1,0 +1,115 @@
+﻿@rendermode InteractiveServer
+
+@page "/MediaFiles"
+@attribute [Authorize]
+@using virtualmuseum.web.api.Components.Common
+@using virtualmuseum.web.api.Services.Admin
+@using virtualmuseum.web.api.Services.ConfigurationRepository
+@using virtualmuseum.web.data.Model.Media
+@inject IConfigurationRepository ConfigurationRepository
+@inject ICustomRoleService CustomRoleService
+
+@if (!CustomRoleService.HasRole("Administrator") && !CustomRoleService.HasRole("Contributor"))
+{
+    <AccessDeniedComponent />
+}
+else
+{
+
+    <h4>Medien Dateien verwalten</h4>
+    <div class="d-flex">
+        <div class="rounded-2 alert-light p-2 mb-5" style="border: gray 1px solid;">
+            <div class="d-flex flex-row">
+                <input type="text" class="form-control" @oninput="@(e => FilterText = e.Value.ToString())" placeholder="Filter"/>
+            </div>
+            <RadzenTree Data=@_filteredMedia Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange">
+                <RadzenTreeLevel Text="@GetTextForNode"/>
+            </RadzenTree>
+        </div>
+        <div>
+            <MediaDataComponent MediaFile="_currentMediaFile" OnMediaFileChanged="@OnMediaFileChanged" />
+        </div>
+
+    </div>
+}
+@code {
+    
+    private List<MediaFile> _filteredMedia = [];
+    private List<MediaFile> _allMedia = [];
+    private MediaFile? _currentMediaFile = null;
+
+    private string FilterText
+    {
+        get => _filterText;
+        set
+        {
+            _filterText = value;
+            ApplyFilter();
+        }
+    }
+
+    private object _selectedItem = null!;
+    private List<string> _debugMessages = ["Starting"];
+    private string _filterText = "";
+
+
+    private void Log(string message)
+    {
+        _debugMessages.Insert(0, message);
+        _debugMessages = _debugMessages.Take(30).ToList();
+    }
+    
+    protected override Task OnInitializedAsync()
+    {
+        _allMedia = ConfigurationRepository.GetMediaFiles();
+        ApplyFilter();
+        _currentMediaFile= _filteredMedia.FirstOrDefault();
+        return base.OnInitializedAsync();
+    }
+    
+    private void ApplyFilter()
+    {
+        _filteredMedia = _allMedia.Where(m => m.Name?.Contains(FilterText) ?? false).ToList();
+    }
+    
+    void ExpandTree(TreeExpandEventArgs args)
+    {
+        Log($"Expanding: {args.Text}");
+        switch (args.Value.GetType())
+        {
+            case { } t when t == typeof(MediaFile):
+                var mediaFile = (MediaFile)args.Value;
+                break;
+        }
+    }
+    void OnChange()
+    {
+        if(_selectedItem.GetType() == typeof(MediaFile))
+            _currentMediaFile = (MediaFile)_selectedItem;
+        Log($"Selected: {GetTextForNode(_selectedItem)}");
+    }
+    
+    private string GetTextForNode(object data)
+    {
+        Log($"Getting text for: {data.GetType()}");
+        return data.GetType() switch
+        {
+            { } t when t == typeof(MediaFile) => ((MediaFile)data).Name!,
+            _ => "Unknown"
+        };
+    }
+
+    private void OnMediaFileChanged(MediaFile mediaFile)
+    {
+        if(_currentMediaFile?.Id == mediaFile.Id)
+        {
+            _currentMediaFile = mediaFile;
+        }
+        // Replace the media file in the list
+        _allMedia = _allMedia.Select(m => m.Id == mediaFile.Id ? mediaFile : m).ToList();
+        ApplyFilter();
+        // Render the tree again
+        StateHasChanged();
+    }
+
+}

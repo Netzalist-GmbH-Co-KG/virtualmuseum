@@ -4,6 +4,6 @@ namespace virtualmuseum.web.api.Services.MediaService;
 
 public interface IMediaService
 {
-    byte[] GetMedia(Guid id);
-    ActionResult GetMediaAsFile(Guid id);
+    byte[] GetMedia(string id);
+    ActionResult GetMediaAsFile(string id);
 }

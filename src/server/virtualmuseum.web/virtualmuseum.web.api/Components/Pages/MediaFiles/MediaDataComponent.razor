@@ -1,0 +1,83 @@
+﻿@using virtualmuseum.web.api.Services.ConfigurationRepository
+@using virtualmuseum.web.data.Model.Media
+
+@inject IConfigurationRepository ConfigurationRepository
+
+<div class="media-data-component">
+    @if(MediaFile == null)
+    {
+        <p>No media file selected.</p>
+        return;
+    }
+
+    <EditForm Model="@MediaFile">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="name" class="label-above">Name:</label>
+            <InputText id="name" @bind-Value="MediaFile.Name" @bind-Value:after="SaveChangesAsync" class="fullWidth" />
+        </div>
+        <div>
+            <label for="type" class="label-above">Art der Datei:</label>
+            <InputSelect id="type" @bind-Value="MediaFile.Type" @bind-Value:after="SaveChangesAsync" class="fullWidth">
+                @foreach (var type in Enum.GetValues<MediaType>())
+                {
+                    <option value="@type">@type</option>
+                }
+            </InputSelect>
+        </div>
+        <div>
+            <label for="description" class="label-above">Beschreibung:</label>
+            <InputTextArea id="description" @bind-Value="MediaFile.Description" @bind-Value:after="SaveChangesAsync" class="fullWidth small-font" rows="10" />
+        </div>
+        <div>
+            <label for="duration" class="label-above">Länge in Sekunden (bei Videos):</label>
+            <InputNumber id="duration" @bind-Value="MediaFile.DurationInSeconds" @bind-Value:after="SaveChangesAsync" class="fullWidth" />
+        </div>
+        <div>
+            <label for="url" class="label-above">Link:</label>
+            @if (isEditingUrl)
+            {
+                <InputText id="url" @bind-Value="MediaFile.Url" @bind-Value:after="SaveChangesAsync" @onblur="ToggleEditUrl" class="fullWidth" />
+            }
+            else
+            {
+                <a href="@MediaFile.Url" class="small-font">@MediaFile.Url</a>
+                <button class="edit-button" @onclick="ToggleEditUrl"><i class="fas fa-pencil-alt"></i></button>
+            }
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public MediaFile? MediaFile { get; set; }
+
+    [Parameter]
+    public EventCallback<MediaFile> OnMediaFileChanged { get; set; }
+
+    private bool isEditingUrl = false;
+
+    private async Task SaveChangesAsync()
+    {
+        if (MediaFile != null)
+        {
+            try
+            {
+                ConfigurationRepository.SaveMediaFile(MediaFile);
+                await OnMediaFileChanged.InvokeAsync(MediaFile);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+    }
+
+    private void ToggleEditUrl()
+    {
+        isEditingUrl = !isEditingUrl;
+    }
+
+}

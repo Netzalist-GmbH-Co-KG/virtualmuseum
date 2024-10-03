@@ -13,16 +13,16 @@ public class MediaService : IMediaService
         InitializeMediaFiles();
         
     }
-    public byte[] GetMedia(Guid id)
+    public byte[] GetMedia(string id)
     {
         var file = _mediaFiles.FirstOrDefault(f => f.Id == id);
-        if (file == null) return new byte[0];
+        if (file == null) return Array.Empty<byte>();
         
         var path = Path.Combine("InputData/Media", file.FileName!);
         return File.ReadAllBytes( Path.GetFullPath(path));
     }
     
-    public ActionResult GetMediaAsFile(Guid id)
+    public ActionResult GetMediaAsFile(string id)
     {
         var file = _mediaFiles.FirstOrDefault(f => f.Id == id);
         // throw 404 if file not found

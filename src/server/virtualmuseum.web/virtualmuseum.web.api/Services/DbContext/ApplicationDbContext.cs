@@ -33,6 +33,10 @@ namespace virtualmuseum.web.api.Services.DbContext
         public DbSet<MultimediaPresentation> MultimediaPresentations { get; set; } = null!;
         public DbSet<PresentationItem> PresentationItems { get; set; } = null!;
         public DbSet<MediaFile> MediaFiles { get; set; } = null!;
+        public void SaveAllChanges()
+        {
+            SaveChanges();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

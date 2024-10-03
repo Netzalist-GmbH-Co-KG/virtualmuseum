@@ -180,8 +180,7 @@ namespace virtualmuseum.web.api.Migrations
 
             modelBuilder.Entity("virtualmuseum.web.data.Model.Media.MediaFile", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
