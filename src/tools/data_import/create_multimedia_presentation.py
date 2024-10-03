@@ -35,7 +35,7 @@ def create_default_multimedia_presentation(
 def try_read_metadata_file_for_presenation(
     presentation: MultiMediaPresentation, base_path: str
 ) -> MultiMediaPresentation:
-    meta_data_file_path = base_path + os.path.basename(base_path) + ".txt"
+    meta_data_file_path = base_path + os.path.sep + os.path.basename(base_path) + ".txt"
     if os.path.exists(meta_data_file_path):
         meta_data_file = open(meta_data_file_path, "r")
 
@@ -56,7 +56,7 @@ def try_read_metadata_file_for_presenation(
 def save_metadata_file_for_presenation(
     presentation: MultiMediaPresentation, base_path: str
 ):
-    meta_data_file_path = base_path + os.path.basename(base_path) + ".txt"
+    meta_data_file_path = base_path + os.path.sep + os.path.basename(base_path) + ".txt"
     meta_data_file = open(meta_data_file_path, "w")
     meta_data_file.write(presentation.Name + "\n")
     meta_data_file.write(presentation.Description + "\n")
