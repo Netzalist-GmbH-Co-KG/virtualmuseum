@@ -2,6 +2,7 @@ import os
 import uuid
 
 from model.MediaFileDefinition import MediaFile, MediaType
+from model.MultiMediaPresentationDefinition import MultiMediaPresentation
 
 
 def create_multimedia_presentations(base_path: str):
@@ -10,13 +11,57 @@ def create_multimedia_presentations(base_path: str):
     for multimedia_dir in multimedia_dirs:
         create_multimedia_presentation(multimedia_dir)
     print(multimedia_dirs)
-    pass
 
 
 def create_multimedia_presentation(base_path: str, **kwargs):
     files = find_multimedia_files(base_path)
-    create_media_files(files)
-    pass
+
+    presentation = create_default_multimedia_presentation(base_path, **kwargs)
+    presentation = try_read_metadata_file_for_presenation(presentation, base_path)
+    save_metadata_file_for_presenation(presentation, base_path)
+    presentation.MediaFiles = create_media_files(files)
+
+
+def create_default_multimedia_presentation(
+    base_path: str, **kwargs
+) -> MultiMediaPresentation:
+    presentation = MultiMediaPresentation()
+    presentation.Id = str(uuid.uuid4())
+    presentation.Name = os.path.basename(base_path)
+    presentation.Description = ""
+    return presentation
+
+
+def try_read_metadata_file_for_presenation(
+    presentation: MultiMediaPresentation, base_path: str
+) -> MultiMediaPresentation:
+    meta_data_file_path = base_path + os.path.basename(base_path) + ".txt"
+    if os.path.exists(meta_data_file_path):
+        meta_data_file = open(meta_data_file_path, "r")
+
+        lines = meta_data_file.readlines()
+        # check if we have at least 3 lines
+        if len(lines) < 3:
+            print(
+                f"Invalid metadata file for {base_path}: Needs at least 3 lines but has {len(lines)}"
+            )
+        presentation.Name = lines[0].strip()
+        presentation.Description = "".join(lines[1:-1]).strip()
+        presentation.Id = lines[-1].strip()
+        meta_data_file.close()
+
+    return presentation
+
+
+def save_metadata_file_for_presenation(
+    presentation: MultiMediaPresentation, base_path: str
+):
+    meta_data_file_path = base_path + os.path.basename(base_path) + ".txt"
+    meta_data_file = open(meta_data_file_path, "w")
+    meta_data_file.write(presentation.Name + "\n")
+    meta_data_file.write(presentation.Description + "\n")
+    meta_data_file.write(presentation.Id + "\n")
+    meta_data_file.close()
 
 
 def find_multimedia_dirs(base_path: str):
@@ -45,7 +90,7 @@ def find_multimedia_files(multimedia_dir: str) -> list[str]:
     return multimedia_files
 
 
-def create_media_files(media_file_paths: list[str]):
+def create_media_files(media_file_paths: list[str]) -> list[MediaFile]:
     media_files: list[MediaFile] = []
     # check if a text file with the same name exists in the same directory
 
@@ -54,7 +99,7 @@ def create_media_files(media_file_paths: list[str]):
         media_file = try_read_metadata_file(media_file, media_file_path)
         save_metadata_file(media_file, media_file_path)
         media_files.append(media_file)
-    pass
+    return media_files
 
 
 def create_default_media_data(media_file_path: str) -> MediaFile:
