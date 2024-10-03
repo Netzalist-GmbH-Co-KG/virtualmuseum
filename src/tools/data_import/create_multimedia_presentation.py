@@ -5,37 +5,44 @@ from model.MediaFileDefinition import MediaFile, MediaType
 from model.MultiMediaPresentationDefinition import MultiMediaPresentation
 
 
+# Multimedia Presentations
 def create_multimedia_presentations(base_path: str):
-    # we need to find all directories 6 levels beneath the base_path
     multimedia_dirs = find_multimedia_dirs(base_path)
     for multimedia_dir in multimedia_dirs:
         create_multimedia_presentation(multimedia_dir)
     print(multimedia_dirs)
 
 
-def create_multimedia_presentation(base_path: str, **kwargs):
-    files = find_multimedia_files(base_path)
+def create_multimedia_presentation(presentation_directory: str):
+    files = find_multimedia_files(presentation_directory)
 
-    presentation = create_default_multimedia_presentation(base_path, **kwargs)
-    presentation = try_read_metadata_file_for_presenation(presentation, base_path)
-    save_metadata_file_for_presenation(presentation, base_path)
+    presentation = create_default_multimedia_presentation(presentation_directory)
+    presentation = try_read_metadata_file_for_presenation(
+        presentation, presentation_directory
+    )
+    save_metadata_file_for_presenation(presentation, presentation_directory)
     presentation.MediaFiles = create_media_files(files)
 
 
 def create_default_multimedia_presentation(
-    base_path: str, **kwargs
+    presentation_directory: str,
 ) -> MultiMediaPresentation:
     presentation = MultiMediaPresentation()
     presentation.Id = str(uuid.uuid4())
-    presentation.Name = os.path.basename(base_path)
+    presentation.Name = os.path.basename(presentation_directory)
     presentation.Description = ""
     return presentation
 
 
 def try_read_metadata_file_for_presenation(
-    presentation: MultiMediaPresentation, base_path: str
+    presentation: MultiMediaPresentation, presentation_directory: str
 ) -> MultiMediaPresentation:
-    meta_data_file_path = base_path + os.path.sep + os.path.basename(base_path) + ".txt"
+    meta_data_file_path = (
+        presentation_directory
+        + os.path.sep
+        + os.path.basename(presentation_directory)
+        + ".txt"
+    )
     if os.path.exists(meta_data_file_path):
         meta_data_file = open(meta_data_file_path, "r")
 
@@ -43,7 +50,7 @@ def try_read_metadata_file_for_presenation(
         # check if we have at least 3 lines
         if len(lines) < 3:
             print(
-                f"Invalid metadata file for {base_path}: Needs at least 3 lines but has {len(lines)}"
+                f"Invalid metadata file for {presentation_directory}: Needs at least 3 lines but has {len(lines)}"
             )
         presentation.Name = lines[0].strip()
         presentation.Description = "".join(lines[1:-1]).strip()
@@ -54,9 +61,14 @@ def try_read_metadata_file_for_presenation(
 
 
 def save_metadata_file_for_presenation(
-    presentation: MultiMediaPresentation, base_path: str
+    presentation: MultiMediaPresentation, presentation_directory: str
 ):
-    meta_data_file_path = base_path + os.path.sep + os.path.basename(base_path) + ".txt"
+    meta_data_file_path = (
+        presentation_directory
+        + os.path.sep
+        + os.path.basename(presentation_directory)
+        + ".txt"
+    )
     meta_data_file = open(meta_data_file_path, "w")
     meta_data_file.write(presentation.Name + "\n")
     meta_data_file.write(presentation.Description + "\n")
@@ -67,7 +79,7 @@ def save_metadata_file_for_presenation(
 def find_multimedia_dirs(base_path: str):
     all_dirs = []
     # walk through the base_path and find all directories 6 levels beneath it
-    for root, _, files in os.walk(base_path):
+    for root, _, _ in os.walk(base_path):
         # check if the depth of the current directory is 6
         if root.count(os.sep) - base_path.count(os.sep) == 6:
             all_dirs.append(root)
@@ -75,6 +87,7 @@ def find_multimedia_dirs(base_path: str):
     return all_dirs
 
 
+# Media Files
 def find_multimedia_files(multimedia_dir: str) -> list[str]:
     # all .jpg, .png, .mp4, .mp3 files in the multimedia_dir. Do not include subdirectories
     multimedia_files = []
@@ -85,7 +98,7 @@ def find_multimedia_files(multimedia_dir: str) -> list[str]:
             or file.endswith(".mp4")
             or file.endswith(".mp3")
         ):
-            multimedia_files.append(file)
+            multimedia_files.append(multimedia_dir + os.sep + file)
 
     return multimedia_files
 
