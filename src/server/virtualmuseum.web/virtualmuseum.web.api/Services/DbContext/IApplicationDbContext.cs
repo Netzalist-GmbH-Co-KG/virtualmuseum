@@ -16,7 +16,8 @@ public interface IApplicationDbContext
     DbSet<Room> Rooms { get; set; } 
     DbSet<InventoryItem> InventoryItems { get; set; }
     DbSet<TopographicalTable> TopographicalTables { get; set; }
-    DbSet<TopographicalTableTimeSeries> TopographicalTableGeoEventGroups { get; set; } 
+    DbSet<TopographicalTableTopic> TopographicalTableTopics { get; set; } 
+    DbSet<TopographicalTableTopicTimeSeries> TopographicalTableTopicTimeSeries { get; set; }
         
     // TimeSeries
     DbSet<TimeSeries> TimeSeries { get; set; }

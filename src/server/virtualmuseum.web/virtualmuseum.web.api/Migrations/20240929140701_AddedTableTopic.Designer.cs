@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using virtualmuseum.web.api.Services.DbContext;
 
@@ -10,9 +11,11 @@ using virtualmuseum.web.api.Services.DbContext;
 namespace virtualmuseum.web.api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240929140701_AddedTableTopic")]
+    partial class AddedTableTopic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -136,31 +139,6 @@ namespace virtualmuseum.web.api.Migrations
                     b.ToTable("TopographicalTables");
                 });
 
-            modelBuilder.Entity("virtualmuseum.web.data.Model.Inventory.TopographicalTableTopic", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("MediaFileImage2DId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("TopographicalTableId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TopographicalTableTopics");
-                });
-
             modelBuilder.Entity("virtualmuseum.web.data.Model.Inventory.TopographicalTableTopicTimeSeries", b =>
                 {
                     b.Property<Guid>("Id")
@@ -175,7 +153,7 @@ namespace virtualmuseum.web.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TopographicalTableTopicTimeSeries");
+                    b.ToTable("TopographicalTableGeoEventGroups");
                 });
 
             modelBuilder.Entity("virtualmuseum.web.data.Model.Media.MediaFile", b =>
@@ -187,8 +165,8 @@ namespace virtualmuseum.web.api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("DurationInSeconds")
-                        .HasColumnType("REAL");
+                    b.Property<int>("DurationInSeconds")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FileName")
                         .HasColumnType("TEXT");

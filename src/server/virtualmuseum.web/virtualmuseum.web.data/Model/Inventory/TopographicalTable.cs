@@ -10,6 +10,7 @@ namespace virtualmuseum.web.data.Model.Inventory;
 public class TopographicalTable
 {
     public Guid Id { get; set; }
+
     [NotMapped]
-    public List<TimeSeries.TimeSeries> TimeSeries { get; set; } = [];
+    public List<TopographicalTableTopic> Topics { get; set; } = [];
 }

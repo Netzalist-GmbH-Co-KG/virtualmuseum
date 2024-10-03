@@ -21,7 +21,8 @@ namespace virtualmuseum.web.api.Services.DbContext
         public DbSet<Room> Rooms { get; set; } = null!;
         public DbSet<InventoryItem> InventoryItems { get; set; } = null!;
         public DbSet<TopographicalTable> TopographicalTables { get; set; } = null!;
-        public DbSet<TopographicalTableTimeSeries> TopographicalTableGeoEventGroups { get; set; } = null!;
+        public DbSet<TopographicalTableTopic> TopographicalTableTopics { get; set; } = null!;
+        public DbSet<TopographicalTableTopicTimeSeries> TopographicalTableTopicTimeSeries { get; set; } = null!;
         
         // TimeSeries
         public DbSet<TimeSeries> TimeSeries { get; set; } = null!;

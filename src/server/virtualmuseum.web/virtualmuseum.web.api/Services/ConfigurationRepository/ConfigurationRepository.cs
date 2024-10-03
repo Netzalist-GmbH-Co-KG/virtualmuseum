@@ -70,23 +70,26 @@ public class ConfigurationRepository : IConfigurationRepository
         var table = _applicationDbContext.TopographicalTables
             .FirstOrDefault(t => t.Id.ToString() == topographicalTableId.ToString());
         if (table == null) throw new FileNotFoundException();
-        
-        var tableTimeSeries = _applicationDbContext.TopographicalTableGeoEventGroups
+
+        table.Topics = _applicationDbContext.TopographicalTableTopics
             .Where(g => g.TopographicalTableId.ToString() == topographicalTableId.ToString())
             .ToList();
 
-        var timeSeries = _applicationDbContext.TimeSeries
-            .Where(ts => tableTimeSeries
-                .Select(tgeg => tgeg.TimeSeriesId.ToString())
-                .Contains(ts.Id.ToString()))
-            .ToList();
-        
-        var fullTimeSeries = timeSeries
-            .Select(GetTimeSeries)
-            .ToList();
-        
-        table.TimeSeries = fullTimeSeries;
-        
+        foreach (var topic in table.Topics)
+        {
+            var timeSeriesMap = _applicationDbContext.TopographicalTableTopicTimeSeries
+                .Where(ts => ts.TopographicalTableTopicId.ToString() == topic.Id.ToString())
+                .ToList();
+            var timeSeries = _applicationDbContext.TimeSeries
+                .AsEnumerable()
+                .Where(ts => timeSeriesMap.Any(tsm => tsm.TimeSeriesId.ToString() == ts.Id.ToString()))
+                .ToList();
+            var fullTimeSeries = timeSeries
+                .Select(GetTimeSeries)
+                .ToList();
+            
+            topic.TimeSeries = fullTimeSeries;
+        }
         return table;
     }
 
