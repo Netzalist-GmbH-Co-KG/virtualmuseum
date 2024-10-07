@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using BunnyCDN.Net.Storage;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,7 +31,12 @@ builder.Configuration
 builder.Services.Configure<ReleaseServiceConfig>(builder.Configuration.GetSection("ReleaseService"));
 
 builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
-builder.Services.AddTransient<IMediaService, MediaService>();
+
+var bunnyStorageConfig = builder.Configuration.GetSection("BunnyStorage").Get<BunnyStorageConfig>();
+if(bunnyStorageConfig == null) throw new Exception("BunnyStorage configuration is missing");
+var bunnyStorage = new BunnyCDNStorage(bunnyStorageConfig.StorageZoneName, bunnyStorageConfig.ApiAccessKey);
+builder.Services.AddSingleton<IBunnyCDNStorage>(bunnyStorage);
+builder.Services.AddTransient<IMediaService, BunnyMediaService>();
 builder.Services.AddSingleton<IReleaseService, ReleaseService>();
 builder.Services.AddTransient<ICustomRoleService, CustomRoleService>();
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); 

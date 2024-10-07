@@ -8,7 +8,7 @@ using BunnyCDN.Net.Storage.Models;
 
 namespace BunnyCDN.Net.Storage
 {
-    public class BunnyCDNStorage
+    public class BunnyCDNStorage : IBunnyCDNStorage
     {
         /// <summary>
         /// The API access key used for authentication

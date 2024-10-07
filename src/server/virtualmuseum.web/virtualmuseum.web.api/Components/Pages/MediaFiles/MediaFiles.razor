@@ -6,6 +6,7 @@
 @using virtualmuseum.web.api.Services.Admin
 @using virtualmuseum.web.api.Services.ConfigurationRepository
 @using virtualmuseum.web.data.Model.Media
+
 @inject IConfigurationRepository ConfigurationRepository
 @inject ICustomRoleService CustomRoleService
 
@@ -15,25 +16,36 @@
 }
 else
 {
-
     <h4>Medien Dateien verwalten</h4>
     <div class="d-flex">
         <div class="rounded-2 alert-light p-2 mb-5" style="border: gray 1px solid;">
-            <div class="d-flex flex-row">
-                <input type="text" class="form-control" @oninput="@(e => FilterText = e.Value.ToString())" placeholder="Filter"/>
+            <div class="d-flex flex-row align-items-center mb-2">
+                <input type="text" class="form-control me-2" @oninput="@(e => FilterText = e.Value.ToString())" placeholder="Filter"/>
+                <button class="btn btn-primary" @onclick="ShowConfirmDialog" title="Neues Medium hinzufügen">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
             <RadzenTree Data=@_filteredMedia Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange">
                 <RadzenTreeLevel Text="@GetTextForNode"/>
             </RadzenTree>
         </div>
-        <div>
+        <div style="width: 100%; padding: 5px;">
             <MediaDataComponent MediaFile="_currentMediaFile" OnMediaFileChanged="@OnMediaFileChanged" />
         </div>
-
     </div>
+
+    <ConfirmDialog 
+    IsVisible="@isConfirmDialogVisible"
+    Message="@ConfirmDialogMessage"
+    OnConfirm="AddNewMediaFile"
+    OnCancel="HideConfirmDialog" />
 }
 @code {
     
+
+    private bool isConfirmDialogVisible = false;
+    private string ConfirmDialogMessage = "Neues Medium hinzufügen. Sind Sie sicher?";
+
     private List<MediaFile> _filteredMedia = [];
     private List<MediaFile> _allMedia = [];
     private MediaFile? _currentMediaFile = null;
@@ -101,6 +113,8 @@ else
 
     private void OnMediaFileChanged(MediaFile mediaFile)
     {
+        ConfigurationRepository.SaveMediaFile(mediaFile);
+
         if(_currentMediaFile?.Id == mediaFile.Id)
         {
             _currentMediaFile = mediaFile;
@@ -112,4 +126,33 @@ else
         StateHasChanged();
     }
 
+    private void AddNewMediaFile()
+    {
+        var newMediaFile = new MediaFile
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Neues Medium",
+            Type = MediaType.Image2D, 
+            Url = "",
+            Description = "",
+            DurationInSeconds = 0
+        };
+
+        _allMedia.Add(newMediaFile);
+        ApplyFilter();
+        _currentMediaFile = newMediaFile;
+        _selectedItem = newMediaFile;
+        HideConfirmDialog();
+        StateHasChanged();
+    }
+
+    private void HideConfirmDialog()
+    {
+        isConfirmDialogVisible = false;
+    }   
+
+    private void ShowConfirmDialog()
+    {
+        isConfirmDialogVisible = true;
+    }
 }

@@ -9,11 +9,8 @@ namespace BunnyCDN.Net.Storage
     {
         internal static string Generate(Stream stream)
         {
-            using (var sha = new SHA256Managed())
-            {
-                byte[] checksumData = sha.ComputeHash(stream);
-                return BitConverter.ToString(checksumData).Replace("-", String.Empty);
-            }
+            var checksumData = SHA256.HashData(stream);
+            return BitConverter.ToString(checksumData).Replace("-", String.Empty);
         }
     }
 }

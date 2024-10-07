@@ -1,0 +1,19 @@
+﻿<div class="modal @(IsVisible ? "is-active" : "")">
+    <div class="modal-background" @onclick="OnCancel"></div>
+    <div class="modal-content">
+        <div class="box">
+            <p>@Message</p>
+            <div class="buttons">
+                <button class="button is-danger" @onclick="OnConfirm">Ja</button>
+                <button class="button" @onclick="OnCancel">Nein</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public string Message { get; set; } = "";
+    [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+}

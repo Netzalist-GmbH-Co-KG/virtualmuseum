@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <Version>1.0.5</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>BunnyWay d.o.o.</Company>
     <Description>The official .NET library used for interacting with the BunnyCDN Storage API.</Description>
     <Authors>BunnyWay d.o.o.</Authors>

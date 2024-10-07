@@ -1,19 +1,21 @@
-﻿@using virtualmuseum.web.api.Services.ConfigurationRepository
+﻿@using virtualmuseum.web.api.Components.Common
 @using virtualmuseum.web.data.Model.Media
-
-@inject IConfigurationRepository ConfigurationRepository
+@using virtualmuseum.web.api.Services.ConfigurationRepository
 
 <div class="media-data-component">
     @if(MediaFile == null)
     {
-        <p>No media file selected.</p>
+        <p>Keine Mediendatei ausgewählt.</p>
         return;
     }
 
-    <EditForm Model="@MediaFile">
+    <EditForm Model="@MediaFile" OnValidSubmit="SaveChangesAsync">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+        <div class="delete-button-container">
+            <button class="delete-button" @onclick="ShowConfirmDialog" title="Medium löschen"><i class="fas fa-trash"></i></button>
+        </div>
         <div>
             <label for="name" class="label-above">Name:</label>
             <InputText id="name" @bind-Value="MediaFile.Name" @bind-Value:after="SaveChangesAsync" class="fullWidth" />
@@ -31,13 +33,24 @@
             <label for="description" class="label-above">Beschreibung:</label>
             <InputTextArea id="description" @bind-Value="MediaFile.Description" @bind-Value:after="SaveChangesAsync" class="fullWidth small-font" rows="10" />
         </div>
-        <div>
-            <label for="duration" class="label-above">Länge in Sekunden (bei Videos):</label>
-            <InputNumber id="duration" @bind-Value="MediaFile.DurationInSeconds" @bind-Value:after="SaveChangesAsync" class="fullWidth" />
-        </div>
+            @switch (MediaFile.Type)
+            {
+                case MediaType.Video3D:
+                case MediaType.Video360Degree:
+                case MediaType.Video2D:
+                <div>
+                    <label for="duration" class="label-above">Länge in Sekunden (bei Videos):</label>
+                    <InputNumber id="duration" @bind-Value="MediaFile.DurationInSeconds" @bind-Value:after="SaveChangesAsync" class="fullWidth" />
+                </div>
+                break;
+            }
         <div>
             <label for="url" class="label-above">Link:</label>
-            @if (isEditingUrl)
+            @if (string.IsNullOrEmpty(MediaFile.Url))
+            {
+                <InputFile OnChange="OnFileSelected" />
+            }
+            else if (isEditingUrl)
             {
                 <InputText id="url" @bind-Value="MediaFile.Url" @bind-Value:after="SaveChangesAsync" @onblur="ToggleEditUrl" class="fullWidth" />
             }
@@ -45,10 +58,52 @@
             {
                 <a href="@MediaFile.Url" class="small-font">@MediaFile.Url</a>
                 <button class="edit-button" @onclick="ToggleEditUrl"><i class="fas fa-pencil-alt"></i></button>
+                <button class="delete-button" @onclick="ShowConfirmDialogUrl"><i class="fas fa-trash"></i></button>
             }
         </div>
     </EditForm>
+    
+    @if (!string.IsNullOrEmpty(MediaFile.Url))
+    {
+        <div class="media-preview">
+            @if (isLoading)
+            {
+                <div class="loading-indicator">
+                    <div class="spinner"></div>
+                </div>
+            }
+            @switch (MediaFile.Type)
+            {
+                case MediaType.Image3D:
+                case MediaType.Image360Degree:
+                case MediaType.Image2D:
+                    <img src="@MediaFile.Url" alt="@MediaFile.Name" class="media-preview-item @(isLoading ? "invisible" : "")" @onload="OnMediaLoaded" @onerror="OnMediaLoaded" />
+                    break;
+                case MediaType.Video3D:
+                case MediaType.Video360Degree:
+                case MediaType.Video2D:
+                    <video src="@MediaFile.Url" controls class="media-preview-item @(isLoading ? "invisible" : "")" @onloadeddata="OnMediaLoaded" @onerror="OnMediaLoaded">
+                        Ihr Browser unterstützt das Video-Tag nicht.
+                    </video>
+                    break;
+                case MediaType.Audio:
+                    <audio src="@MediaFile.Url" controls class="media-preview-item @(isLoading ? "invisible" : "")" @onloadeddata="OnMediaLoaded" @onerror="OnMediaLoaded">
+                        Ihr Browser unterstützt das Audio-Tag nicht.
+                    </audio>
+                    break;
+                default:
+                    <p>Vorschau nicht verfügbar für diesen Medientyp.</p>
+                    break;
+            }
+        </div>
+    }
 </div>
+
+<ConfirmDialog 
+    IsVisible="@isConfirmDialogVisible"
+    Message="@ConfirmDialogMessage"
+    OnConfirm="DeleteAsset"
+    OnCancel="HideConfirmDialog" />
 
 @code {
     [Parameter]
@@ -58,6 +113,22 @@
     public EventCallback<MediaFile> OnMediaFileChanged { get; set; }
 
     private bool isEditingUrl = false;
+    private bool isLoading = false;
+    private string currentUrl = string.Empty;
+    private bool isConfirmDialogVisible = false;
+    private bool isDeletingUrl = false;
+    private string ConfirmDialogMessage = "Medium löschen. Sind Sie sicher?";
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (MediaFile != null && MediaFile.Url != currentUrl)
+        {
+            isLoading = true;
+            currentUrl = MediaFile.Url!;
+        }
+    }
 
     private async Task SaveChangesAsync()
     {
@@ -65,7 +136,6 @@
         {
             try
             {
-                ConfigurationRepository.SaveMediaFile(MediaFile);
                 await OnMediaFileChanged.InvokeAsync(MediaFile);
             }
             catch (Exception e)
@@ -80,4 +150,95 @@
         isEditingUrl = !isEditingUrl;
     }
 
+    private async Task DeleteUrl()
+    {
+        if (MediaFile != null)      
+        {
+            MediaFile.Url = null;
+            await SaveChangesAsync();
+        }
+    }
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        if(MediaFile == null)
+        {
+            return;
+        }
+        var file = e.File;
+        if (file != null)
+        {
+            // Hier implementieren Sie die Logik zum Hochladen der Datei
+            var uploadedUrl = await UploadFileAsync(file);
+            if (!string.IsNullOrEmpty(uploadedUrl))
+            {
+                MediaFile.Url = uploadedUrl;
+                await SaveChangesAsync();
+            }
+        }
+    }
+
+    private async Task<string> UploadFileAsync(IBrowserFile file)
+    {
+        // Implementieren Sie hier die Logik zum Hochladen der Datei auf den Server
+        // und geben Sie die URL der hochgeladenen Datei zurück
+        // Dies ist nur ein Platzhalter und muss an Ihre spezifische Implementierung angepasst werden
+        return await Task.FromResult($"/uploads/{file.Name}");
+    }
+
+    private void OnMediaLoaded()
+    {
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task ConfirmDelete()
+    {
+        var confirmed = true;
+        if (confirmed)
+        {
+            await DeleteMedia();
+        }
+    }
+
+    private async Task DeleteAsset()
+    {
+        if(isDeletingUrl)
+        {
+            await DeleteUrl();
+        }
+        else
+        {
+            await DeleteMedia();
+        }
+        HideConfirmDialog();
+    }
+
+    private async Task DeleteMedia()
+    {
+
+        // Hier später den API-Aufruf zum Löschen des Mediums einfügen
+        // Vorläufig leere Implementierung
+        await Task.CompletedTask;
+    }
+
+    private void ShowConfirmDialog()
+    {
+        isConfirmDialogVisible = true;
+        isDeletingUrl = false;
+        ConfirmDialogMessage = "Medium löschen. Sind Sie sicher?";
+    }
+
+    private void ShowConfirmDialogUrl()
+    {   
+        isConfirmDialogVisible = true;
+        isDeletingUrl = true;
+        ConfirmDialogMessage = "Link löschen. Sind Sie sicher?";
+    }
+
+
+    private void HideConfirmDialog()
+    {
+        isConfirmDialogVisible = false;
+    }
 }
