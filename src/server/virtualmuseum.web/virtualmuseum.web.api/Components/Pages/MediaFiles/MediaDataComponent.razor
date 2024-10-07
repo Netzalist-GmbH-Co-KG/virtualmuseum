@@ -1,6 +1,12 @@
-﻿@using virtualmuseum.web.api.Components.Common
+﻿@using BunnyCDN.Net.Storage
+@using virtualmuseum.web.api.Components.Common
 @using virtualmuseum.web.data.Model.Media
 @using virtualmuseum.web.api.Services.ConfigurationRepository
+@using System.Web
+@using System.Net.Mime
+@using System.Drawing
+
+@inject IBunnyCDNStorage BunnyCDNStorage;
 
 <div class="media-data-component">
     @if(MediaFile == null)
@@ -180,10 +186,39 @@
 
     private async Task<string> UploadFileAsync(IBrowserFile file)
     {
-        // Implementieren Sie hier die Logik zum Hochladen der Datei auf den Server
-        // und geben Sie die URL der hochgeladenen Datei zurück
-        // Dies ist nur ein Platzhalter und muss an Ihre spezifische Implementierung angepasst werden
-        return await Task.FromResult($"/uploads/{file.Name}");
+        try
+        {
+            var fileName = HttpUtility.UrlEncode(file.Name);
+            await BunnyCDNStorage.UploadAsync(file.OpenReadStream(maxAllowedSize:100000000L), "timeglide/" + fileName);
+
+            // Set defaults for the media file
+            MediaFile!.FileName = fileName;
+            if (string.IsNullOrEmpty(MediaFile!.Name!.Trim()))
+                MediaFile.Name = Path.GetFileNameWithoutExtension(file.Name);
+            var ext = Path.GetExtension(file.Name).ToLowerInvariant();
+            switch (ext)
+            {
+                case ".jpg":
+                case ".jpeg":
+                case ".png":
+                case ".gif":
+                    // Check if the ratio of the image is wider than 2:1 --> Assume 360° image
+                    var image = Image.FromStream(file.OpenReadStream());
+                    MediaFile.Type = image.Width > 2 * image.Height ? MediaType.Image360Degree : MediaType.Image2D;
+                    MediaFile.Type = MediaType.Image2D;
+                    break;
+                case ".mp4":
+                    MediaFile.Type = MediaType.Video360Degree;
+                    break;
+            }
+
+            return "https://timeglide-vr.b-cdn.net/" + fileName;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private void OnMediaLoaded()
