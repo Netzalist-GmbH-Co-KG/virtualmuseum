@@ -37,7 +37,6 @@
 
     <ItemGroup>
       <Folder Include="Components\Pages\Inventory\Components\" />
-      <Folder Include="Components\Pages\MultiMediaPresentations\Components\" />
       <Folder Include="db\" />
     </ItemGroup>
 

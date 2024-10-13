@@ -1,0 +1,42 @@
+﻿@using virtualmuseum.web.data.Model.Media
+<div class="media-data-component">
+    @if(MultimediaPresentation == null)
+    {
+        <p>Keine Präsentation ausgewählt.</p>
+        return;
+    }
+    <div>
+        <label for="name" class="label-above">Name:</label>
+        <InputText id="name" @bind-Value="MultimediaPresentation.Name" @bind-Value:after="SaveChangesAsync" class="fullWidth" />
+    </div>
+    <div>
+        <label for="description" class="label-above">Beschreibung:</label>
+        <InputTextArea id="description" @bind-Value="MultimediaPresentation.Description" @bind-Value:after="SaveChangesAsync" class="fullWidth small-font" rows="10" />
+    </div>
+
+    
+</div>
+
+@code
+{
+    [Parameter]
+    public MultimediaPresentation? MultimediaPresentation { get; set; }
+
+    [Parameter]
+    public EventCallback<MultimediaPresentation> OnPresentationChanged { get; set; }
+
+    private async Task SaveChangesAsync()
+    {
+        if (MultimediaPresentation != null)
+        {
+            try
+            {
+                await OnPresentationChanged.InvokeAsync(MultimediaPresentation);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+    }
+}

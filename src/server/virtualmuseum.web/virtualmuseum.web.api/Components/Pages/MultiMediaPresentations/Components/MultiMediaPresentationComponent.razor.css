@@ -1,0 +1,100 @@
+﻿
+::deep .label-above {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #44E;
+}
+
+::deep .fullWidth {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+::deep .small-font {
+    font-size: 0.7em;
+}
+
+::deep .edit-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline;
+    margin-left: 10px;
+}
+
+::deep .delete-button {
+    background: none;
+    color: red;
+    border: none;
+    cursor: pointer;
+    display: inline;
+}
+
+::deep .edit-button:focus {
+    outline: none;
+}
+
+/* Zusätzliche Stile für die Eingabefelder */
+::deep input[type="text"],
+::deep input[type="number"],
+::deep textarea,
+::deep select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+::deep .media-preview {
+    margin-top: 1rem;
+    max-width: 100%;
+}
+
+::deep .media-preview-item {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.delete-button {
+    color: #ff4136;
+    font-size: 1.5em;
+
+}
+
+.delete-button:hover {
+    background-color: #ff1a1a;
+    color: white;
+}
+
+.delete-button-container {
+    text-align: right;
+}
+

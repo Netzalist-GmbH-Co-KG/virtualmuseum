@@ -2,12 +2,12 @@
 
 @page "/MultiMediaPresentation"
 @attribute [Authorize]
-@using virtualmuseum.web.data
-@using virtualmuseum.web.api.Services
 @using virtualmuseum.web.api.Services.Admin
 @using virtualmuseum.web.api.Services.ConfigurationRepository
-@inject IConfigurationRepository ConfigurationRepository
+@using virtualmuseum.web.data.Model.Media
+@using virtualmuseum.web.api.Components.Pages.MultiMediaPresentations.Components
 @inject ICustomRoleService CustomRoleService
+@inject IConfigurationRepository ConfigurationRepository
 
 @if (!CustomRoleService.HasRole("Administrator") && !CustomRoleService.HasRole("Contributor"))
 {
@@ -15,80 +15,117 @@
 }
 else
 {
-    <div class="rounded-2 alert-light p-2 mb-5" style="border: gray 1px solid;">
-        <h4>Multimedia Präsentationen verwalten</h4>
-        @* <RadzenTree Data=@_multimediaPresentations Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange"> *@
-        @*     <RadzenTreeLevel Text="@GetTextForNode"/> *@
-        @* </RadzenTree> *@
+    <h4>Multimedia Präsentationen verwalten</h4>
+    <div class="d-flex">
+        <div class="rounded-2 alert-light p-2 mb-5" style="border: gray 1px solid;">
+            <div class="d-flex flex-row align-items-center mb-2">
+                <input type="text" class="form-control me-2" @oninput="@(e => FilterText = e.Value.ToString())" placeholder="Filter"/>
+                <button class="btn btn-primary" @onclick="ShowConfirmAddDialog" title="Neues Präsentation hinzufügen">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <RadzenTree Data=@_filteredPresentations Expand="@ExpandTree" @bind-Value="@_selectedItem" Change="@OnChange">
+                <RadzenTreeLevel Text="@GetTextForNode"/>
+            </RadzenTree>
+        </div>
+        <div style="width: 100%; padding: 5px;">
+            <MultiMediaPresentationComponent MultimediaPresentation="@_currentPresentation" OnPresentationChanged="@OnPresentationChanged" />
+        </div>
     </div>
+    <ConfirmDialog 
+        IsVisible="@isConfirmDialogVisible"
+        Message="@ConfirmDialogMessage"
+        OnConfirm="AddNewMediaFile"
+        OnCancel="HideConfirmAddDialog" />
 }
 
 @code
 {
-    // private List<MultimediaPresentation> _multimediaPresentations = [];
-    // private object _selectedItem = null!;
-    // private List<string> _debugMessages = ["Starting"];
-    //
-    // protected override Task OnInitializedAsync()
-    // {
-    //     _multimediaPresentations = ConfigurationRepository.GetAllMultimediaPresentations();
-    //     return base.OnInitializedAsync();
-    // }
-    //
-    // void OnChange()
-    // {
-    //     Log($"Selected: {GetTextForNode(_selectedItem)}");
-    // }
-    //
-    // private void Log(string message)
-    // {
-    //     _debugMessages.Insert(0, message);
-    //     _debugMessages = _debugMessages.Take(30).ToList();
-    // }
-    //
-    // private string GetTextForNode(object data)
-    // {
-    //     Log($"Getting text for: {data.GetType()}");
-    //     return data.GetType() switch
-    //     {
-    //         { } t when t == typeof(MultimediaPresentation) => ((MultimediaPresentation)data).Name!,
-    //         { } t when t == typeof(PresentationItem) => ((PresentationItem)data).SequenceNumber!.ToString(),
-    //         _ => "Unknown"
-    //     };
-    // }
-    //
-    // void ExpandTree(TreeExpandEventArgs args)
-    // {
-    //     Log($"Expanding: {args.Text}");
-    //     switch (args.Value.GetType())
-    //     {
-    //         case { } t when t == typeof(MultimediaPresentation):
-    //             var presentation = (MultimediaPresentation)args.Value;
-    //             var presentationItems = ConfigurationRepository.GetMultiMediaPresentation(presentation.Id);
-    //             args.Children.Data = presentationItems;
-    //             args.Children.Text = GetTextForNode;
-    //             args.Children.HasChildren = _ => false;
-    //             args.Children.Template = value => _testFragment(value);
-    //             break;
-    //     }
-    // }
-    // readonly RenderFragment<RadzenTreeItem> _testFragment = (context) => builder =>
-    // {
-    //     builder.OpenComponent<RadzenIcon>(0);
-    //     var icon = context.Value.GetType() switch
-    //     {
-    //         { } t when t == typeof(MultimediaPresentation) => "home",
-    //         { } t when t == typeof(PresentationItem) => "table_bar",
-    //         { } t when t == typeof(MediaFile) => "photo_camera",
-    //         _ => "question"
-    //     };
-    //
-    //
-    //     builder.AddAttribute(1, "Icon", icon);
-    //
-    //     builder.CloseComponent();
-    //
-    //     // Append the current item text
-    //     builder.AddContent(3, context.Text);
-    // };
+    private bool isConfirmDialogVisible = false;
+    private string ConfirmDialogMessage = "Neues Präsentation hinzufügen. Sind Sie sicher?";
+
+    private string _filterText = "";
+    private object _selectedItem;
+    private List<MultimediaPresentation> _allPresentations;
+    private List<MultimediaPresentation> _filteredPresentations;
+    private MultimediaPresentation _currentPresentation;
+    private List<string> _debugMessages = ["Starting"];
+    
+    private void Log(string message)
+    {
+        _debugMessages.Insert(0, message);
+        _debugMessages = _debugMessages.Take(30).ToList();
+    }
+    
+    protected override Task OnInitializedAsync()
+    {
+        _allPresentations = ConfigurationRepository.GetMultiMediaPresentation();
+        ApplyFilter();
+        _currentPresentation= _filteredPresentations.FirstOrDefault()!;
+        return base.OnInitializedAsync();
+    }
+    private string FilterText
+    {
+        get => _filterText;
+        set
+        {
+            _filterText = value;
+            ApplyFilter();
+        }
+    }
+    
+    private void ApplyFilter()
+    {
+        _filteredPresentations = _allPresentations.Where(m => m.Name?.Contains(FilterText) ?? false).ToList();
+    }
+    void OnChange()
+    {
+        if(_selectedItem.GetType() == typeof(MultimediaPresentation))
+            _currentPresentation = (MultimediaPresentation)_selectedItem;
+        Log($"Selected: {GetTextForNode(_selectedItem)}");
+    }
+    
+    void ExpandTree(TreeExpandEventArgs args)
+    {
+        Log($"Expanding: {args.Text}");
+        switch (args.Value.GetType())
+        {
+            case { } t when t == typeof(MultimediaPresentation):
+                var presentation = (MultimediaPresentation)args.Value;
+                break;
+        }
+    }
+
+    private void OnPresentationChanged(MultimediaPresentation presentation)
+    {
+        ConfigurationRepository.SavePresentation(presentation);
+
+        if(_currentPresentation?.Id == presentation.Id)
+        {
+            _currentPresentation = presentation;
+        }
+        // Replace the media file in the list
+        _allPresentations = _allPresentations.Select(m => m.Id == presentation.Id ? presentation : m).ToList();
+        ApplyFilter();
+        // Render the tree again
+        StateHasChanged();
+    }
+    private string GetTextForNode(object data)
+    {
+        Log($"Getting text for: {data.GetType()}");
+        return data.GetType() switch
+        {
+            { } t when t == typeof(MultimediaPresentation) => ((MultimediaPresentation)data).Name!,
+            _ => "Unknown"
+        };
+    }    
+    private void HideConfirmAddDialog()
+    {
+        isConfirmDialogVisible = false;
+    }   
+
+    private void ShowConfirmAddDialog()
+    {
+        isConfirmDialogVisible = true;
+    }
 }
