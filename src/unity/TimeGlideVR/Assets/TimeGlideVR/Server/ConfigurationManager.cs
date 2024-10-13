@@ -13,7 +13,7 @@ namespace TimeGlideVR.Server
         
         private void Awake()
         {
-            ConfigurationClient = new DataCache(new ConfigurationClient(apiUrl, apiToken));
+            ConfigurationClient = new ConfigurationClient(apiUrl, apiToken);
         }
 
         public IConfigurationClient ConfigurationClient { get; private set; }

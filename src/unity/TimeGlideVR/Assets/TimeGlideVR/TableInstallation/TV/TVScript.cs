@@ -7,7 +7,8 @@ using UnityEngine.Networking;
 
 public class TVScript : MonoBehaviour
 {
-    
+    [SerializeField]
+    private int slotNumber;
     [SerializeField]
     private GameObject fullInstallation; 
     [SerializeField]
@@ -29,6 +30,7 @@ public class TVScript : MonoBehaviour
             _mediaTypeUnityEvents = FindObjectOfType<MediaTypeUnityEvents>(true);
             _mediaTypeUnityEvents.DefaultImageEvent.AddListener(HandleMediaEvent);
             _mediaTypeUnityEvents.DefaultVideoEvent.AddListener(HandleMediaEvent);
+            _mediaTypeUnityEvents.DisplayMedia.AddListener(HandleMediaEvent);
             _mediaTypeUnityEvents.ResetMediaEvent.AddListener(() =>
             {
                 _mediaFiles.Clear();
@@ -57,6 +59,15 @@ public class TVScript : MonoBehaviour
         _currentMediaFile = file;
         DisplayCurrentMedia();
     }
+    
+    private void HandleMediaEvent(PresentationItem item)
+    {
+        if(item.SlotNumber != slotNumber) return;
+
+        _currentMediaFile = item.MediaFile;
+        DisplayCurrentMedia();
+    }    
+    
     private void DisplayCurrentMedia()
     {
         if (_currentMediaFile is null)

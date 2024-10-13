@@ -69,7 +69,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             if (!_dataLoaded)
                 yield return new WaitForSeconds(1);
 
-            _buttonPanelScript.Init(_tableConfiguration.TimeSeries[0].GeoEventGroups, _tableConfiguration.TimeSeries[1].GeoEventGroups);
+            _buttonPanelScript.Init(_tableConfiguration.Topics[0].TimeSeries[0].GeoEventGroups, _tableConfiguration.Topics[0].TimeSeries[1].GeoEventGroups);
             yield return null;
         }
 
@@ -103,7 +103,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             }
 
             _tableConfiguration = await _configurationClient.GetTopographicalTableConfiguration(firstTable.Id);
-            Debug.Log($"Configuration loaded: {_tableConfiguration.TimeSeries.Count} rows");
+            Debug.Log($"Configuration loaded: {_tableConfiguration.Topics[0].TimeSeries.Count} rows");
             _dataLoaded = true;
         }
 
@@ -126,7 +126,16 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             _cityCoordinates.Add("Schmalkalden", new Vector2(50.716f, 10.451f));
             _cityCoordinates.Add("Bad Salzungen", new Vector2(50.812f, 10.222f));
 
-            _tableConfiguration.TimeSeries = new List<TimeSeries>
+            _tableConfiguration.Topics = new List<TopographicalTableTopic>
+            {
+                new TopographicalTableTopic()
+                {
+                    Id = Guid.NewGuid(),
+                    Topic = "Test"
+                }
+            };
+
+            _tableConfiguration.Topics[0].TimeSeries = new List<TimeSeries>
             {
                 new TimeSeries
                 {

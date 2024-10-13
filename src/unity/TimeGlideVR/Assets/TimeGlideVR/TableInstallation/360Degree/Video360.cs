@@ -51,11 +51,28 @@ namespace TimeGlideVR.TableInstallation._360Degree
 
             _audioSource = GetComponent<AudioSource>();
         
+            _mediaTypeUnityEvents.DisplayMedia.AddListener(HandleMediaEvent);
+            
             _mediaTypeUnityEvents.ThreeSixtyImageEvent.AddListener(HandleMediaEvent);
             _mediaTypeUnityEvents.ThreeSixtyVideoEvent.AddListener(HandleMediaEvent);
             // _mediaTypeUnityEvents.DefaultImageEvent.AddListener(HandleMediaEvent);
             _mediaTypeUnityEvents.DefaultAudioEvent.AddListener(HandleMediaEvent);
             _mediaTypeUnityEvents.ResetMediaEvent.AddListener(ResetMedia);
+        }
+
+        private void HandleMediaEvent(PresentationItem item)
+        {
+            if(item.SlotNumber!=0) return;
+
+            if (item.MediaFile is null)
+            {
+                ClearScreen();
+            }
+            else
+            {
+                _currentMediaFile = item.MediaFile;
+                DisplayCurrentMedia();
+            }
         }
 
         private void ClearScreen()

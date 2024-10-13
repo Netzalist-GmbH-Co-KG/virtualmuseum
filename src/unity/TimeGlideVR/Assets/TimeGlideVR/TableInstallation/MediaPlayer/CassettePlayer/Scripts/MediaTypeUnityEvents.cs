@@ -8,12 +8,18 @@ using UnityEngine.Serialization;
 
 public class MediaTypeUnityEvents : MonoBehaviour
 {
+    public UnityEvent<PresentationItem> DisplayMedia;
+    public void InvokeDisplayMedia(PresentationItem s)
+    {
+        DisplayMedia.Invoke(s);
+    }
+    
+    
     [SerializeField]
     public UnityEvent<MediaFile> ThreeSixtyImageEvent;
     public void InvokeThreeSixtyImageEvent(MediaFile s)
     {
         ThreeSixtyImageEvent.Invoke(s);
-
     }
 
     [SerializeField]
@@ -21,7 +27,6 @@ public class MediaTypeUnityEvents : MonoBehaviour
     public void InvokeThreeSixtyVideoEvent(MediaFile s)
     {
         ThreeSixtyVideoEvent.Invoke(s);
-
     }
 
     [SerializeField]
