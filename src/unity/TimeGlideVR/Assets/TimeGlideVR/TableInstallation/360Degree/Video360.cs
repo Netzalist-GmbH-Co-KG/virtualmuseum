@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Oculus.Assistant.VoiceCommand.Listeners;
 using TimeGlideVR.Server.Data.Media;
 using TMPro;
@@ -61,22 +62,16 @@ namespace TimeGlideVR.TableInstallation._360Degree
             _mediaTypeUnityEvents.ResetMediaEvent.AddListener(ResetMedia);
         }
 
-        private void HandleMediaEvent(int slot, PresentationItem item)
+        private void HandleMediaEvent(int slot, [CanBeNull] PresentationItem item)
         {
-            if(item is null){
-                if(slot == 1) ClearScreen();
-                return;
-            }
-            if (item.MediaFile is null)
+            if(slot>1) return;
+            _currentMediaFile = item?.MediaFile;
+            if (_currentMediaFile is null || string.IsNullOrEmpty(_currentMediaFile.Url))
             {
                 ClearScreen();
+                return;
             }
-            else
-            {
-                if(slot!=1) return;
-                _currentMediaFile = item.MediaFile;
-                DisplayCurrentMedia();
-            }
+            DisplayCurrentMedia();
         }
 
         private void ClearScreen()

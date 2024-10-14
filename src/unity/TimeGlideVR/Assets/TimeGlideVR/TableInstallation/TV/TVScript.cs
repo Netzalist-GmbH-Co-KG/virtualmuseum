@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Oculus.Platform;
 using TimeGlideVR.Server.Data.Media;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Video;
 
 public class TVScript : MonoBehaviour
 {
+    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private Texture videoTexture;
     [SerializeField]
     private int slotNumber;
     [SerializeField]
@@ -23,6 +27,14 @@ public class TVScript : MonoBehaviour
 
     private List<MediaFile> _mediaFiles = new List<MediaFile>();
     private MediaFile _currentMediaFile;
+    private bool _playingVideo = false;
+    
+    private void Awake()
+    {
+        videoPlayer.errorReceived += (source, message) => { Debug.LogError($"Video player error: {message}"); };
+
+    }
+
     void Start()
     {
         Debug.Log("TVScript SlideUp");
@@ -61,59 +73,67 @@ public class TVScript : MonoBehaviour
         DisplayCurrentMedia();
     }
     
-    private void HandleMediaEvent(int slot, PresentationItem item)
+    private void HandleMediaEvent(int slot, [CanBeNull] PresentationItem item)
     {
-        if(item is null){
-            if(slot == slotNumber) HideScreen();
-            return;
-        }
-        if(slot != slotNumber) return;
-        Debug.Log($"TV: Handling media event: {item.MediaFile.Name} / {item.SlotNumber}");
-
-        _currentMediaFile = item.MediaFile;
+        if(slot!=slotNumber) return;
+        _currentMediaFile = item?.MediaFile;
+        Debug.Log($"TV: Handling media event: {_currentMediaFile?.Name} / {item.SlotNumber}");
         DisplayCurrentMedia();
     }    
     
     private void DisplayCurrentMedia()
     {
-    
-        if (_currentMediaFile is null)
+        if (_currentMediaFile is null || string.IsNullOrEmpty(_currentMediaFile.Url))
         {
+            Debug.Log($"TV: Hiding screen {slotNumber}");
             HideScreen();
             return;
         }
         switch (_currentMediaFile.Type)
         {
             case MediaType.Image2D:
-                Debug.Log("360: Ignoring 2djpg media type");
-                ShowImage(_currentMediaFile);
+                LoadImageFromUrl(_currentMediaFile);
                 break;
             case MediaType.Video2D:
-                //TODO: Show video
+                LoadVideoFromUrl(_currentMediaFile);
                 break;
             default:
                 HideScreen();
-                //ShowImage(_currentMediaFile);
                 return;
-                //break;
         }
         DisplayLabel();
     }
     
     private void HideScreen()
     {
+        if(videoPlayer is not null)
+            if(videoPlayer.isPlaying)
+                videoPlayer.Stop();
+
         _tvScreenMaterial.mainTexture = null;
         fullInstallation.SetActive(false);
     }
 
-    private void ShowVideo(MediaFile arg0)
+    private void LoadVideoFromUrl(MediaFile mediaFile)
     {
-        Debug.Log("TV: Showing Video");
+        Debug.Log($"Loading video from URL: {mediaFile.Url}");
+
+        if (_playingVideo || videoPlayer is null) return;
+        fullInstallation.SetActive(true);
+        _tvScreenMaterial.mainTexture = videoTexture;
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.url = mediaFile.Url;
+        videoPlayer.time = 0;
+        videoPlayer.Play();
+        _playingVideo = true;
     }
 
-    private void ShowImage(MediaFile mediaFile)
+    private void LoadImageFromUrl(MediaFile mediaFile)
     {
-        Debug.Log("TV: Showing Image");
+        Debug.Log($"TV: Showing Image: {mediaFile.Name} on screen {slotNumber}"); 
+        if (videoPlayer is not null)
+            videoPlayer.Stop();
+        _playingVideo = false;
         fullInstallation.SetActive(true);
         
         var url = mediaFile.Url;

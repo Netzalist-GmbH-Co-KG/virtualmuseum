@@ -61,12 +61,12 @@ namespace TimeGlideVR.DevScenes
                     .OrderByDescending(p => p.PresentationItems.Count)
                     .FirstOrDefault();
 
+
+                var testPresentation = presentations.FirstOrDefault(p => p.Name == "Meiningen");
                 if (presentationWithMostMedia != null)
                 {
-                    Log($"Playing presentation: {presentationWithMostMedia.Name} with {presentationWithMostMedia.PresentationItems.Count} items");
+                    Log($"Playing presentation: {testPresentation.Name} with {testPresentation.PresentationItems.Count} items");
                 }
-
-                var testPresentation = presentations.Where(p => p.Name == "TestPresentation 15.10.24").FirstOrDefault();
             
                 multiMediaPresentationPlayer.Init(testPresentation);
                 multiMediaPresentationPlayer.StartPresentation();
