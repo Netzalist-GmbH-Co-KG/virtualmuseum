@@ -66,11 +66,14 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         // Need coroutine to get back to main thread
         private IEnumerator DisplayButtons()
         {
-            if (!_dataLoaded)
+            while (!_dataLoaded)
                 yield return new WaitForSeconds(1);
             // Display buttons                                                                   Informationen zu Thüringen   Größte Städte ESA,ARN...
             Debug.Log(_tableConfiguration.Topics.Count);
-            _buttonPanelScript.Init(_tableConfiguration.Topics[0].TimeSeries[0].GeoEventGroups, _tableConfiguration.Topics[0].TimeSeries[1].GeoEventGroups);
+            var allTimeSeries = _tableConfiguration.Topics.SelectMany( t => t.TimeSeries).ToList();
+            var erstErwaehnung = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("5b1ec4ab-b2d4-49b4-b05e-01f1579a233b"));
+            var groessteStaedte = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("8c472a83-e961-4bd3-b6f3-562964e322c4"));
+            _buttonPanelScript.Init(erstErwaehnung!.GeoEventGroups, groessteStaedte!.GeoEventGroups);
             yield return null;
         }
 

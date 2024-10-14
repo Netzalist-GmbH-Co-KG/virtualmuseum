@@ -8,7 +8,7 @@ namespace TimeGlideVR.TableInstallation.Lift.Button
         public AudioSource buttonClickSound;
 
         [SerializeField]
-        private UnityEvent onClick;
+        internal UnityEvent onClick;
         
         public void HandleButtonClick()
         {

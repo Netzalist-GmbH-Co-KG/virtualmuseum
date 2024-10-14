@@ -37,7 +37,6 @@ public class TVScript : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("TVScript SlideUp");
         try
         {
             _mediaTypeUnityEvents = FindObjectOfType<MediaTypeUnityEvents>(true);

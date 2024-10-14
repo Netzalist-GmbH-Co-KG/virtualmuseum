@@ -25,7 +25,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
             if(LabelText != null)
                 _label.text = LabelText;
             else
-                LabelText = _label.text;
+                LabelText = _label?.text;
         }
 
         public void Init(string label)

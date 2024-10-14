@@ -31,7 +31,7 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
             if(_anchorPrefabTransform is null) return;
             
             // Verify that the right controller is connected (Admin mode)
-            if (OVRInput.GetConnectedControllers() != OVRInput.Controller.RTouch)
+            if (!OVRInput.IsControllerConnected(OVRInput.Controller.RTouch))
             {
                 StopPlacement();
                 return;
@@ -57,18 +57,30 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
 
         private void StartPlacement()
         {
-            StopPlacement();
-            Debug.Log($"Erasing all anchors");
-            _spatialAnchorLocalStorageManager.Reset();
-            spatialAnchorCore.EraseAllAnchors();
+            EraseAllAnchors();
+            Debug.Log("Starting placement");
             if (_anchorPrefabTransform) Destroy(_anchorPrefabTransform.gameObject);
             _anchorPrefabTransform = Instantiate(AnchorPrefab).transform;
             _anchorPlacementInProgress = true;
+        }
+        
+        public void EraseAllAnchors()
+        {
+            if (!OVRInput.IsControllerConnected(OVRInput.Controller.RTouch))
+            {
+                return;
+            }
+            Debug.Log("Erasing all anchors");
+            StopPlacement();
+            _spatialAnchorLocalStorageManager.Reset();
+            spatialAnchorCore.EraseAllAnchors();
+            Debug.Log("Erased all anchors");
         }
 
         private void StopPlacement()
         {
             if (_anchorPrefabTransform is null) return;
+            Debug.Log("Stopping placement. Destroying anchor prefab.");
             Destroy(_anchorPrefabTransform.gameObject);
             _anchorPrefabTransform = null;
             _anchorPlacementInProgress = false;
@@ -79,9 +91,10 @@ namespace TimeGlideVR.TableInstallation.TablePlacement
         /// </summary>
         public void TogglePlacement()
         {
-            // Verify that the right controller is connected
-            if(OVRInput.GetConnectedControllers() != OVRInput.Controller.RTouch) return;
-
+            if (!OVRInput.IsControllerConnected(OVRInput.Controller.RTouch))
+            {
+                return;
+            }
             if (_anchorPlacementInProgress)
             {
                 Debug.Log("Stopping placement. Creating fixes object.");

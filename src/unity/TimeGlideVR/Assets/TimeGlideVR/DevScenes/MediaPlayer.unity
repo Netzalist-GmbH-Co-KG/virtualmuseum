@@ -642,74 +642,6 @@ Transform:
   - {fileID: 546220693}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &653981328
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 653981329}
-  - component: {fileID: 653981330}
-  m_Layer: 0
-  m_Name: VideoPlayer2D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &653981329
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 653981328}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1022432298}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!328 &653981330
-VideoPlayer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 653981328}
-  m_Enabled: 1
-  m_VideoClip: {fileID: 0}
-  m_TargetCameraAlpha: 1
-  m_TargetCamera3DLayout: 0
-  m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: 56a58018b273c3e40b0ea014221aec07, type: 2}
-  m_TimeReference: 0
-  m_TargetMaterialRenderer: {fileID: 0}
-  m_TargetMaterialProperty: <noninit>
-  m_RenderMode: 2
-  m_AspectRatio: 2
-  m_DataSource: 0
-  m_TimeUpdateMode: 2
-  m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
-  m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 0
-  m_SkipOnDrop: 1
-  m_Looping: 0
-  m_WaitForFirstFrame: 1
-  m_FrameReadyEventEnabled: 0
-  m_VideoShaders: []
 --- !u!1 &718067358
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,40 +821,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2241517240733524042, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      propertyPath: m_Looping
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4011987787552539264, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      propertyPath: objectsToHide.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4756399099975529634, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      propertyPath: videoPlayer
-      value: 
-      objectReference: {fileID: 653981330}
-    - target: {fileID: 4756399099975529634, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      propertyPath: videoTexture
-      value: 
-      objectReference: {fileID: 8400000, guid: 56a58018b273c3e40b0ea014221aec07, type: 2}
     - target: {fileID: 6600892780040331590, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
       propertyPath: m_Name
       value: 360Degree
       objectReference: {fileID: 0}
-    - target: {fileID: 6600892780040331590, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7980649147433000036, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 65702d2c64b879147b930ad4f04e197a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1623552068882874662, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
-      insertIndex: 5
-      addedObject: {fileID: 653981329}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3852409490174622725, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
       insertIndex: -1

@@ -31,6 +31,8 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         
         [CanBeNull] private InfoDisplay.InfoDisplay _infoDisplay;
 
+        public Dictionary<string, GameObject> Buttons => _buttons;
+        
         public void Start()
         {
             _infoDisplay = FindObjectOfType<InfoDisplay.InfoDisplay>();

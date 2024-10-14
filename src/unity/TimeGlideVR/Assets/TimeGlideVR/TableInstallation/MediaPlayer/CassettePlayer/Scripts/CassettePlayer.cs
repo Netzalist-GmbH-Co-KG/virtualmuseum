@@ -151,6 +151,7 @@ public class CassettePlayer : MonoBehaviour
         }
 
         multiMediaPresentationPlayer.Init(cassettePresentation);
+        multiMediaPresentationPlayer.StartPresentation();
     }
 
     private void ResetMedia()

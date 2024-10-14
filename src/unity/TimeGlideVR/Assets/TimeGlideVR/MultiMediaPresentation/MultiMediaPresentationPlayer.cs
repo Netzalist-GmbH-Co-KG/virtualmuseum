@@ -8,6 +8,26 @@ namespace TimeGlideVR.MultiMediaPresentation
 {
     public class MultiMediaPresentationPlayer : MonoBehaviour
     {
+        [SerializeField] private List<GameObject> objectsToHide = new ();
+        
+        private void HideHiddenObjects()
+        {
+            Debug.Log("Hiding other objects");
+            if(objectsToHide == null) return;
+            foreach (var objectToHide in objectsToHide)
+            {
+                objectToHide.SetActive(false);
+            }
+        }
+        private void ShowHiddenObjects()
+        {
+            Debug.Log("Showing other objects");
+            if(objectsToHide == null) return;
+            foreach (var objectToHide in objectsToHide)
+            {
+                objectToHide.SetActive(true);
+            }
+        }   
         private class PresentationItemStart
         {
             public PresentationItem PresentationItem { get; set; }
@@ -16,19 +36,27 @@ namespace TimeGlideVR.MultiMediaPresentation
         
         private MediaTypeUnityEvents _mediaTypeUnityEvents;
         private Dictionary<int, List<PresentationItemStart>> _slots;
-        
         private Dictionary<int, PresentationItem> _currentlyDisplayedItems = new ();
         private float _presentationDuration;
         
         private void Start()
         {
             _mediaTypeUnityEvents = FindObjectOfType<MediaTypeUnityEvents>(true);
+            _mediaTypeUnityEvents.ResetMediaEvent.AddListener(() =>
+            {
+                Debug.Log("Stopping presentation");
+                _currentlyDisplayedItems?.Clear();
+                _slots?.Clear();
+                _presentationDuration = 0;
+                ShowHiddenObjects();
+            });
         }
 
         private float _startTime;
         
         public void StartPresentation()
         {
+            Debug.Log($"Starting presentation");
             StartCoroutine(RunPresentation());
         }
         
@@ -36,14 +64,17 @@ namespace TimeGlideVR.MultiMediaPresentation
         private IEnumerator RunPresentation()
         {
             _startTime = Time.time;
+            HideHiddenObjects();
             while (true)
             {
                 DisplayAllMediaAtTimestamp(Time.time - _startTime);
                 if (!(Time.time - _startTime > _presentationDuration))
-                    yield return new WaitForSeconds(5);
+                    yield return new WaitForSeconds(1);
                 else
                     break;
             }
+            ShowHiddenObjects();
+            Debug.Log("Presentation finished");
         }
 
         private void DisplayAllMediaAtTimestamp(float secondsSinceStart)
