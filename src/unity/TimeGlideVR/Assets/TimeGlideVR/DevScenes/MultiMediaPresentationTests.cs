@@ -46,7 +46,9 @@ namespace TimeGlideVR.DevScenes
                             .SelectMany(geg => geg.GeoEvents
                                 .Select(ge => ge.MultiMediaPresentation))))
                     .ToList();
-            
+                foreach(var p in presentations){
+                    Log("Presentation: " + p.Name);
+                }
                 Log($"Found {presentations.Count} presentations");
             
                 var presentationsWithMedia = presentations
@@ -63,8 +65,10 @@ namespace TimeGlideVR.DevScenes
                 {
                     Log($"Playing presentation: {presentationWithMostMedia.Name} with {presentationWithMostMedia.PresentationItems.Count} items");
                 }
+
+                var testPresentation = presentations.Where(p => p.Name == "TestPresentation 15.10.24").FirstOrDefault();
             
-                multiMediaPresentationPlayer.Init(presentationWithMostMedia);
+                multiMediaPresentationPlayer.Init(testPresentation);
                 multiMediaPresentationPlayer.StartPresentation();
             }
             catch (Exception e)

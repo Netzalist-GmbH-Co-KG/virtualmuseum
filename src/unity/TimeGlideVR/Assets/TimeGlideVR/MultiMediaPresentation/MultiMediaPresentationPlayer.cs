@@ -67,7 +67,7 @@ namespace TimeGlideVR.MultiMediaPresentation
                         if(currentItem == null) continue;
                         Debug.Log($"Clearing media for slot {slot.Key} at {secondsSinceStart}");
                         _currentlyDisplayedItems[slot.Key] = null;
-                        // _mediaTypeUnityEvents.InvokeDisplayMedia(null);
+                        _mediaTypeUnityEvents.InvokeDisplayMedia(slot.Key, null);
                     }
                     continue;
                 }
@@ -76,14 +76,14 @@ namespace TimeGlideVR.MultiMediaPresentation
                 {
                     if (currentItem.Id == slot.Value.PresentationItem.Id) continue;
                     
-                    Debug.Log($"Displaying media for slot {slot.Key}: {slot.Value.PresentationItem!.MediaFile!.Name} at {secondsSinceStart}");
-                    // _mediaTypeUnityEvents.InvokeDisplayMedia(slot.Value.PresentationItem);
+                    //Debug.Log($"Displaying media for slot {slot.Key}: {slot.Value.PresentationItem!.MediaFile!.Name} at {secondsSinceStart}");
+                    _mediaTypeUnityEvents.InvokeDisplayMedia(slot.Key, slot.Value.PresentationItem);
                     _currentlyDisplayedItems[slot.Key] = slot.Value.PresentationItem;
                 }
                 else
                 {
-                    Debug.Log($"Displaying media for slot {slot.Key}: {slot.Value.PresentationItem!.MediaFile!.Name} at {secondsSinceStart}");
-                    //_mediaTypeUnityEvents.InvokeDisplayMedia(slot.Value.PresentationItem);
+                    //Debug.Log($"Displaying media for slot {slot.Key}: {slot.Value.PresentationItem!.MediaFile!.Name} at {secondsSinceStart}");
+                    _mediaTypeUnityEvents.InvokeDisplayMedia(slot.Key, slot.Value.PresentationItem);
                     _currentlyDisplayedItems[slot.Key] = slot.Value.PresentationItem;
                 }
             }

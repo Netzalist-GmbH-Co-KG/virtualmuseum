@@ -8,10 +8,10 @@ using UnityEngine.Serialization;
 
 public class MediaTypeUnityEvents : MonoBehaviour
 {
-    public UnityEvent<PresentationItem> DisplayMedia;
-    public void InvokeDisplayMedia(PresentationItem s)
+    public UnityEvent<int, PresentationItem> DisplayMedia;
+    public void InvokeDisplayMedia(int slot, PresentationItem s)
     {
-        DisplayMedia.Invoke(s);
+        DisplayMedia.Invoke(slot, s);
     }
     
     

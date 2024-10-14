@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Oculus.Interaction;
+using TimeGlideVR.MultiMediaPresentation;
 using TimeGlideVR.Server.Data.Media;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,6 +27,13 @@ public class CassettePlayer : MonoBehaviour
     private GameObject cassetteReference;
     private MediaTypeUnityEvents mediaTypeUnityEvents;
     private CasettePlayerStatus casettePlayerStatus;
+
+    private MultiMediaPresentationPlayer multiMediaPresentationPlayer;
+
+    private void Start() {
+        casettePlayerStatus = GetComponentInChildren<CasettePlayerStatus>(true);
+        multiMediaPresentationPlayer = GetComponent<MultiMediaPresentationPlayer>();
+    }
 
     private void Update() {
         if(cassetteInserted && cassetteReference == null){
@@ -130,46 +138,19 @@ public class CassettePlayer : MonoBehaviour
 
     public void TryReadCassette() {
         ResetMedia();
-        Debug.Log("Trying to read cassette");
         if(!cassetteInserted || !cassetteReference) return;
         cassetteReference.TryGetComponent<Cassette>(out var cassette);
 
         if(!cassette) return;
         cassette.InvokeSpawnObjectEvent();
 
-        var mediaReferences = cassette.GetAllMediaFiles();
-        if(mediaReferences.Count == 0) {
+        var cassettePresentation = cassette.GetPresentation();
+        if(cassettePresentation is null){
             mediaTypeUnityEvents.InvokeResetMediaEvent();
             return;
         }
-        foreach(var media in cassette.GetAllMediaFiles()){
-            Debug.Log($"Media found: {media.Type} / {media.Name}");
-            //check type of media and handle accordingly
-            //what types dont mix:
-            //2dmp4 and 3dmp4
-            //3dmp4 and audio
-            //2dmp4 and audio
-            //3djpg and 3dmp4
-            //2djpg and 2dmp4
-            //if any of these are present, sequence them TODO
-            switch(media.Type){
-                case MediaType.Image360Degree:
-                    mediaTypeUnityEvents.InvokeThreeSixtyImageEvent(media);
-                    break;
-                case MediaType.Video360Degree:
-                    mediaTypeUnityEvents.InvokeThreeSixtyVideoEvent(media);
-                    break; 
-                case MediaType.Audio:
-                    mediaTypeUnityEvents.InvokeDefaultAudioEvent(media);
-                    break;
-                case MediaType.Image2D:
-                    mediaTypeUnityEvents.InvokeDefaultImageEvent(media);
-                    break;
-                case MediaType.Video2D:
-                    mediaTypeUnityEvents.InvokeDefaultVideoEvent(media);
-                    break;
-            }
-        }
+
+        multiMediaPresentationPlayer.Init(cassettePresentation);
     }
 
     private void ResetMedia()
@@ -183,10 +164,5 @@ public class CassettePlayer : MonoBehaviour
         if(cassette){
             cassette.DestroyObject();
         }
-    }
-
-    private void Start()
-    {
-        casettePlayerStatus = GetComponentInChildren<CasettePlayerStatus>(true);
     }
 }

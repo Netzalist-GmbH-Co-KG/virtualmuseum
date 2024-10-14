@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Oculus.Platform;
 using TimeGlideVR.Server.Data.Media;
 using TMPro;
 using UnityEngine;
@@ -60,9 +61,14 @@ public class TVScript : MonoBehaviour
         DisplayCurrentMedia();
     }
     
-    private void HandleMediaEvent(PresentationItem item)
+    private void HandleMediaEvent(int slot, PresentationItem item)
     {
-        if(item.SlotNumber != slotNumber) return;
+        if(item is null){
+            if(slot == slotNumber) HideScreen();
+            return;
+        }
+        if(slot != slotNumber) return;
+        Debug.Log($"TV: Handling media event: {item.MediaFile.Name} / {item.SlotNumber}");
 
         _currentMediaFile = item.MediaFile;
         DisplayCurrentMedia();
@@ -70,6 +76,7 @@ public class TVScript : MonoBehaviour
     
     private void DisplayCurrentMedia()
     {
+    
         if (_currentMediaFile is null)
         {
             HideScreen();
@@ -81,9 +88,14 @@ public class TVScript : MonoBehaviour
                 Debug.Log("360: Ignoring 2djpg media type");
                 ShowImage(_currentMediaFile);
                 break;
+            case MediaType.Video2D:
+                //TODO: Show video
+                break;
             default:
                 HideScreen();
+                //ShowImage(_currentMediaFile);
                 return;
+                //break;
         }
         DisplayLabel();
     }

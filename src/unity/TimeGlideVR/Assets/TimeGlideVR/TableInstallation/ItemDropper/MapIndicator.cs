@@ -50,7 +50,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 _buttonPanelScript.onTimeRowButtonClick.AddListener(HandleButtonClick);
                 _buttonPanelScript.onDespawnAllItems.AddListener(DespawnAllItems);
 
-                LoadConfiguration().ConfigureAwait(false);
+                LoadConfiguration();
                 StartCoroutine(nameof(DisplayButtons));
             }
             catch (Exception e)
@@ -68,7 +68,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         {
             if (!_dataLoaded)
                 yield return new WaitForSeconds(1);
-
+            // Display buttons                                                                   Informationen zu Thüringen   Größte Städte ESA,ARN...
+            Debug.Log(_tableConfiguration.Topics.Count);
             _buttonPanelScript.Init(_tableConfiguration.Topics[0].TimeSeries[0].GeoEventGroups, _tableConfiguration.Topics[0].TimeSeries[1].GeoEventGroups);
             yield return null;
         }
@@ -77,6 +78,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         {
             Debug.Log("Loading configuration...");
             var tenants = await _configurationClient.GetTenants();
+            Debug.Log("Loaded Tenants");
             if (tenants.Count == 0)
             {
                 Debug.Log("No tenants found, initializing dummy coordinates...");
@@ -85,6 +87,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             }
 
             var firstRoom = tenants[0].Rooms.FirstOrDefault();
+            Debug.Log("Loaded firstRoom");
             if (firstRoom == null)
             {
                 Debug.Log("No rooms found, initializing dummy coordinates...");
@@ -94,6 +97,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
 
             var firstTable = firstRoom?
                 .InventoryItems.FirstOrDefault(i => i.InventoryType == InventoryType.TopographicalTable);
+            Debug.Log("Loaded firstTable");
 
             if (firstTable == null)
             {
@@ -103,12 +107,14 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             }
 
             _tableConfiguration = await _configurationClient.GetTopographicalTableConfiguration(firstTable.Id);
+            Debug.Log("Loaded _tableConfig");
             Debug.Log($"Configuration loaded: {_tableConfiguration.Topics[0].TimeSeries.Count} rows");
             _dataLoaded = true;
         }
 
         private void InitializeDummyCoordinates()
         {
+            Debug.Log("Initializing dummy coordinates...");
             _cityCoordinates.Add("Erfurt", new Vector2(50.99908816755116f, 11.033815496053597f));
             _cityCoordinates.Add("Nordhausen", new Vector2(51.49450564672544f, 10.785537710396323f));
             _cityCoordinates.Add("Weimar", new Vector2(50.97900000000001f, 11.329f));
@@ -175,7 +181,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
 
             };
             SpawnOrDespawnItem("Informationen",
-                new Vector2(50.582299f, 10.091699f), new List<MediaFile>{ media });
+                new Vector2(50.582299f, 10.091699f), null);
         }
 
         private IEnumerator SpawnItems(DisplayLocationTimeRowEvent evt)
@@ -188,6 +194,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 batchCount++;
                 try
                 {
+                    /*
                     var mediaFiles = 
                         geoEvent.MultiMediaPresentation == null
                          ? new List<MediaFile>()
@@ -195,8 +202,9 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                             .PresentationItems
                             .Select(pi => pi.MediaFile)
                             .ToList();
+                    */
                     SpawnOrDespawnItem(geoEvent.Name,
-                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude), mediaFiles);
+                        new Vector2((float)geoEvent.Latitude, (float)geoEvent.Longitude), geoEvent.MultiMediaPresentation);
                 }
                 catch (Exception e)
                 {
@@ -228,7 +236,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             return new Vector3(localX, spawnHeight, localZ);
         }
 
-        private void SpawnOrDespawnItem(string label, Vector2 location, List<MediaFile> mediaFiles, bool remove = false)
+        private void SpawnOrDespawnItem(string label, Vector2 location, MultimediaPresentation presentation, bool remove = false)
         {
             if (_spawnedItems.ContainsKey(label))
             {
@@ -257,8 +265,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 newDropObject.transform.localPosition = spawnLocation;
                 newDropObject.transform.parent = null; // this is so deleting the "root" in ClearItems or above wont delete the whole installation
                 var dictList = new List<Transform> { newDropObject.transform };
-                if(mediaFiles.Count > 0) {
-                    var cassetteTransform = SpawnBubbleWithCassette(mediaFiles, label, cassettePrefab);
+                if(presentation != null) {
+                    var cassetteTransform = SpawnBubbleWithCassette(presentation, label, cassettePrefab);
                     dictList.AddRange(cassetteTransform);
                 }
                 
@@ -288,12 +296,12 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             _spawnedItems.Clear();
         }
 
-        public List<Transform> SpawnBubbleWithCassette(List<MediaFile> mediaFiles, string cityName, GameObject cassettePrefab){
+        public List<Transform> SpawnBubbleWithCassette(MultimediaPresentation presentation, string cityName, GameObject cassettePrefab){
             var bubble = Instantiate(bubblePrefab);
             var insideBubbleReference = bubble.transform.GetChild(0).GetChild(0);
             var cas = Instantiate(cassettePrefab, insideBubbleReference.transform);
             cas.transform.localPosition = Vector3.zero;
-            cas.GetComponent<Cassette>().Init(mediaFiles, cityName);
+            cas.GetComponent<Cassette>().Init(presentation, cityName);
             bubblePlacerReference.PlaceBubble(bubble.transform, cas);
             return new List<Transform> { cas.transform, bubble.transform };
         }

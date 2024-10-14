@@ -17,21 +17,19 @@ public class Cassette : MonoBehaviour
     [SerializeField]
     private GameObject objectToSpawn;
     [SerializeField]
-    List<MediaFile> mediaFiles = new List<MediaFile>();
+    private MultimediaPresentation presentation;
     [SerializeField]
     private bool invokeEventOnInsert = true;
     private GameObject objectReference;
 
-    public void Init(List<MediaFile> mediaFiles, string cityName){
-        this.mediaFiles = mediaFiles;
+    public void Init(MultimediaPresentation presentation, string cityName){
+        this.presentation = presentation;
         InvokeUpdateCityDisplayText(cityName);
     }
-    public List<MediaFile> GetAllMediaFiles(){
-        return mediaFiles;
+    public MultimediaPresentation GetPresentation(){
+        return presentation;
     }
-    public MediaFile GetMediaAt(int index = 0){
-        return mediaFiles[index];
-    }
+    
     public void InvokeUpdateCityDisplayText(string newName){
         UpdateCityDisplayTextEvent.Invoke(newName);
     }
