@@ -22,8 +22,8 @@ namespace TimeGlideVR.TableInstallation.Table
         private FortificationMap _fortificationMap;
         
         public void SetMap(int index){
-            if(maps==null || index < 0 || index >= maps.Length) return;
             if (index == 4) index = 3;
+            if(maps==null || index < 0 || index >= maps.Length) return;
             currentMapIndex = index;
             for(var i = 0; i < maps.Length; i++){
                 maps[i].SetActive(i == currentMapIndex);
@@ -51,7 +51,7 @@ namespace TimeGlideVR.TableInstallation.Table
                 "Stadtbefestigungen von Schmalkalden" => 1,
                 "Dialekte in Thüringen" => 2,
                 "Urkundliche Ersterwähnungen" => 3,
-                "Größte Städte um 1600" => 3,
+                "Größte Städte um 1600" => 4,
                 _ => 0
             };
             SetMap(map);
