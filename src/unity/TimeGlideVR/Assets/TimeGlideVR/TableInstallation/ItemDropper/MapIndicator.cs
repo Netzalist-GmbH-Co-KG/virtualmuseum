@@ -62,6 +62,23 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         public void StartDisplayButtons(){
             StartCoroutine(nameof(DisplayButtons));
         }
+        
+        public void HideSpawnedItems()
+        {
+            foreach (var item in _spawnedItems.Values)
+            {
+                item.ForEach(t => t.gameObject.SetActive(false));
+            }
+        }
+        
+        public void ShowSpawnedItems()
+        {
+            foreach (var item in _spawnedItems.Values)
+            {
+                item.ForEach(t => t.gameObject.SetActive(true));
+            }
+        }
+        
 
         // Need coroutine to get back to main thread
         private IEnumerator DisplayButtons()
@@ -73,7 +90,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             var allTimeSeries = _tableConfiguration.Topics.SelectMany( t => t.TimeSeries).ToList();
             var erstErwaehnung = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("5b1ec4ab-b2d4-49b4-b05e-01f1579a233b"));
             var groessteStaedte = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("8c472a83-e961-4bd3-b6f3-562964e322c4"));
-            _buttonPanelScript.Init(erstErwaehnung!.GeoEventGroups, groessteStaedte!.GeoEventGroups);
+            var infos = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("8c472a83-e961-4bd3-b6f3-562964e32000"));
+            _buttonPanelScript.Init(erstErwaehnung!.GeoEventGroups, groessteStaedte!.GeoEventGroups, infos!.GeoEventGroups);
             yield return null;
         }
 

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TimeGlideVR.Server.Data.Media;
+using TimeGlideVR.TableInstallation.ItemDropper;
 using UnityEngine;
 
 namespace TimeGlideVR.MultiMediaPresentation
@@ -9,23 +11,45 @@ namespace TimeGlideVR.MultiMediaPresentation
     public class MultiMediaPresentationPlayer : MonoBehaviour
     {
         [SerializeField] private List<GameObject> objectsToHide = new ();
-        
+        [SerializeField] private MapIndicator mapIndicator;
         private void HideHiddenObjects()
         {
-            Debug.Log("Hiding other objects");
-            if(objectsToHide == null) return;
-            foreach (var objectToHide in objectsToHide)
+            try
             {
-                objectToHide.SetActive(false);
+                Debug.Log("Hiding other objects");
+                if (objectsToHide == null) return;
+                foreach (var objectToHide in objectsToHide)
+                {
+                    if (objectsToHide != null)
+                        objectToHide.SetActive(false);
+                }
+
+                if (mapIndicator != null)
+                    mapIndicator.HideSpawnedItems();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
         private void ShowHiddenObjects()
         {
-            Debug.Log("Showing other objects");
-            if(objectsToHide == null) return;
-            foreach (var objectToHide in objectsToHide)
+            try
             {
-                objectToHide.SetActive(true);
+                Debug.Log("Showing other objects");
+                if (objectsToHide == null) return;
+                foreach (var objectToHide in objectsToHide)
+                {
+                    if (objectsToHide != null)
+                        objectToHide.SetActive(true);
+                }
+
+                if (mapIndicator != null)
+                    mapIndicator.ShowSpawnedItems();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }   
         private class PresentationItemStart

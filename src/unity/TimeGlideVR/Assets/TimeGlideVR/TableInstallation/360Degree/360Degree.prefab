@@ -718,6 +718,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1623552068882874662}
     m_Modifications:
+    - target: {fileID: 2210254999119308080, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.008
+      objectReference: {fileID: 0}
+    - target: {fileID: 2210254999119308080, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.569
+      objectReference: {fileID: 0}
+    - target: {fileID: 2210254999119308080, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.029
+      objectReference: {fileID: 0}
     - target: {fileID: 3337886566927510673, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.372
@@ -758,6 +770,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3816651414172403375, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4162689369270459077, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
       propertyPath: m_Name
       value: ContentButton
@@ -766,6 +782,18 @@ PrefabInstance:
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4011987787552539264}
+    - target: {fileID: 4520426808059981382, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4803344375821600932, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595707741529028296, guid: b203999e3f20e0f4283e01e19a608a4b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

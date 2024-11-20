@@ -969,6 +969,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5781916855807219370, guid: 722169cebbbe4e945a5629405d59c519, type: 3}
   m_PrefabInstance: {fileID: 2170376884521456631}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8888475437930321956 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7297114628113419219, guid: 722169cebbbe4e945a5629405d59c519, type: 3}
+  m_PrefabInstance: {fileID: 2170376884521456631}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5630560536789075293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cebfb9618512864498c91686b4692d4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2669037994367108086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1114,6 +1125,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1016358974255898103}
     m_Modifications:
+    - target: {fileID: 409094172888680755, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
+      propertyPath: mapIndicator
+      value: 
+      objectReference: {fileID: 8888475437930321956}
     - target: {fileID: 409094172888680755, guid: 72c0e1a35384748459d15474fc680a3c, type: 3}
       propertyPath: objectsToHide.Array.size
       value: 3

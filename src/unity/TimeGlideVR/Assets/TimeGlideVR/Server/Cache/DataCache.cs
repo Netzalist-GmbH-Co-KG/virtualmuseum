@@ -39,6 +39,8 @@ namespace TimeGlideVR.Server.Cache
             return await GetCachedItem("table_" + multimediaPresentationId, async () => await _webClient.GetMultiMediaPresentation(multimediaPresentationId));
         }
 
+        public ConnectionState ConnectionState => _webClient.ConnectionState;
+
         private async Task<T> GetCachedItem<T>(string cacheId, Func<Task<T>> retrieval) where T : class
         {
             try

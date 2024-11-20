@@ -25,6 +25,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         
         private List<GeoEventGroup> _geoEventGroupsErstErwaehnung = new ();
         private List<GeoEventGroup> _geoEventGroupsGroessteStaedte = new();
+        private List<GeoEventGroup> _geoEventGroupsInformationen = new();
         private List<GeoEventGroup> _currentGeoEventGroup = new();
         private List<ButtonScript> _dialectButtons;
         private List<ButtonScript> _wallButtons;
@@ -86,9 +87,10 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             }
         }
 
-        public void Init(List<GeoEventGroup> geoEventGroupsErstErwaehnung, List<GeoEventGroup> geoEventGroupsGroessteStaedte)
+        public void Init(List<GeoEventGroup> geoEventGroupsErstErwaehnung, List<GeoEventGroup> geoEventGroupsGroessteStaedte, List<GeoEventGroup> geoEventGroupsInformationen)
         {
             Debug.Log($"Initializing ButtonPanel with {geoEventGroupsErstErwaehnung.Count} rows");
+            _geoEventGroupsInformationen = geoEventGroupsInformationen;
             _geoEventGroupsGroessteStaedte = geoEventGroupsGroessteStaedte;
             _geoEventGroupsErstErwaehnung = geoEventGroupsErstErwaehnung;
             _currentGeoEventGroup = _geoEventGroupsErstErwaehnung;
@@ -107,6 +109,16 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         {
             ClearButtons();
             _currentGeoEventGroup = _geoEventGroupsGroessteStaedte;
+            foreach (var timeRow in _currentGeoEventGroup)
+            {
+                AddButton(timeRow.Label);
+            }
+        }
+        
+        public void DisplayButtonsInformationen()
+        {
+            ClearButtons();
+            _currentGeoEventGroup = _geoEventGroupsInformationen;
             foreach (var timeRow in _currentGeoEventGroup)
             {
                 AddButton(timeRow.Label);

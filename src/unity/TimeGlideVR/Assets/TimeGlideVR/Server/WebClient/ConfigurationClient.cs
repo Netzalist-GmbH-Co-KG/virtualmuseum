@@ -9,11 +9,19 @@ using UnityEngine.Networking;
 
 namespace TimeGlideVR.Server.WebClient
 {
+    public enum ConnectionState
+    {
+        Unkown,
+        Connected,
+        Disconnected
+    }
+    
     public class ConfigurationClient : IConfigurationClient
     {
         public delegate void ServerRequestCallBack(byte[] response);
         private readonly string _apiUrl;
         private readonly string _apiToken;
+        public ConnectionState ConnectionState { get; private set; } = ConnectionState.Unkown;
 
         public ConfigurationClient(string apiUrl, string apiToken)
         {
@@ -38,21 +46,32 @@ namespace TimeGlideVR.Server.WebClient
 
         private async Task<T> MakeRequest<T>(string url) where T : class
         {
-            using var request = UnityWebRequest.Get(url);
-            request.SetRequestHeader("Authorization", $"Bearer {_apiToken}");
-
-            var operation = request.SendWebRequest();
-            while (!operation.isDone)
-                await Task.Yield();
-
-            if (request.result != UnityWebRequest.Result.Success)
+            try
             {
-                Debug.LogError($"Error: {request.error}");
+                using var request = UnityWebRequest.Get(url);
+                request.SetRequestHeader("Authorization", $"Bearer {_apiToken}");
+
+                var operation = request.SendWebRequest();
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError($"Error: {request.error}");
+                    ConnectionState = ConnectionState.Disconnected;
+                    return null;
+                }
+
+                ConnectionState = ConnectionState.Connected;
+                var json = request.downloadHandler.text;
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                ConnectionState = ConnectionState.Disconnected;
                 return null;
             }
-
-            var json = request.downloadHandler.text;
-            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

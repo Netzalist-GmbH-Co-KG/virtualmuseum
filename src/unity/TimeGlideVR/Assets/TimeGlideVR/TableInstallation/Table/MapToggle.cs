@@ -22,7 +22,7 @@ namespace TimeGlideVR.TableInstallation.Table
         private FortificationMap _fortificationMap;
         
         public void SetMap(int index){
-            if (index == 4) index = 3;
+            if (index > 4) index = 3;
             if(maps==null || index < 0 || index >= maps.Length) return;
             currentMapIndex = index;
             for(var i = 0; i < maps.Length; i++){
@@ -52,12 +52,19 @@ namespace TimeGlideVR.TableInstallation.Table
                 "Dialekte in Thüringen" => 2,
                 "Urkundliche Ersterwähnungen" => 3,
                 "Größte Städte um 1600" => 4,
+                "Informationen zu Schloss Wilhelmsburg" => 5,
                 _ => 0
             };
             SetMap(map);
 
             switch (map)
             {
+                case 5:
+                    _buttonPanelScript.DisplayButtonsInformationen();
+                    fortificationsButtons.SetActive(false);
+                    dialectsButtons.SetActive(false);
+                    break;
+                    
                 case 4:
                     _buttonPanelScript.DisplayButtonsGroessteStaedte();
                     fortificationsButtons.SetActive(false);

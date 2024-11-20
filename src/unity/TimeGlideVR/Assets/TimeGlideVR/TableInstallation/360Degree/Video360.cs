@@ -70,6 +70,7 @@ namespace TimeGlideVR.TableInstallation._360Degree
                 ClearScreen();
                 return;
             }
+            _mediaFiles.Add(item?.MediaFile);
             DisplayCurrentMedia();
         }
 
@@ -256,21 +257,23 @@ namespace TimeGlideVR.TableInstallation._360Degree
             if (currentMediaText is null) return;
 
             if (_currentMediaFile is not null)
-                currentMediaText.text = _currentMediaFile.Name;
+                currentMediaText.text = string.IsNullOrEmpty(_currentMediaFile.Description)
+                    ? _currentMediaFile.Name
+                    : _currentMediaFile.Description;
             else
                 currentMediaText.text = "";
 
             if (nextMediaText is null) return;
-            if (_mediaFiles.Count > 1)
-            {
-                var currentIndex = _mediaFiles.IndexOf(_currentMediaFile);
-                var nextIndex = (currentIndex + 1) % _mediaFiles.Count;
-                nextMediaText.text = _mediaFiles[nextIndex].Name;
-            }
-            else
-            {
+            // if (_mediaFiles.Count > 1)
+            // {
+            //     var currentIndex = _mediaFiles.IndexOf(_currentMediaFile);
+            //     var nextIndex = (currentIndex + 1) % _mediaFiles.Count;
+            //     nextMediaText.text = _mediaFiles[nextIndex].Name;
+            // }
+            // else
+            // {
                 nextMediaText.text = "";
-            }
+            // }
         }
 
         public void ToggleContent()

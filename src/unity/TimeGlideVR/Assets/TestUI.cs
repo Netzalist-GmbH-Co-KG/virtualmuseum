@@ -42,9 +42,9 @@ public class TestUI : MonoBehaviour
 
     private void HandleMeiningenButtonClick()
     {
-        var meinigenButton = buttonPanelScript.Buttons.FirstOrDefault(b => b.Key == "MGN");
-        if(meinigenButton.Value != null)
-            meinigenButton.Value.GetComponent<ButtonScript>().HandleSelect();
+        var meinigenButtonScript = buttonPanelScript.Buttons.FirstOrDefault(b => b.Key.Contains("Wilhelmsburg"));
+        if(meinigenButtonScript.Value != null)
+            meinigenButtonScript.Value.GetComponent<ButtonScript>().HandleSelect();
     }
 
     private void HandleMediaPlayButtonClick()

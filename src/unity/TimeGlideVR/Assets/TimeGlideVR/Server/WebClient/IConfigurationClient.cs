@@ -12,5 +12,6 @@ namespace TimeGlideVR.Server.WebClient
         Task<List<Tenant>> GetTenants();
         Task<TopographicalTable> GetTopographicalTableConfiguration(Guid topographicalTableId);
         Task<MultimediaPresentation> GetMultiMediaPresentation(Guid multimediaPresentationId);
+        ConnectionState ConnectionState { get; }
     }
 }

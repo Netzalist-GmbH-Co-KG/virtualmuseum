@@ -62,7 +62,7 @@ namespace TimeGlideVR.DevScenes
                     .FirstOrDefault();
 
 
-                var testPresentation = presentations.FirstOrDefault(p => p.Name == "Meiningen");
+                var testPresentation = presentations.FirstOrDefault(p => p.Name.Contains("Meiningen"));
                 if (presentationWithMostMedia != null)
                 {
                     Log($"Playing presentation: {testPresentation.Name} with {testPresentation.PresentationItems.Count} items");
