@@ -1,19 +1,20 @@
 import express, { Router } from 'express';
 import { DatabaseService } from '../services/database.service';
-import { TenantController } from '../controllers/tenant.controller';
+import { TimeSeriesController } from '../controllers/timeseries.controller';
 
-export class TenantRouter {
+
+export class TimeSeriesRouter {
     private router: Router;
-    private controller: TenantController;
+    private controller: TimeSeriesController;
 
     constructor(dbService: DatabaseService) {
         this.router = express.Router();
-        this.controller = new TenantController(dbService);
+        this.controller = new TimeSeriesController(dbService);
         this.setupRoutes();
     }
 
     private setupRoutes(): void {
-        this.router.get('/', this.controller.getAllTenants.bind(this.controller));
+        this.router.get('/', this.controller.getTimeSeries.bind(this.controller));
     }
 
     getRouter(): Router {

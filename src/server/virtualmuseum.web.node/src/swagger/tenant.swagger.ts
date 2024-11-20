@@ -87,18 +87,25 @@
  *         - $ref: '#/components/schemas/Room'
  *         - type: object
  *           properties:
- *             inventoryItems:
+ *             InventoryItems:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/InventoryItem'
  * 
  *     TenantWithRooms:
- *       allOf:
- *         - $ref: '#/components/schemas/Tenant'
- *         - type: object
- *           properties:
- *             rooms:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/RoomWithInventory'
+ *       type: object
+ *       properties:
+ *         Id:
+ *           type: string
+ *           format: uuid
+ *         Name:
+ *           type: string
+ *         Rooms:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/RoomWithInventory'
+ *       required:
+ *         - Id
+ *         - Name
+ *         - Rooms
  */

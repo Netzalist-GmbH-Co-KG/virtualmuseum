@@ -35,7 +35,7 @@ const options = {
     apis: [
         './src/controllers/*.ts',
         './src/routes/*.ts',
-        './src/config/swagger.schemas.ts'
+        './src/swagger/*.ts'
     ],
 };
 

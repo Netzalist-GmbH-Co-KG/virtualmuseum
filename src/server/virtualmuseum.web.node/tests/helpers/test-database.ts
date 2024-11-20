@@ -29,7 +29,17 @@ export class TestDatabaseService extends DatabaseService {
     protected async dropTables(): Promise<void> {
         if (!this.db) return;
 
-        const tables = ['InventoryItems', 'Rooms', 'Tenants'];
+        const tables = [
+            'InventoryItems', 
+            'Rooms', 
+            'Tenants', 
+            'GeoEvents', 
+            'GeoEventGroups', 
+            'TimeSeries',
+            'PresentationItems',
+            'MultimediaPresentations',
+            'MediaFiles'
+        ];
         for (const table of tables) {
             await this.db.exec(`DROP TABLE IF EXISTS ${table}`);
         }
@@ -67,7 +77,54 @@ export class TestDatabaseService extends DatabaseService {
                 ScaleY REAL NOT NULL DEFAULT 1,
                 ScaleZ REAL NOT NULL DEFAULT 1,
                 FOREIGN KEY (RoomId) REFERENCES Rooms(Id)
-            )`
+            )`,
+            `CREATE TABLE IF NOT EXISTS TimeSeries (
+                Id TEXT PRIMARY KEY,
+                Name TEXT NOT NULL,
+                Description TEXT NOT NULL
+            )`,
+            `CREATE TABLE IF NOT EXISTS GeoEventGroups (
+                Id TEXT PRIMARY KEY,
+                Label TEXT,
+                Description TEXT,
+                TimeSeriesId TEXT NOT NULL,
+                FOREIGN KEY (TimeSeriesId) REFERENCES TimeSeries(Id)
+            )`,
+            `CREATE TABLE IF NOT EXISTS GeoEvents (
+                Id TEXT PRIMARY KEY,
+                GeoEventGroupId TEXT NOT NULL,
+                MultimediaPresentationId TEXT,
+                Label TEXT,
+                Description TEXT,
+                DateTime TEXT NOT NULL,
+                Latitude REAL NOT NULL,
+                Longitude REAL NOT NULL,
+                FOREIGN KEY (GeoEventGroupId) REFERENCES GeoEventGroups(Id)
+            )`,
+            `CREATE TABLE IF NOT EXISTS MediaFiles (
+                Id TEXT PRIMARY KEY,
+                Description TEXT NULL,
+                DurationInSeconds REAL NOT NULL,
+                FileName TEXT NULL,
+                Name TEXT NULL,
+                Type INTEGER NOT NULL,
+                Url TEXT NULL
+            )`,
+            `CREATE TABLE IF NOT EXISTS MultimediaPresentations (
+                Id TEXT PRIMARY KEY,
+                Name TEXT NULL,
+                Description TEXT NULL
+            )`,
+            `CREATE TABLE IF NOT EXISTS PresentationItems (
+                Id TEXT PRIMARY KEY,
+                MultimediaPresentationId TEXT NOT NULL,
+                MediaFileId TEXT NULL,
+                SlotNumber INTEGER NOT NULL,
+                SequenceNumber INTEGER NOT NULL,
+                DurationInSeconds INTEGER NOT NULL,
+                FOREIGN KEY (MultimediaPresentationId) REFERENCES MultimediaPresentations(Id),
+                FOREIGN KEY (MediaFileId) REFERENCES MediaFiles(Id)
+            )`,
         ];
 
         for (const query of queries) {
@@ -115,6 +172,64 @@ export class TestDatabaseService extends DatabaseService {
                 0, 0, 0,
                 0, 0, 0,
                 1, 1, 1
+            );
+
+            // Add TimeSeries test data
+            await this.db.run(
+                'INSERT INTO TimeSeries (Id, Name, Description) VALUES (?, ?, ?)',
+                'test-timeseries-1',
+                'Test TimeSeries',
+                'A test time series'
+            );
+
+            // Add GeoEventGroup test data
+            await this.db.run(
+                'INSERT INTO GeoEventGroups (Id, Label, Description, TimeSeriesId) VALUES (?, ?, ?, ?)',
+                'test-group-1',
+                'Test Group',
+                'A test group',
+                'test-timeseries-1'
+            );
+
+            // Add GeoEvent test data
+            await this.db.run(
+                'INSERT INTO GeoEvents (Id, GeoEventGroupId, MultimediaPresentationId, Label, Description, DateTime, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                'test-event-1',
+                'test-group-1',
+                null,
+                'Test Event',
+                'A test event',
+                '2024-01-01T00:00:00Z',
+                0, 0
+            );
+
+            // Seed multimedia presentation test data
+            await this.db?.run(
+                `INSERT INTO MediaFiles (Id, Name, Description, Type, DurationInSeconds, FileName, Url) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                ['test-media-1', 'Test Media 1', 'Test Media Description 1', 0, 60, 'test1.jpg', 'http://test.com/test1.jpg']
+            );
+            await this.db?.run(
+                `INSERT INTO MediaFiles (Id, Name, Description, Type, DurationInSeconds, FileName, Url) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                ['test-media-2', 'Test Media 2', 'Test Media Description 2', 1, 120, 'test2.mp4', 'http://test.com/test2.mp4']
+            );
+
+            await this.db?.run(
+                `INSERT INTO MultimediaPresentations (Id, Name, Description) 
+                 VALUES (?, ?, ?)`,
+                ['test-presentation-1', 'Test Presentation 1', 'Test Presentation Description 1']
+            );
+
+            await this.db?.run(
+                `INSERT INTO PresentationItems (Id, MultimediaPresentationId, MediaFileId, SlotNumber, SequenceNumber, DurationInSeconds) 
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                ['test-item-1', 'test-presentation-1', 'test-media-1', 1, 1, 60]
+            );
+            await this.db?.run(
+                `INSERT INTO PresentationItems (Id, MultimediaPresentationId, MediaFileId, SlotNumber, SequenceNumber, DurationInSeconds) 
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                ['test-item-2', 'test-presentation-1', 'test-media-2', 2, 2, 120]
             );
 
             await this.db.exec('COMMIT');

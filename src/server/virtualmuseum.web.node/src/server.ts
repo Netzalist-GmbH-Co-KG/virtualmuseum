@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { App } from './app';
-import './config/swagger.schemas';
+import './swagger/tenant.swagger';
 
 // Load environment variables
 dotenv.config();

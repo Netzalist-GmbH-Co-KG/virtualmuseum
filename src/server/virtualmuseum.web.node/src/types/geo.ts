@@ -1,4 +1,9 @@
-import { LabeledEntity } from './common';
+import { LabeledEntity, NamedEntity } from './common';
+
+export interface TimeSeries extends NamedEntity {
+    Name: string; // Override to make it required
+    Description: string; // Override to make it required
+}
 
 export interface GeoEventGroup extends LabeledEntity {
     TimeSeriesId: string;

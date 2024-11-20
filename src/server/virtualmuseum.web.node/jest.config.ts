@@ -20,6 +20,8 @@ const config: Config.InitialOptions = {
     '!<rootDir>/src/config/**',
     '!<rootDir>/src/**/*.d.ts',
     '!<rootDir>/src/controllers/**',
+    '!<rootDir>/src/swagger/**',
+    '!<rootDir>/tests/**',
     '!**/node_modules/**'
   ],
   coverageDirectory: '<rootDir>/coverage',

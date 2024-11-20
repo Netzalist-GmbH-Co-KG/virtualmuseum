@@ -1,9 +1,9 @@
 import { InventoryItem, Room, Tenant } from '../';
 
 export interface RoomWithInventory extends Room {
-    inventoryItems: InventoryItem[];
+    InventoryItems: InventoryItem[];
 }
 
 export interface TenantWithRooms extends Tenant {
-    rooms: RoomWithInventory[];
+    Rooms: RoomWithInventory[];
 }

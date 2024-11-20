@@ -1,7 +1,9 @@
 import sqlite3 from 'sqlite3';
 import { Database, open } from 'sqlite';
 import { TenantWithRooms, RoomWithInventory } from '../types/dto/tenant.dto';
+import { TimeSeriesWithEvents } from '../types/dto/timeseries.dto';
 import { BaseService } from './base.service';
+import { MultimediaPresentationWithPresentationItems } from '@/types/dto/multimediapresentation.dt';
 
 export class DatabaseService extends BaseService {
     protected db: Database | null = null;
@@ -58,14 +60,100 @@ export class DatabaseService extends BaseService {
                         room.Id
                     );
                     console.log(`Retrieved inventory items for room ${room.Id}:`, inventoryItems);
-                    room.inventoryItems = inventoryItems;
+                    room.InventoryItems = inventoryItems;
                 }
-                tenant.rooms = rooms;
+                tenant.Rooms = rooms;
             }
 
             return tenants;
         } catch (error) {
             console.error('Error in getTenants:', error);
+            throw error;
+        }
+    }
+
+    async getTimeSeriesWithEvents(): Promise<TimeSeriesWithEvents[]> {
+        try {
+            if (!this.db) {
+                throw new Error('Database not initialized');
+            }
+
+            console.log('Executing getTimeSeriesWithEvents query...');
+
+            // First get all time series
+            const timeSeries = await this.db.all<TimeSeriesWithEvents[]>(`
+                SELECT * FROM TimeSeries
+            `);
+            
+            // For each time series, get their GeoEventGroups and GeoEvents
+            for (const series of timeSeries) {
+                const geoEventGroups = await this.db.all(`
+                    SELECT * FROM GeoEventGroups 
+                    WHERE TimeSeriesId = ?
+                `, series.Id);
+
+                for (const group of geoEventGroups) {
+                    const geoEvents = await this.db.all(`
+                        SELECT 
+                            Id,
+                            GeoEventGroupId,
+                            MultimediaPresentationId,
+                            Label,
+                            Description,
+                            DateTime,
+                            Latitude,
+                            Longitude
+                        FROM GeoEvents 
+                        WHERE GeoEventGroupId = ?
+                    `, group.Id);
+                    
+                    group.GeoEvents = geoEvents;
+                }
+                
+                series.GeoEventGroups = geoEventGroups;
+            }
+
+            return timeSeries;
+        } catch (error) {
+            console.error('Failed to get time series with events:', error);
+            throw error;
+        }
+    }
+
+    async getMultimediaPresentations(): Promise<any[]> {
+        try {
+            if (!this.db) {
+                throw new Error('Database not initialized');
+            }
+
+            console.log('Executing getMultimediaPresentations query...');
+
+            // First get all multimedia presentations
+            const multimediaPresentations = await this.db.all<MultimediaPresentationWithPresentationItems[]>(`
+                SELECT * FROM MultimediaPresentations
+            `);
+            
+            // For each multimedia presentation, get their PresentationItems and MediaFiles 
+            for (const presentation of multimediaPresentations) {
+                const presentationItems = await this.db.all(`
+                    SELECT * FROM PresentationItems 
+                    WHERE MultimediaPresentationId = ?
+                `, presentation.Id);
+
+                for (const item of presentationItems) {
+                    const mediafiles = await this.db.all(`
+                        SELECT * FROM MediaFiles 
+                        WHERE Id = ?
+                    `, item.MediaFileId);
+                    item.MediaFile = mediafiles[0];
+                }
+                
+                presentation.PresentationItems = presentationItems;                
+            }
+
+            return multimediaPresentations;
+        } catch (error) {
+            console.error('Failed to get multimedia presentations:', error);
             throw error;
         }
     }

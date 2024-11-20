@@ -18,12 +18,12 @@ Returns all tenants with their associated rooms and inventory items.
 {
     Id: string;          // Tenant ID
     Name: string;        // Tenant name
-    rooms: {
+    Rooms: {
         Id: string;      // Room ID
         TenantId: string;// Reference to parent tenant
         Label: string | null;
         Description: string | null;
-        inventoryItems: {
+        InventoryItems: {
             Id: string;  // Inventory item ID
             RoomId: string; // Reference to parent room
             Name: string | null;
@@ -49,13 +49,13 @@ Returns all tenants with their associated rooms and inventory items.
     {
         "Id": "tenant-1",
         "Name": "Museum Wing A",
-        "rooms": [
+        "Rooms": [
             {
                 "Id": "room-1",
                 "TenantId": "tenant-1",
                 "Label": "Exhibition Hall",
                 "Description": "Main exhibition space",
-                "inventoryItems": [
+                "InventoryItems": [
                     {
                         "Id": "item-1",
                         "RoomId": "room-1",

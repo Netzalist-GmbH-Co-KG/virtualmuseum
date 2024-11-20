@@ -6,6 +6,8 @@ import { authMiddleware } from './middleware/auth.middleware';
 import { DatabaseService } from './services/database.service';
 import { ConfigService } from './services/config.service';
 import { TenantRouter } from './routes/tenant.routes';
+import { TimeSeriesRouter } from './routes/timeseries.routes';
+import { MultiMediaPresentationRouter } from './routes/multimediapresentations.routes';
 
 export class App {
     private app: Express;
@@ -17,12 +19,12 @@ export class App {
         this.dbService = dbService || new DatabaseService(this.configService.get('dbPath'));
         this.app = express();
         this.initializeMiddlewares();
-        this.initializeRoutes();
-        this.setupErrorHandling();
     }
 
     async initialize(): Promise<void> {
         await this.dbService.initialize();
+        this.initializeRoutes();
+        this.setupErrorHandling();
     }
 
     private initializeMiddlewares(): void {
@@ -40,7 +42,12 @@ export class App {
 
         // API routes
         const tenantRouter = new TenantRouter(this.dbService);
+        const timeSeriesRouter = new TimeSeriesRouter(this.dbService);
+        const multiMediaPresentationRouter = new MultiMediaPresentationRouter(this.dbService);
+
         this.app.use('/api/tenants', tenantRouter.getRouter());
+        this.app.use('/api/timeseries', timeSeriesRouter.getRouter());
+        this.app.use('/api/multimediapresentations', multiMediaPresentationRouter.getRouter());
     }
 
     private setupErrorHandling(): void {
@@ -62,7 +69,7 @@ export class App {
 
     public async start(): Promise<void> {
         try {
-            await this.dbService.initialize();
+            await this.initialize();
             const port = parseInt(this.configService.get('PORT') || '3000', 10);
             const host = this.configService.get('HOST') || '0.0.0.0';
 

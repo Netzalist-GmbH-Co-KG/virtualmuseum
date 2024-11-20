@@ -4,29 +4,29 @@ import { DatabaseService } from '../services/database.service';
 /**
  * @swagger
  * tags:
- *   name: Tenants
- *   description: Tenant management endpoints
+ *   name: TimeSeries
+ *   description: Time series management endpoints
  */
-export class TenantController {
+export class TimeSeriesController {
     constructor(private dbService: DatabaseService) {}
 
     /**
      * @swagger
-     * /tenants:
+     * /timeseries:
      *   get:
-     *     summary: Get all tenants with their rooms and inventory items
-     *     tags: [Tenants]
+     *     summary: Get all time series with their events
+     *     tags: [TimeSeries]
      *     security:
      *       - ApiKeyAuth: []
      *     responses:
      *       200:
-     *         description: List of tenants with their rooms and inventory items
+     *         description: List of time series with their events
      *         content:
      *           application/json:
      *             schema:
      *               type: array
      *               items:
-     *                 $ref: '#/components/schemas/TenantWithRooms'
+     *                 $ref: '#/components/schemas/TimeSeriesWithEvents'
      *       500:
      *         description: Server error
      *         content:
@@ -37,12 +37,12 @@ export class TenantController {
      *                 error:
      *                   type: string
      */
-    async getAllTenants(req: Request, res: Response): Promise<void> {
+    async getTimeSeries(req: Request, res: Response): Promise<void> {
         try {
-            const tenants = await this.dbService.getTenants();
-            res.json(tenants);
+            const timeSeries = await this.dbService.getTimeSeriesWithEvents();
+            res.json(timeSeries);
         } catch (error) {
-            console.error('Error fetching tenants:', error);
+            console.error('Error getting time series:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }

@@ -64,12 +64,12 @@ describe('TenantRouter', () => {
             expect(tenant).toEqual({
                 Id: 'test-tenant-1',
                 Name: 'Test Museum',
-                rooms: [{
+                Rooms: [{
                     Id: 'test-room-1',
                     TenantId: 'test-tenant-1',
                     Label: 'Test Room',
                     Description: 'A test room',
-                    inventoryItems: [{
+                    InventoryItems: [{
                         Id: 'test-item-1',
                         RoomId: 'test-room-1',
                         Name: 'Test Item',
