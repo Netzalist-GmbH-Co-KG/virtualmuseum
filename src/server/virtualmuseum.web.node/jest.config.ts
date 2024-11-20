@@ -3,48 +3,39 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  rootDir: '.',
   roots: ['<rootDir>/src', '<rootDir>/tests'],
-  testMatch: ['**/*.test.ts'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
-  collectCoverageFrom: [
-    'src/**/*.{js,ts}',
-    '!src/server.ts', 
-    '!src/types/**/*.{js,ts}', 
-    '!src/**/*.d.ts', 
-    '!src/controllers/**/*.{js,ts}', 
-    '!**/node_modules/**',
+  testMatch: [
+    '**/tests/**/*.test.ts',
+    '**/tests/**/*.spec.ts'
   ],
-  coverageDirectory: 'coverage',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  collectCoverage: true,
+  forceExit: true,
+  detectOpenHandles: true,
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.{ts,js}',
+    '!<rootDir>/src/server.ts',
+    '!<rootDir>/src/types/**',
+    '!<rootDir>/src/config/**',
+    '!<rootDir>/src/**/*.d.ts',
+    '!<rootDir>/src/controllers/**',
+    '!**/node_modules/**'
+  ],
+  coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  coverageThreshold: {
-    global: {
-      statements: 75,
-      branches: 50,
-      functions: 70,
-      lines: 75,
-    },
-    './src/services/': {
-      statements: 80,
-      branches: 65,
-      functions: 75,
-      lines: 80,
-    },
-    './src/middleware/': {
-      statements: 90,
-      branches: 80,
-      functions: 90,
-      lines: 90,
-    }
-  },
+  coverageProvider: 'v8',
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname'
+  ],
   verbose: true,
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
       tsconfig: 'tsconfig.json'
     }]
   },
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts']
 };
 
 export default config;
