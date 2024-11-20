@@ -36,7 +36,11 @@
  *         Description:
  *           type: string
  *           nullable: true
- *         Order:
+ *         SlotNumber:
+ *           type: integer
+ *         SequenceNumber:
+ *           type: integer
+ *         DurationInSeconds:
  *           type: integer
  *         MediaFileId:
  *           type: string
@@ -58,7 +62,11 @@
  *         Description:
  *           type: string
  *           nullable: true
- *         Order:
+ *         SlotNumber:
+ *           type: integer
+ *         SequenceNumber:
+ *           type: integer
+ *         DurationInSeconds:
  *           type: integer
  *         MediaFileId:
  *           type: string
