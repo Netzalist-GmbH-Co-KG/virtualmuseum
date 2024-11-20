@@ -2,5 +2,6 @@
 
 public enum InventoryType
 {
-    TopographicalTable,
+    Unknown = 0,
+    TopographicalTable = 1,
 }
