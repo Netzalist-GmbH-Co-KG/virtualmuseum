@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
+import { ConfigService } from '../services/config.service';
 
-dotenv.config();
-
-export const validateApiKey = (req: Request, res: Response, next: NextFunction) => {
+export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
     const apiKey = req.header('x-api-key');
-    
-    if (!apiKey || apiKey !== process.env.API_KEY) {
-        return res.status(401).json({ error: 'Invalid API Key' });
+    const config = ConfigService.getInstance();
+    const validApiKey = process.env.API_KEY || config.get('API_KEY');
+
+    if (!apiKey || apiKey !== validApiKey) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
     }
-    
+
     next();
-};
+}

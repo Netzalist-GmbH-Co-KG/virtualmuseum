@@ -1,30 +1,35 @@
-import express, { Application } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import { specs } from './config/swagger';
-import { validateApiKey } from './middleware/auth.middleware';
+import { authMiddleware } from './middleware/auth.middleware';
 import { DatabaseService } from './services/database.service';
 import { ConfigService } from './services/config.service';
-import { createTenantRouter } from './routes/tenant.routes';
+import { TenantRouter } from './routes/tenant.routes';
 
 export class App {
-    private app: Application;
+    private app: Express;
     private configService: ConfigService;
     private dbService: DatabaseService;
 
-    constructor() {
-        this.app = express();
+    constructor(dbService?: DatabaseService) {
         this.configService = ConfigService.getInstance();
-        this.dbService = new DatabaseService(this.configService.get('dbPath'));
+        this.dbService = dbService || new DatabaseService(this.configService.get('dbPath'));
+        this.app = express();
         this.initializeMiddlewares();
         this.initializeRoutes();
+        this.setupErrorHandling();
+    }
+
+    async initialize(): Promise<void> {
+        await this.dbService.initialize();
     }
 
     private initializeMiddlewares(): void {
         this.app.use(cors());
         this.app.use(express.json());
         this.app.use('/swagger', swaggerUi.serve, swaggerUi.setup(specs));
-        this.app.use('/api', validateApiKey);
+        this.app.use('/api', authMiddleware);
     }
 
     private initializeRoutes(): void {
@@ -34,7 +39,25 @@ export class App {
         });
 
         // API routes
-        this.app.use('/api/tenants', createTenantRouter(this.dbService));
+        const tenantRouter = new TenantRouter(this.dbService);
+        this.app.use('/api/tenants', tenantRouter.getRouter());
+    }
+
+    private setupErrorHandling(): void {
+        // Handle 404
+        this.app.use((req: Request, res: Response) => {
+            res.status(404).json({ error: 'Not Found' });
+        });
+
+        // Handle all other errors
+        this.app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+            console.error('Error:', err);
+            res.status(500).json({ 
+                error: 'Internal Server Error',
+                message: err.message,
+                stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+            });
+        });
     }
 
     public async start(): Promise<void> {
@@ -53,7 +76,11 @@ export class App {
         }
     }
 
-    public getApp(): Application {
+    public getApp(): Express {
         return this.app;
+    }
+
+    async close(): Promise<void> {
+        await this.dbService.close();
     }
 }

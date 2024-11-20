@@ -1,12 +1,33 @@
-import { Router } from 'express';
-import { TenantController } from '../controllers/tenant.controller';
+import express, { Router, Request, Response, NextFunction } from 'express';
 import { DatabaseService } from '../services/database.service';
 
-export function createTenantRouter(dbService: DatabaseService): Router {
-    const router = Router();
-    const controller = new TenantController(dbService);
+export class TenantRouter {
+    private router: Router;
+    private dbService: DatabaseService;
 
-    router.get('/', (req, res) => controller.getAllTenants(req, res));
+    constructor(dbService: DatabaseService) {
+        this.router = express.Router();
+        this.dbService = dbService;
+        this.setupRoutes();
+    }
 
-    return router;
+    private setupRoutes(): void {
+        this.router.get('/', this.getTenants.bind(this));
+    }
+
+    private async getTenants(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            console.log('Getting tenants...');
+            const tenants = await this.dbService.getTenants();
+            console.log('Retrieved tenants:', tenants);
+            res.json(tenants);
+        } catch (error) {
+            console.error('Error getting tenants:', error);
+            next(error);
+        }
+    }
+
+    getRouter(): Router {
+        return this.router;
+    }
 }

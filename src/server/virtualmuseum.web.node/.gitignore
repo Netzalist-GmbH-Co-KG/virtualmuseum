@@ -38,6 +38,8 @@ npm-debug.log*
 # Testing
 coverage/
 .nyc_output/
+coverage/lcov-report/
+coverage/clover.xml
 
 # Production
 build/
