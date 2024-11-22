@@ -2,12 +2,7 @@
 
 ## Next steps
 
-### 1. Add the following query routes:
-
-/api/topopgraphical-tables/:topographicalTableId
---> returns the topographical table with all its topics and time series, geo events and multimedia presentations (main endpoint for the app)
-
-### 2. Add the following commands:
+### 1. Add the following commands:
 
 - CreateTenantCommand
 - RenameTenantCommand
@@ -38,19 +33,23 @@
 ---
 ... More to be defined.
 
-### 3. Create UI for the apo using these commands and queries
+### 2. Create UI for the apo using these commands and queries
 
 Idea: Create a mockup and let the initial UI be created with V0. Then
 move code here and connect to backend.
 
-### 4. Containerize the app
+### 3. Containerize the app
 
-### 5. Create a build pipeline in Github
+### 4. Create a build pipeline in Github
 
-### 6. Create a deployment pipeline - deploy the app to a good location
+### 5. Create a deployment pipeline - deploy the app to a good location
 
 
 # History
+
+## 2024-11-22 - added topographical table endpoint
+/api/v1/topopgraphical-tables/:topographicalTableId
+--> returns the topographical table with all its topics and time series, geo events and multimedia presentations (main endpoint for the app)
 
 ## 2024-11-20 - initial setup with windsurf.ai
 

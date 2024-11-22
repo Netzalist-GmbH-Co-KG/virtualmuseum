@@ -12,8 +12,8 @@ const options = {
         servers: [
             {
                 url: process.env.NODE_ENV === 'production' 
-                    ? 'http://0.0.0.0/api' 
-                    : 'http://localhost:3000/api',
+                    ? 'http://0.0.0.0/api/v1' 
+                    : 'http://localhost:3000/api/v1',
                 description: 'Virtual Museum API Server',
             },
         ],

@@ -6,7 +6,7 @@ This is a list of all Query endpoints in the API.
 
 ## Endpoints
 
-### GET /api/tenants
+### GET /api/v1/tenants
 
 Returns all tenants with their associated rooms and inventory items.
 

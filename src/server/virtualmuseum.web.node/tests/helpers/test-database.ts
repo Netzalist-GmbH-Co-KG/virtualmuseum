@@ -38,7 +38,10 @@ export class TestDatabaseService extends DatabaseService {
             'TimeSeries',
             'PresentationItems',
             'MultimediaPresentations',
-            'MediaFiles'
+            'MediaFiles',
+            'TopographicalTables',
+            'TopographicalTableTopics',
+            'TopographicalTableTopicTimeSeries'
         ];
         for (const table of tables) {
             await this.db.exec(`DROP TABLE IF EXISTS ${table}`);
@@ -53,6 +56,24 @@ export class TestDatabaseService extends DatabaseService {
             `CREATE TABLE IF NOT EXISTS Tenants (
                 Id TEXT PRIMARY KEY,
                 Name TEXT NOT NULL
+            )`,
+            `CREATE TABLE IF NOT EXISTS TopographicalTables (
+                Id TEXT PRIMARY KEY,
+                Name TEXT NOT NULL,
+                Description TEXT
+            )`,
+            `CREATE TABLE IF NOT EXISTS TopographicalTableTopics (
+                Id TEXT PRIMARY KEY,
+                TopographicalTableId TEXT NOT NULL,
+                Name TEXT NOT NULL,
+                Description TEXT,
+                FOREIGN KEY (TopographicalTableId) REFERENCES TopographicalTables(Id)
+            )`,
+            `CREATE TABLE IF NOT EXISTS TopographicalTableTopicTimeSeries (
+                TopographicalTableTopicId TEXT NOT NULL,
+                TimeSeriesId TEXT NOT NULL,
+                FOREIGN KEY (TopographicalTableTopicId) REFERENCES TopographicalTableTopics(Id),
+                FOREIGN KEY (TimeSeriesId) REFERENCES TimeSeries(Id)
             )`,
             `CREATE TABLE IF NOT EXISTS Rooms (
                 Id TEXT PRIMARY KEY,
@@ -174,33 +195,58 @@ export class TestDatabaseService extends DatabaseService {
                 1, 1, 1
             );
 
-            // Add TimeSeries test data
+            // Insert test topographical table data
+            await this.db.run(
+                'INSERT INTO TopographicalTables (Id, Name, Description) VALUES (?, ?, ?)',
+                'test-table-1',
+                'Test Table 1',
+                'Test Table Description 1'
+            );
+
+            // Insert test topic
+            await this.db.run(
+                'INSERT INTO TopographicalTableTopics (Id, TopographicalTableId, Name, Description) VALUES (?, ?, ?, ?)',
+                'test-topic-1',
+                'test-table-1',
+                'Test Topic 1',
+                'Test Topic Description 1'
+            );
+
+            // Insert test time series
             await this.db.run(
                 'INSERT INTO TimeSeries (Id, Name, Description) VALUES (?, ?, ?)',
                 'test-timeseries-1',
-                'Test TimeSeries',
-                'A test time series'
+                'Test Time Series 1',
+                'Test Time Series Description 1'
             );
 
-            // Add GeoEventGroup test data
+            // Link time series to topic
             await this.db.run(
-                'INSERT INTO GeoEventGroups (Id, Label, Description, TimeSeriesId) VALUES (?, ?, ?, ?)',
-                'test-group-1',
-                'Test Group',
-                'A test group',
+                'INSERT INTO TopographicalTableTopicTimeSeries (TopographicalTableTopicId, TimeSeriesId) VALUES (?, ?)',
+                'test-topic-1',
                 'test-timeseries-1'
             );
 
-            // Add GeoEvent test data
+            // Insert test geo event group
+            await this.db.run(
+                'INSERT INTO GeoEventGroups (Id, Label, Description, TimeSeriesId) VALUES (?, ?, ?, ?)',
+                'test-group-1',
+                'Test Group 1',
+                'Test Group Description 1',
+                'test-timeseries-1'
+            );
+
+            // Insert test geo event with multimedia presentation
             await this.db.run(
                 'INSERT INTO GeoEvents (Id, GeoEventGroupId, MultimediaPresentationId, Label, Description, DateTime, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
                 'test-event-1',
                 'test-group-1',
-                null,
-                'Test Event',
-                'A test event',
-                '2024-01-01T00:00:00Z',
-                0, 0
+                'test-presentation-1',
+                'Test Event 1',
+                'Test Event Description 1',
+                '2023-01-01T00:00:00Z',
+                0,
+                0
             );
 
             // Seed multimedia presentation test data

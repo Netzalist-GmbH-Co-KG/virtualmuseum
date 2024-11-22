@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TenantRouter GET /api/v1/tenants should return tenants with rooms and inventory items when API key is valid 1`] = `
+{
+  "Id": "test-tenant-1",
+  "Name": "Test Museum",
+  "Rooms": [
+    {
+      "Description": "A test room",
+      "Id": "test-room-1",
+      "InventoryItems": [
+        {
+          "Description": "A test item",
+          "Id": "test-item-1",
+          "InventoryType": 1,
+          "Name": "Test Item",
+          "PositionX": 0,
+          "PositionY": 0,
+          "PositionZ": 0,
+          "RoomId": "test-room-1",
+          "RotationX": 0,
+          "RotationY": 0,
+          "RotationZ": 0,
+          "ScaleX": 1,
+          "ScaleY": 1,
+          "ScaleZ": 1,
+        },
+      ],
+      "Label": "Test Room",
+      "TenantId": "test-tenant-1",
+    },
+  ],
+}
+`;

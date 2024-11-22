@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TopographicalTableRouter GET /api/v1/topographicaltables/:tableId should return topographical table with topics when API key is valid 1`] = `
+{
+  "Description": "Test Table Description 1",
+  "Id": "test-table-1",
+  "Name": "Test Table 1",
+  "Topics": [
+    {
+      "Description": "Test Topic Description 1",
+      "Id": "test-topic-1",
+      "Name": "Test Topic 1",
+      "TimeSeries": [
+        {
+          "Description": "Test Time Series Description 1",
+          "GeoEventGroups": [
+            {
+              "Description": "Test Group Description 1",
+              "GeoEvents": [
+                {
+                  "DateTime": "2023-01-01T00:00:00Z",
+                  "Description": "Test Event Description 1",
+                  "GeoEventGroupId": "test-group-1",
+                  "Id": "test-event-1",
+                  "Label": "Test Event 1",
+                  "Latitude": 0,
+                  "Longitude": 0,
+                  "MultimediaPresentation": {
+                    "Description": "Test Presentation Description 1",
+                    "Id": "test-presentation-1",
+                    "Name": "Test Presentation 1",
+                    "PresentationItems": [
+                      {
+                        "DurationInSeconds": 60,
+                        "Id": "test-item-1",
+                        "MediaFile": {
+                          "Description": "Test Media Description 1",
+                          "DurationInSeconds": 60,
+                          "FileName": "test1.jpg",
+                          "Id": "test-media-1",
+                          "Name": "Test Media 1",
+                          "Type": 0,
+                          "Url": "http://test.com/test1.jpg",
+                        },
+                        "MediaFileId": "test-media-1",
+                        "MultimediaPresentationId": "test-presentation-1",
+                        "SequenceNumber": 1,
+                        "SlotNumber": 1,
+                      },
+                      {
+                        "DurationInSeconds": 120,
+                        "Id": "test-item-2",
+                        "MediaFile": {
+                          "Description": "Test Media Description 2",
+                          "DurationInSeconds": 120,
+                          "FileName": "test2.mp4",
+                          "Id": "test-media-2",
+                          "Name": "Test Media 2",
+                          "Type": 1,
+                          "Url": "http://test.com/test2.mp4",
+                        },
+                        "MediaFileId": "test-media-2",
+                        "MultimediaPresentationId": "test-presentation-1",
+                        "SequenceNumber": 2,
+                        "SlotNumber": 2,
+                      },
+                    ],
+                  },
+                  "MultimediaPresentationId": "test-presentation-1",
+                },
+              ],
+              "Id": "test-group-1",
+              "Label": "Test Group 1",
+              "TimeSeriesId": "test-timeseries-1",
+            },
+          ],
+          "Id": "test-timeseries-1",
+          "Name": "Test Time Series 1",
+        },
+      ],
+      "TopographicalTableId": "test-table-1",
+    },
+  ],
+}
+`;

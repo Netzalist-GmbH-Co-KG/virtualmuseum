@@ -5,9 +5,7 @@ import { specs } from './config/swagger';
 import { authMiddleware } from './middleware/auth.middleware';
 import { DatabaseService } from './services/database.service';
 import { ConfigService } from './services/config.service';
-import { TenantRouter } from './routes/tenant.routes';
-import { TimeSeriesRouter } from './routes/timeseries.routes';
-import { MultiMediaPresentationRouter } from './routes/multimediapresentations.routes';
+import { ApiV1Router } from './routes/apiv1.routes';
 
 export class App {
     private app: Express;
@@ -41,13 +39,9 @@ export class App {
         });
 
         // API routes
-        const tenantRouter = new TenantRouter(this.dbService);
-        const timeSeriesRouter = new TimeSeriesRouter(this.dbService);
-        const multiMediaPresentationRouter = new MultiMediaPresentationRouter(this.dbService);
+        const apiV1Router = new ApiV1Router(this.dbService);
 
-        this.app.use('/api/tenants', tenantRouter.getRouter());
-        this.app.use('/api/timeseries', timeSeriesRouter.getRouter());
-        this.app.use('/api/multimediapresentations', multiMediaPresentationRouter.getRouter());
+        this.app.use('/api/v1/', apiV1Router.getRouter());
     }
 
     private setupErrorHandling(): void {

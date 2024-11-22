@@ -20,3 +20,18 @@ export interface InventoryItem extends BaseEntity {
     ScaleY: number;
     ScaleZ: number;
 }
+
+export interface TopographicalTable extends BaseEntity {
+}
+
+export interface TopographicalTableTopic extends BaseEntity {
+    TopographicalTableId: string;
+    Topic: string;
+    Description: string | null;
+    MediaFileImage2DId: string | null;
+}
+
+export interface  TopographicalTableTopicTimeSeries extends BaseEntity {
+    TimeSeriesId: string;
+    TopographicalTableTopicId: string;
+}

@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TimeSeriesRouter GET /api/v1/timeseries should return all time series with their geo event groups and events 1`] = `
+{
+  "Description": "Test Time Series Description 1",
+  "GeoEventGroups": [
+    {
+      "Description": "Test Group Description 1",
+      "GeoEvents": [
+        {
+          "DateTime": "2023-01-01T00:00:00Z",
+          "Description": "Test Event Description 1",
+          "GeoEventGroupId": "test-group-1",
+          "Id": "test-event-1",
+          "Label": "Test Event 1",
+          "Latitude": 0,
+          "Longitude": 0,
+          "MultimediaPresentationId": "test-presentation-1",
+        },
+      ],
+      "Id": "test-group-1",
+      "Label": "Test Group 1",
+      "TimeSeriesId": "test-timeseries-1",
+    },
+  ],
+  "Id": "test-timeseries-1",
+  "Name": "Test Time Series 1",
+}
+`;

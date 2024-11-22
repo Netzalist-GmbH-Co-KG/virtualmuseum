@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MultimediaPresentationRouter GET /api/v1/multimediapresentations should return multimedia presentations with presentation items when API key is valid 1`] = `
+{
+  "Description": "Test Presentation Description 1",
+  "Id": "test-presentation-1",
+  "Name": "Test Presentation 1",
+  "PresentationItems": [
+    {
+      "DurationInSeconds": 60,
+      "Id": "test-item-1",
+      "MediaFile": {
+        "Description": "Test Media Description 1",
+        "DurationInSeconds": 60,
+        "FileName": "test1.jpg",
+        "Id": "test-media-1",
+        "Name": "Test Media 1",
+        "Type": 0,
+        "Url": "http://test.com/test1.jpg",
+      },
+      "MediaFileId": "test-media-1",
+      "MultimediaPresentationId": "test-presentation-1",
+      "SequenceNumber": 1,
+      "SlotNumber": 1,
+    },
+    {
+      "DurationInSeconds": 120,
+      "Id": "test-item-2",
+      "MediaFile": {
+        "Description": "Test Media Description 2",
+        "DurationInSeconds": 120,
+        "FileName": "test2.mp4",
+        "Id": "test-media-2",
+        "Name": "Test Media 2",
+        "Type": 1,
+        "Url": "http://test.com/test2.mp4",
+      },
+      "MediaFileId": "test-media-2",
+      "MultimediaPresentationId": "test-presentation-1",
+      "SequenceNumber": 2,
+      "SlotNumber": 2,
+    },
+  ],
+}
+`;

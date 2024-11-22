@@ -1,8 +1,9 @@
 import request from 'supertest';
 import { App } from '../../../src/app';
 import { TestDatabaseService } from '../../helpers/test-database';
+import { TopographicalTableWithTopics } from '../../../src/types/dto/topographicaltable.dto';
 
-describe('TenantRouter', () => {
+describe('TopographicalTableRouter', () => {
     let app: App;
     let dbService: TestDatabaseService;
 
@@ -30,10 +31,10 @@ describe('TenantRouter', () => {
         console.log('Test cleanup complete');
     });
 
-    describe('GET /api/v1/tenants', () => {
+    describe('GET /api/v1/topographicaltables/:tableId', () => {
         it('should return 401 when API key is missing', async () => {
             const response = await request(app.getApp())
-                .get('/api/v1/tenants');
+                .get('/api/v1/topographicaltables/test-table-1');
             
             expect(response.status).toBe(401);
             expect(response.body).toEqual({ error: 'Unauthorized' });
@@ -41,39 +42,31 @@ describe('TenantRouter', () => {
 
         it('should return 401 when API key is invalid', async () => {
             const response = await request(app.getApp())
-                .get('/api/v1/tenants')
+                .get('/api/v1/topographicaltables/test-table-1')
                 .set('x-api-key', 'invalid-key');
             
             expect(response.status).toBe(401);
             expect(response.body).toEqual({ error: 'Unauthorized' });
         });
 
-        it('should return tenants with rooms and inventory items when API key is valid', async () => {
+        it('should return 404 when table does not exist', async () => {
             const response = await request(app.getApp())
-                .get('/api/v1/tenants')
-                .set('x-api-key', process.env.API_KEY || '');
+                .get('/api/v1/topographicaltables/non-existent-table')
+                .set('x-api-key', 'test-api-key');
             
-            if (response.status !== 200) {
-                console.error('Response error:', response.body);
-            }
-            
-            expect(response.status).toBe(200);
-            expect(Array.isArray(response.body)).toBe(true);
-            
-            const [tenant] = response.body;
-            expect(tenant).toMatchSnapshot();
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual({ error: 'Topographical table not found' });
         });
 
-        it('should return empty array when no tenants exist', async () => {
-            // Clear all data but keep schema
-            await dbService.clearData();
-
+        it('should return topographical table with topics when API key is valid', async () => {
             const response = await request(app.getApp())
-                .get('/api/v1/tenants')
-                .set('x-api-key', process.env.API_KEY || '');
+                .get('/api/v1/topographicaltables/test-table-1')
+                .set('x-api-key', 'test-api-key');
             
             expect(response.status).toBe(200);
-            expect(response.body).toEqual([]);
+            
+            const table: TopographicalTableWithTopics = response.body;
+            expect(table).toMatchSnapshot();
         });
     });
 });
