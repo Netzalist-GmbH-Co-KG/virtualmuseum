@@ -8,6 +8,9 @@ using TimeGlideVR.Server.Data.Inventory;
 using TimeGlideVR.Server.Data.Media;
 using TimeGlideVR.Server.Data.TimeRows;
 using TimeGlideVR.Server.WebClient;
+using TimeGlideVR.TableInstallation.Table;
+using TimeGlideVR.TableInstallation.Table.InfoDisplay;
+using TimeGlideVR.TableInstallation.Table.MapSwitch;
 using TimeGlideVR.TableInstallation.Table.Panel;
 using UnityEngine;
 
@@ -25,6 +28,8 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         [SerializeField] public DropObject dropItemTemplate;
         [SerializeField] public float spawnHeight = 1.8f;
         [SerializeField] public float despawnHeight = -1.0f;
+
+        [SerializeField] private int topicsToLoad = 0;
 
         private float _ratioWidth;
         private float _ratioHeight;
@@ -51,7 +56,6 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 _buttonPanelScript.onDespawnAllItems.AddListener(DespawnAllItems);
 
                 LoadConfiguration();
-                StartCoroutine(nameof(DisplayButtons));
             }
             catch (Exception e)
             {
@@ -59,8 +63,13 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
             }
         }
 
-        public void StartDisplayButtons(){
-            StartCoroutine(nameof(DisplayButtons));
+        private int _currentTopicIndex = 0;
+        public void StartDisplayButtonsIncremental(){
+            var topic = _tableConfiguration.Topics[_currentTopicIndex];
+            _currentTopicIndex = (_currentTopicIndex + 1) % _tableConfiguration.Topics.Count;
+            InfoDisplay.Instance.DisplayTitle(topic.Topic);
+            InfoDisplay.Instance.DisplayDescription(topic.Description);
+            StartCoroutine(nameof(DisplayButtons), topic);
         }
         
         public void HideSpawnedItems()
@@ -81,17 +90,20 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         
 
         // Need coroutine to get back to main thread
-        private IEnumerator DisplayButtons()
+        private IEnumerator DisplayButtons(TopographicalTableTopic topic)
         {
             while (!_dataLoaded)
                 yield return new WaitForSeconds(1);
             // Display buttons                                                                   Informationen zu Thüringen   Größte Städte ESA,ARN...
             Debug.Log(_tableConfiguration.Topics.Count);
+            /*
             var allTimeSeries = _tableConfiguration.Topics.SelectMany( t => t.TimeSeries).ToList();
             var erstErwaehnung = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("5b1ec4ab-b2d4-49b4-b05e-01f1579a233b"));
             var groessteStaedte = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("8c472a83-e961-4bd3-b6f3-562964e322c4"));
             var infos = allTimeSeries.FirstOrDefault(ts => ts.Id == new Guid("8c472a83-e961-4bd3-b6f3-562964e32000"));
             _buttonPanelScript.Init(erstErwaehnung!.GeoEventGroups, groessteStaedte!.GeoEventGroups, infos!.GeoEventGroups);
+            */
+            _buttonPanelScript.DisplayTimeSeriesButtonsByTopic(topic);
             yield return null;
         }
 
@@ -129,7 +141,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
 
             _tableConfiguration = await _configurationClient.GetTopographicalTableConfiguration(firstTable.Id);
             Debug.Log("Loaded _tableConfig");
-            Debug.Log($"Configuration loaded: {_tableConfiguration.Topics[0].TimeSeries.Count} rows");
+            Debug.Log($"Configuration loaded: {_tableConfiguration.Topics[topicsToLoad].TimeSeries.Count} rows");
             _dataLoaded = true;
         }
 
@@ -162,7 +174,7 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
                 }
             };
 
-            _tableConfiguration.Topics[0].TimeSeries = new List<TimeSeries>
+            _tableConfiguration.Topics[topicsToLoad].TimeSeries = new List<TimeSeries>
             {
                 new TimeSeries
                 {

@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using TimeGlideVR.Server.Data.Inventory;
 using TimeGlideVR.Server.Data.TimeRows;
 using TimeGlideVR.TableInstallation.Table.InfoDisplay;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
 using UnityEngine;
 using UnityEngine.Events;
+using TimeGlideVR.TableInstallation.Table.MapSwitch;
 
 namespace TimeGlideVR.TableInstallation.Table.Panel
 {
@@ -14,10 +16,14 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         [SerializeField]
         private GameObject buttonPrefab;
         
+        [SerializeField] private Transform timeSeriesButtonLocation;
         [SerializeField] private GameObject wallButtonPrefab;
         [SerializeField] private GameObject dialectButtonPrefab;
+        
+        [SerializeField] private MapSwitchPanel mapSwitchPanel;
 
         private readonly Dictionary<string, GameObject> _buttons = new();
+        private readonly Dictionary<string, GameObject> _timeSeriesButtons = new();
         public UnityEvent<DisplayLocationTimeRowEvent> onTimeRowButtonClick;
         public UnityEvent onDespawnAllItems;
         public UnityEvent<ToggleButtonEvent> onWallButtonClick;
@@ -33,6 +39,9 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         [CanBeNull] private InfoDisplay.InfoDisplay _infoDisplay;
 
         public Dictionary<string, GameObject> Buttons => _buttons;
+        public Dictionary<string, GameObject> TimeSeriesButtons => _timeSeriesButtons;
+
+        private List<TimeSeries> _timeSeries = new List<TimeSeries>();
         
         public void Start()
         {
@@ -87,6 +96,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             }
         }
 
+        /*
         public void Init(List<GeoEventGroup> geoEventGroupsErstErwaehnung, List<GeoEventGroup> geoEventGroupsGroessteStaedte, List<GeoEventGroup> geoEventGroupsInformationen)
         {
             Debug.Log($"Initializing ButtonPanel with {geoEventGroupsErstErwaehnung.Count} rows");
@@ -94,43 +104,80 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             _geoEventGroupsGroessteStaedte = geoEventGroupsGroessteStaedte;
             _geoEventGroupsErstErwaehnung = geoEventGroupsErstErwaehnung;
             _currentGeoEventGroup = _geoEventGroupsErstErwaehnung;
+        }           Outdated hardcoded code
+        */
+
+        public void DisplayTimeSeriesButtonsByTopic(TopographicalTableTopic topic)
+        {
+            _timeSeries = topic.TimeSeries;
+            _currentGeoEventGroup = null;
+            ClearTimeSeriesButtons();
+            foreach (var timeSeries in _timeSeries)
+            {
+                AddTimeSeriesButton(timeSeries.Name);
+            }
+            if(topic.Topic == "Thüringen"){
+                AddTimeSeriesButton("Dialekte in Thüringen");
+                AddTimeSeriesButton("Stadtbefestigungen von Schmalkalden");
+            }
+            mapSwitchPanel.SetUpButtons();
         }
 
-        public void DisplayButtonsErstErwaehnung()
+        public void DisplayTimeSeriesButtons(ToggleButtonEvent evt)
         {
-            ClearButtons();
-            _currentGeoEventGroup = _geoEventGroupsErstErwaehnung;
-            foreach (var timeRow in _currentGeoEventGroup)
+            _currentGeoEventGroup = null;
+            ClearTimeSeriesButtons();
+            foreach (var timeSeries in _timeSeries)
             {
-                AddButton(timeRow.Label);
+                AddTimeSeriesButton(timeSeries.Name);
             }
+            mapSwitchPanel.SetUpButtons();
         }
-        public void DisplayButtonsGroessteStaedte()
+
+        public void DisplayGeoEventGroupButtonsById(int timeSeriesId)
         {
             ClearButtons();
-            _currentGeoEventGroup = _geoEventGroupsGroessteStaedte;
-            foreach (var timeRow in _currentGeoEventGroup)
+            if (_timeSeries == null || _timeSeries.Count <= timeSeriesId)
             {
-                AddButton(timeRow.Label);
+                Debug.LogError($"Invalid time series index: {timeSeriesId}");
+                return;
             }
-        }
-        
-        public void DisplayButtonsInformationen()
-        {
-            ClearButtons();
-            _currentGeoEventGroup = _geoEventGroupsInformationen;
-            foreach (var timeRow in _currentGeoEventGroup)
+            _currentGeoEventGroup = _timeSeries[timeSeriesId].GeoEventGroups;
+
+            foreach (var geoEventGroup in _currentGeoEventGroup)
             {
-                AddButton(timeRow.Label);
+                AddGeoEventGroupButton(geoEventGroup.Label, _timeSeries[timeSeriesId].Name);
             }
         }
 
-        private void AddButton(string label)
+        private void AddTimeSeriesButton(string label){
+            Debug.Log($"Adding button: {label}");
+            int map = label switch
+            {
+                "Stadtbefestigungen von Schmalkalden" => 1,
+                "Dialekte in Thüringen" => 2,
+                "Urkundliche Ersterwähnungen" => 3,
+                "Größte Städte Thüringens um 1600" => 3,
+                "Informationen zu Schloss Wilhelmsburg" => 3
+            };
+            var button = Instantiate(buttonPrefab, mapSwitchPanel.transform);
+            button.GetComponentInChildren<ButtonScript>().Init(label, _timeSeriesButtons.Count, map);
+            button.GetComponentInChildren<ButtonScript>().onClick.AddListener(HandleTimeSeriesButtonClick);
+            var _buttonTransform = mapSwitchPanel.GetButtonLocation(_timeSeriesButtons.Count);
+            
+            mapSwitchPanel._buttons.Add(button.GetComponentInChildren<ButtonScript>());
+            button.transform.localPosition = _buttonTransform.localPosition;
+            button.transform.rotation = _buttonTransform.rotation;
+            button.transform.localScale = Vector3.one * 0.73f;
+            _timeSeriesButtons.Add(label, button);
+        }
+
+        private void AddGeoEventGroupButton(string label, string timeSeriesName)
         {
             Debug.Log($"Adding button: {label}");
             var button = Instantiate(buttonPrefab, transform);
-            button.GetComponentInChildren<ButtonScript>().Init(label);
-            button.GetComponentInChildren<ButtonScript>().onClick.AddListener(HandleButtonClick);
+            button.GetComponentInChildren<ButtonScript>().Init(label, _buttons.Count, 0);
+            button.GetComponentInChildren<ButtonScript>().onClick.AddListener(HandleGeoEventGroupButtonClick);
             var location = NextButtonLocation();
             button.transform.localPosition = location;
             _buttons.Add(label, button);
@@ -154,7 +201,41 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             _buttons.Clear();
         }
 
-        private void HandleButtonClick(ToggleButtonEvent evt)
+        public void ClearTimeSeriesButtons(){
+            onDespawnAllItems.Invoke();
+            foreach (var button in _timeSeriesButtons.Values)
+            {
+                mapSwitchPanel._buttons.Remove(button.GetComponentInChildren<ButtonScript>());
+                Destroy(button);
+            }
+            _timeSeriesButtons.Clear();
+            ClearButtons();
+        }
+
+        private void HandleTimeSeriesButtonClick(ToggleButtonEvent evt)
+        {
+            if(MapToggle.Instance.IsSwitching) return;
+            Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected + " withMapIndex = " + evt.mapIndex + " withButtonIndex = " + evt.buttonIndex);
+            
+//----------------------------------------------------------------------------HARDCODED
+            if(evt.buttonIndex > _timeSeries.Count - 1){
+                MapToggle.Instance.DeactivateAdditionalButtons();
+                if(evt.mapIndex == 1){ //Stadtmauern
+                    wallButtonPrefab.SetActive(true);
+                }
+                else if (evt.mapIndex == 2) { //Dialekte
+                    dialectButtonPrefab.SetActive(true);
+                }
+                MapToggle.Instance.SetMap(evt.mapIndex, evt.buttonIndex, false);
+                return;
+            }
+//----------------------------------------------------------------------------HARDCODED
+
+            MapToggle.Instance.SetMap(evt.mapIndex, evt.buttonIndex);
+
+        }
+
+        private void HandleGeoEventGroupButtonClick(ToggleButtonEvent evt)
         {
             Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected);
             var geoEventGroup = _currentGeoEventGroup.FirstOrDefault(row => row.Label == evt.Name);

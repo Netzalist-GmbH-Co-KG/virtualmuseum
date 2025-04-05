@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/TimeGlideVR/MainScene/MainScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/TimeGlideVR/MainScene/TestingScene.unity
+    guid: 5eb20fcb28923c64cb35fa2c24ae1b96
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: a82b347e111b10d42a311fc6ca2512fc, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 3b83150de25285545bd616678e2784f5, type: 2}

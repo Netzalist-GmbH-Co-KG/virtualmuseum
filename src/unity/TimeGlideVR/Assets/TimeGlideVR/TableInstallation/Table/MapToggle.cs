@@ -4,92 +4,76 @@ using TimeGlideVR.TableInstallation.Table.Karten.Fortification;
 using TimeGlideVR.TableInstallation.Table.MapSwitch;
 using TimeGlideVR.TableInstallation.Table.Panel;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace TimeGlideVR.TableInstallation.Table
 {
     public class MapToggle : MonoBehaviour
     {
+        public static MapToggle Instance { get; private set; }
+        [SerializeField] private AudioSource mapSwitchAudio;
         [SerializeField] private GameObject[] maps;
         [SerializeField] private int currentMapIndex = 0;
+        [SerializeField] private MapSwitchScript mapSwitchScript;
         private ButtonPanelScript _buttonPanelScript;
+        public bool IsSwitching = false;
 
-        [SerializeField] private GameObject dialectsButtons;
-        [SerializeField] private GameObject fortificationsButtons;
+        [SerializeField] private List<GameObject> additionalButtons;
 
         private DialectMap _dialectMap;
         private FortificationMap _fortificationMap;
         
-        public void SetMap(int index){
-            if (index > 4) index = 3;
-            if(maps==null || index < 0 || index >= maps.Length) return;
-            currentMapIndex = index;
-            for(var i = 0; i < maps.Length; i++){
-                maps[i].SetActive(i == currentMapIndex);
+        //0 Karte Default
+        //1 Karte Stadtbefestigungen
+        //2 Karte Dialekte
+        //3 Karte Thüringen
+        public void SetMap(int index, int buttonIndex, bool withButtons = true)
+        {
+            if(index == currentMapIndex){
+                if(withButtons){
+                    AfterMapSwitchMethod(buttonIndex);
+                }
+                return;
             }
+            IsSwitching = mapSwitchScript._isSwitching;
+            if(mapSwitchScript == null) mapSwitchScript = GetComponent<MapSwitchScript>();
+            mapSwitchScript._isSwitching = true;
+            mapSwitchAudio.Play();
+            if(withButtons) {
+                mapSwitchScript.onSwitchComplete.AddListener((int i) => AfterMapSwitchMethod(buttonIndex));
+            }
+            //Debug.Log("Switching maps from " + currentMapIndex + " to " + index);
+            mapSwitchScript.SwitchBetweenObjectsLerpSize(maps[currentMapIndex], maps[index]);
+            currentMapIndex = index;
+        }
+        private void OnEnable()
+        {
+            Instance = this;
         }
 
         void Start()
         {
-            var mapSwitchPanel = GetComponentInChildren<MapSwitchPanel>(true);
+            /*
             _dialectMap = GetComponentInChildren<DialectMap>(true);
             _fortificationMap = GetComponentInChildren<FortificationMap>(true);
             _buttonPanelScript = GetComponentInChildren<ButtonPanelScript>(true);
             _buttonPanelScript.onDialectButtonClick.AddListener(_dialectMap.DisplayDialect);
             _buttonPanelScript.onWallButtonClick.AddListener(_fortificationMap.DisplayPhase);
-            
-            mapSwitchPanel.onMapSwitched.AddListener( HandleOnMapSwitch );
-                
-            SetMap(3);
+            */
         }
 
-        private void HandleOnMapSwitch(ToggleButtonEvent evt)
-        {
-            var map = evt.Name switch
-            {
-                "Stadtbefestigungen von Schmalkalden" => 1,
-                "Dialekte in Thüringen" => 2,
-                "Urkundliche Ersterwähnungen" => 3,
-                "Größte Städte um 1600" => 4,
-                "Informationen zu Schloss Wilhelmsburg" => 5,
-                _ => 0
-            };
-            SetMap(map);
+        private void AfterMapSwitchMethod(int buttonIndex){
+            _buttonPanelScript.DisplayGeoEventGroupButtonsById(buttonIndex);
+            DeactivateAdditionalButtons();
+            mapSwitchScript.onSwitchComplete.RemoveAllListeners();
+        }
 
-            switch (map)
+        public void DeactivateAdditionalButtons()
+        {
+            foreach (var button in additionalButtons)
             {
-                case 5:
-                    _buttonPanelScript.DisplayButtonsInformationen();
-                    fortificationsButtons.SetActive(false);
-                    dialectsButtons.SetActive(false);
-                    break;
-                    
-                case 4:
-                    _buttonPanelScript.DisplayButtonsGroessteStaedte();
-                    fortificationsButtons.SetActive(false);
-                    dialectsButtons.SetActive(false);
-                    break;
-                case 3:
-                    _buttonPanelScript.DisplayButtonsErstErwaehnung();
-                    fortificationsButtons.SetActive(false);
-                    dialectsButtons.SetActive(false);
-                    break;
-                case 1:
-                    _buttonPanelScript.ClearButtons();
-                    fortificationsButtons.SetActive(true);
-                    dialectsButtons.SetActive(false);
-                    break;
-                case 2:
-                    _buttonPanelScript.ClearButtons();
-                    fortificationsButtons.SetActive(false);
-                    dialectsButtons.SetActive(true);
-                    break;
-                default:
-                    _buttonPanelScript.ClearButtons();
-                    fortificationsButtons.SetActive(false);
-                    dialectsButtons.SetActive(false);
-                    break;
+                button.SetActive(false);
             }
         }
     }

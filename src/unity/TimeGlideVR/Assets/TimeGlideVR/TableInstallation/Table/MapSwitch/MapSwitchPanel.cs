@@ -12,7 +12,8 @@ namespace TimeGlideVR.TableInstallation.Table.MapSwitch
     public class MapSwitchPanel : MonoBehaviour
     {
         public UnityEvent<ToggleButtonEvent> onMapSwitched;
-        private List<ButtonScript> _buttons;
+        public List<Transform> buttonLocations;
+        public List<ButtonScript> _buttons;
         private InfoDisplay.InfoDisplay _infoDisplay;
 
         private const string DefaultTitle = "Willkommen bei TimeGlideVR";
@@ -20,9 +21,13 @@ namespace TimeGlideVR.TableInstallation.Table.MapSwitch
 
         void Start()
         {
+            SetUpButtons();
+        }
+
+        public void SetUpButtons(){
             _infoDisplay = FindObjectOfType<InfoDisplay.InfoDisplay>();
             _buttons = GetComponentsInChildren<ButtonScript>().ToList();
-            
+
             foreach (var button in _buttons)
             {
                 // Add a listener to the button's onClick event
@@ -30,11 +35,14 @@ namespace TimeGlideVR.TableInstallation.Table.MapSwitch
             }
         }
 
+        public Transform GetButtonLocation(int index){
+            return buttonLocations[index];
+        }
         private void HandleButtonClick(ToggleButtonEvent evt)
         {
             if (!evt.IsSelected)
             {
-                onMapSwitched?.Invoke(new ToggleButtonEvent("Default", true));
+                onMapSwitched?.Invoke(new ToggleButtonEvent("Default", true, 0, 0));
                 _infoDisplay.DisplayTitle(DefaultTitle);
                 _infoDisplay.DisplayDescription(DefaultDescription);
                 return;

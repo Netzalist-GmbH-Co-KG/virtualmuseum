@@ -8,6 +8,8 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
 {
     public class ButtonScript : MonoBehaviour
     {
+        private int buttonIndex;
+        private int mapIndex;
         private bool _selected;
         [FormerlySerializedAs("light")] [FormerlySerializedAs("_light")] [SerializeField]
         private Light lightComponent;
@@ -28,9 +30,11 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
                 LabelText = _label?.text;
         }
 
-        public void Init(string label)
+        public void Init(string label, int buttonIndex, int mapIndex)
         {
             LabelText = label;
+            this.buttonIndex = buttonIndex;
+            this.mapIndex = mapIndex;
             if(_label != null)
                 _label.text = LabelText;
         }
@@ -49,7 +53,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
             if(!_clickSound.isPlaying)
                 _clickSound.Play();
 
-            onClick.Invoke(new ToggleButtonEvent(LabelText, _selected));
+            onClick.Invoke(new ToggleButtonEvent(LabelText, _selected, mapIndex, buttonIndex));
         }
     }
 }

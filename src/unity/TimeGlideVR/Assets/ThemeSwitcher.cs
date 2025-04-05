@@ -29,7 +29,7 @@ public class ThemeSwitcher : MonoBehaviour
         var button = Instantiate(buttonPrefab, transform);
         button.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * 2, transform.localScale.z);
         var buttonScript = button.GetComponentInChildren<ButtonScript>();
-        buttonScript.Init(label);
+        buttonScript.Init(label, _buttons.Count, 0);
         buttonScript.onClick.AddListener(HandleButtonClick);
         buttonScript.SetSelected(label == "Default");
         var location = NextButtonLocation();
