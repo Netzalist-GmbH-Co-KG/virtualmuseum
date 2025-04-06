@@ -47,6 +47,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
 
         public void HandleSelect()
         {
+            if(MapToggle.Instance.IsSwitching) return;
             _selected = !_selected;
             lightComponent.gameObject.SetActive(_selected);
 

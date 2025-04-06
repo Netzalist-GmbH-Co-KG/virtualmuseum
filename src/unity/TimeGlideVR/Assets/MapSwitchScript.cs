@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TimeGlideVR.TableInstallation.Table.Panel;
 using TimeGlideVR.TableInstallation.Table.Panel.Button;
+using TimeGlideVR.TableInstallation.Table;
 
 public class MapSwitchScript : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class MapSwitchScript : MonoBehaviour
             _toActivate.transform.localScale = Vector3.Lerp(Vector3.zero, startScaleActivate, _sizeCurve.Evaluate(time));
             yield return null;
         }
+        MapToggle.Instance.IsSwitching = false;
         _isSwitching = false;
         _switchCoroutine = null;
         onSwitchComplete?.Invoke(buttonIndex);

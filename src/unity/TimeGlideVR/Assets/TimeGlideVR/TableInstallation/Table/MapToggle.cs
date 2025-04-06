@@ -36,9 +36,9 @@ namespace TimeGlideVR.TableInstallation.Table
                 }
                 return;
             }
-            IsSwitching = mapSwitchScript._isSwitching;
-            if(mapSwitchScript == null) mapSwitchScript = GetComponent<MapSwitchScript>();
             mapSwitchScript._isSwitching = true;
+            IsSwitching = true;
+            if(mapSwitchScript == null) mapSwitchScript = GetComponent<MapSwitchScript>();
             mapSwitchAudio.Play();
             if(withButtons) {
                 mapSwitchScript.onSwitchComplete.AddListener((int i) => AfterMapSwitchMethod(buttonIndex));
@@ -54,18 +54,15 @@ namespace TimeGlideVR.TableInstallation.Table
 
         void Start()
         {
-            /*
             _dialectMap = GetComponentInChildren<DialectMap>(true);
             _fortificationMap = GetComponentInChildren<FortificationMap>(true);
             _buttonPanelScript = GetComponentInChildren<ButtonPanelScript>(true);
             _buttonPanelScript.onDialectButtonClick.AddListener(_dialectMap.DisplayDialect);
             _buttonPanelScript.onWallButtonClick.AddListener(_fortificationMap.DisplayPhase);
-            */
         }
 
         private void AfterMapSwitchMethod(int buttonIndex){
             _buttonPanelScript.DisplayGeoEventGroupButtonsById(buttonIndex);
-            DeactivateAdditionalButtons();
             mapSwitchScript.onSwitchComplete.RemoveAllListeners();
         }
 

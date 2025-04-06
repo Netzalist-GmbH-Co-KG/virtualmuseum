@@ -8,6 +8,7 @@ using TimeGlideVR.TableInstallation.Table.Panel.Button;
 using UnityEngine;
 using UnityEngine.Events;
 using TimeGlideVR.TableInstallation.Table.MapSwitch;
+using System.IO;
 
 namespace TimeGlideVR.TableInstallation.Table.Panel
 {
@@ -158,7 +159,8 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
                 "Dialekte in Thüringen" => 2,
                 "Urkundliche Ersterwähnungen" => 3,
                 "Größte Städte Thüringens um 1600" => 3,
-                "Informationen zu Schloss Wilhelmsburg" => 3
+                "Informationen zu Schloss Wilhelmsburg" => 3,
+                _ => 3
             };
             var button = Instantiate(buttonPrefab, mapSwitchPanel.transform);
             button.GetComponentInChildren<ButtonScript>().Init(label, _timeSeriesButtons.Count, map);
@@ -194,6 +196,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
 
         public void ClearButtons(){
             onDespawnAllItems.Invoke();
+            MapToggle.Instance.DeactivateAdditionalButtons();
             foreach (var button in _buttons.Values)
             {
                 Destroy(button);
@@ -216,23 +219,24 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
         {
             if(MapToggle.Instance.IsSwitching) return;
             Debug.Log("Panel Button Click on: " + evt.Name + " with selected = " + evt.IsSelected + " withMapIndex = " + evt.mapIndex + " withButtonIndex = " + evt.buttonIndex);
-            
+            ClearButtons();
 //----------------------------------------------------------------------------HARDCODED
             if(evt.buttonIndex > _timeSeries.Count - 1){
-                MapToggle.Instance.DeactivateAdditionalButtons();
                 if(evt.mapIndex == 1){ //Stadtmauern
+                    Debug.Log("Switching to wall map");
                     wallButtonPrefab.SetActive(true);
+                    MapToggle.Instance.SetMap(evt.mapIndex, evt.buttonIndex, false);
                 }
                 else if (evt.mapIndex == 2) { //Dialekte
+                    Debug.Log("Switching to dialect map");
                     dialectButtonPrefab.SetActive(true);
+                    MapToggle.Instance.SetMap(evt.mapIndex, evt.buttonIndex, false);
                 }
-                MapToggle.Instance.SetMap(evt.mapIndex, evt.buttonIndex, false);
                 return;
             }
 //----------------------------------------------------------------------------HARDCODED
-
+            Debug.Log("Switching to new map: " + evt.Name);
             MapToggle.Instance.SetMap(evt.mapIndex, evt.buttonIndex);
-
         }
 
         private void HandleGeoEventGroupButtonClick(ToggleButtonEvent evt)
