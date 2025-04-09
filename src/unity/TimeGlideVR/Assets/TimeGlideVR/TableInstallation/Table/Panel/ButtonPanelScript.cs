@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TimeGlideVR.TableInstallation.Table.MapSwitch;
 using System.IO;
+using System.Collections;
 
 namespace TimeGlideVR.TableInstallation.Table.Panel
 {
@@ -113,17 +114,23 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             _timeSeries = topic.TimeSeries;
             _currentGeoEventGroup = null;
             ClearTimeSeriesButtons();
+            StartCoroutine(DisplayTimeSeriesButtonsCoroutine(_timeSeries, topic.Topic));
+        }
+        
+        private IEnumerator DisplayTimeSeriesButtonsCoroutine(List<TimeSeries> _timeSeries, string topic){
+            //loop through _timeSeries and add buttons for each time series
             foreach (var timeSeries in _timeSeries)
             {
                 AddTimeSeriesButton(timeSeries.Name, timeSeries.Name, timeSeries.Description);
+                yield return new WaitForSeconds(0.2f);
             }
-            if(topic.Topic == "Thüringen"){
+            if(topic == "Thüringen"){
                 AddTimeSeriesButton("Dialekte in Thüringen", "Dialekte in Thüringen", "Hier können sie sich verschiedenste Dialekte anhören!");
                 AddTimeSeriesButton("Stadtbefestigungen von Schmalkalden", "Stadtbefestigungen von Schmalkalden", "Hier erleben sie die Entwicklung der Stadtbefestigungen von Schmalkalden!");
             }
             mapSwitchPanel.SetUpButtons();
         }
-
+        
         public void DisplayTimeSeriesButtons(ToggleButtonEvent evt)
         {
             _currentGeoEventGroup = null;
@@ -135,22 +142,27 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             mapSwitchPanel.SetUpButtons();
         }
 
-        public void DisplayGeoEventGroupButtonsById(int timeSeriesId)
+        public void DisplayGeoEventGroupButtonsById(int _timeSeriesId)
         {
             ClearButtons();
-            if (_timeSeries == null || _timeSeries.Count <= timeSeriesId)
+            if (_timeSeries == null || _timeSeries.Count <= _timeSeriesId)
             {
-                Debug.LogError($"Invalid time series index: {timeSeriesId}");
+                Debug.LogError($"Invalid time series index: {_timeSeriesId}");
                 return;
             }
-            _currentGeoEventGroup = _timeSeries[timeSeriesId].GeoEventGroups;
-
+            _currentGeoEventGroup = _timeSeries[_timeSeriesId].GeoEventGroups;
+            StartCoroutine(DisplayGeoEventGroupButtonsCoroutine(_timeSeriesId));
+        }
+        
+        private IEnumerator DisplayGeoEventGroupButtonsCoroutine(int _timeSeriesId){
+            //loop through _currentGeoEventGroup and add buttons for each geo event group
             foreach (var geoEventGroup in _currentGeoEventGroup)
             {
-                AddGeoEventGroupButton(geoEventGroup.Label, _timeSeries[timeSeriesId].Name);
+                AddGeoEventGroupButton(geoEventGroup.Label, _timeSeries[_timeSeriesId].Name);
+                yield return new WaitForSeconds(0.3f);
             }
         }
-
+        
         private void AddTimeSeriesButton(string label, string title = "", string description = ""){
             Debug.Log($"Adding button: {label}");
             int map = label switch
