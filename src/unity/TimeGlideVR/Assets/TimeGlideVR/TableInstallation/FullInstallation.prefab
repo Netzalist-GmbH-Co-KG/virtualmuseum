@@ -434,6 +434,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1016358974255898103}
     m_Modifications:
+    - target: {fileID: 746901335623642490, guid: b3d389bf7e9adef40be276e915e9aa8a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 752208012440245881, guid: b3d389bf7e9adef40be276e915e9aa8a, type: 3}
       propertyPath: m_Name
       value: Table
@@ -441,6 +445,10 @@ PrefabInstance:
     - target: {fileID: 1564654570795782779, guid: b3d389bf7e9adef40be276e915e9aa8a, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1703290915158828227, guid: b3d389bf7e9adef40be276e915e9aa8a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2216874183660746273, guid: b3d389bf7e9adef40be276e915e9aa8a, type: 3}
       propertyPath: m_text

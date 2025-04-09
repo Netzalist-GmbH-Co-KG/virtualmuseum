@@ -115,11 +115,11 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             ClearTimeSeriesButtons();
             foreach (var timeSeries in _timeSeries)
             {
-                AddTimeSeriesButton(timeSeries.Name);
+                AddTimeSeriesButton(timeSeries.Name, timeSeries.Name, timeSeries.Description);
             }
             if(topic.Topic == "Thüringen"){
-                AddTimeSeriesButton("Dialekte in Thüringen");
-                AddTimeSeriesButton("Stadtbefestigungen von Schmalkalden");
+                AddTimeSeriesButton("Dialekte in Thüringen", "Dialekte in Thüringen", "Hier können sie sich verschiedenste Dialekte anhören!");
+                AddTimeSeriesButton("Stadtbefestigungen von Schmalkalden", "Stadtbefestigungen von Schmalkalden", "Hier erleben sie die Entwicklung der Stadtbefestigungen von Schmalkalden!");
             }
             mapSwitchPanel.SetUpButtons();
         }
@@ -151,7 +151,7 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
             }
         }
 
-        private void AddTimeSeriesButton(string label){
+        private void AddTimeSeriesButton(string label, string title = "", string description = ""){
             Debug.Log($"Adding button: {label}");
             int map = label switch
             {
@@ -163,8 +163,17 @@ namespace TimeGlideVR.TableInstallation.Table.Panel
                 _ => 3
             };
             var button = Instantiate(buttonPrefab, mapSwitchPanel.transform);
-            button.GetComponentInChildren<ButtonScript>().Init(label, _timeSeriesButtons.Count, map);
-            button.GetComponentInChildren<ButtonScript>().onClick.AddListener(HandleTimeSeriesButtonClick);
+            var buttonScript = button.GetComponentInChildren<ButtonScript>(); 
+            buttonScript.Init(label, _timeSeriesButtons.Count, map);
+            buttonScript.onClick.AddListener(HandleTimeSeriesButtonClick);
+            if(title != "")
+            {
+                buttonScript.InfoTitle = title;
+            }
+            if(description != "")
+            {
+                buttonScript.InfoDescription = description;
+            }
             var _buttonTransform = mapSwitchPanel.GetButtonLocation(_timeSeriesButtons.Count);
             
             mapSwitchPanel._buttons.Add(button.GetComponentInChildren<ButtonScript>());

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace TimeGlideVR.TableInstallation.Table.Panel.Button
 {
+    using TimeGlideVR.TableInstallation.Table.InfoDisplay;
     public class ButtonScript : MonoBehaviour
     {
         private int buttonIndex;
@@ -16,10 +17,11 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
         private AudioSource _clickSound;
         private TextMeshPro _label;
         public string LabelText { get; set; } = null;
+        public string InfoTitle { get; set; } = null;
+        public string InfoDescription { get; set; } = null;
         
         [SerializeField]
         public UnityEvent<ToggleButtonEvent> onClick;
-
         private void Awake()
         {
             _label = GetComponentInChildren<TextMeshPro>();
@@ -54,6 +56,16 @@ namespace TimeGlideVR.TableInstallation.Table.Panel.Button
             if(!_clickSound.isPlaying)
                 _clickSound.Play();
 
+            if(InfoTitle != null && InfoTitle != "")
+            {
+                InfoDisplay.Instance.DisplayTitle(InfoTitle);
+            }
+            
+            if(InfoDescription != null && InfoDescription != "")
+            {
+                InfoDisplay.Instance.DisplayDescription(InfoDescription);
+            }
+            
             onClick.Invoke(new ToggleButtonEvent(LabelText, _selected, mapIndex, buttonIndex));
         }
     }
