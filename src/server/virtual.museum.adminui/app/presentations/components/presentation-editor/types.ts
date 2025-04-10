@@ -59,20 +59,18 @@ export type Presentation = {
 
 // Helper functions to convert between the two presentation formats
 // We need to store the highest track number to preserve empty tracks
-let highestTrackSlotNumber = 3; // Start with the default 4 tracks (0-3)
+let highestTrackSlotNumber = 2; // Start with the default 3 tracks (0-2)
 
 export function convertAppPresentationToEditorPresentation(appPresentation: AppPresentation): Presentation {
-  console.log('Converting app presentation to editor presentation:', appPresentation);
   
   // Group presentation items by slot number
   const trackMap = new Map<number, Track>();
   
-  // Create default tracks for slots 0-3
+  // Create default tracks for slots 0-2
   const defaultTracks: Track[] = [
     { id: "track-0", name: "Audio Track", slotNumber: 0, clips: [] },
     { id: "track-1", name: "360° Dome", slotNumber: 1, clips: [] },
-    { id: "track-2", name: "Display 2", slotNumber: 2, clips: [] },
-    { id: "track-3", name: "Display 3", slotNumber: 3, clips: [] }
+    { id: "track-2", name: "Display 2", slotNumber: 2, clips: [] }
   ];
   
   // Initialize the track map with default tracks
@@ -103,7 +101,6 @@ export function convertAppPresentationToEditorPresentation(appPresentation: AppP
         slotNumber,
         clips: []
       };
-      console.log(`Creating new track for slot ${slotNumber}:`, newTrack);
       trackMap.set(slotNumber, newTrack);
       
       // Update the highest slot number if needed
@@ -139,34 +136,31 @@ export function convertAppPresentationToEditorPresentation(appPresentation: AppP
   const tracks = Array.from(trackMap.values())
     .sort((a, b) => a.slotNumber - b.slotNumber);
   
-  const result = {
+  return {
     id: appPresentation.id,
     name: appPresentation.name,
     description: appPresentation.description,
     tracks
   };
-  
-  console.log('Converted to editor presentation with tracks:', tracks.length);
-  return result;
 }
 
 export function convertEditorPresentationToAppPresentation(editorPresentation: Presentation): AppPresentation {
-  console.log('Converting editor presentation to app presentation. Tracks:', editorPresentation.tracks.length);
   
-  // Update the highest track slot number to preserve empty tracks
+  // Update the highest track slot number based on the current tracks
   if (editorPresentation.tracks.length > 0) {
     const maxSlot = Math.max(...editorPresentation.tracks.map(t => t.slotNumber));
-    if (maxSlot > highestTrackSlotNumber) {
-      console.log(`Updating highest track slot number from ${highestTrackSlotNumber} to ${maxSlot}`);
-      highestTrackSlotNumber = maxSlot;
-    }
+    // Always update the highest track number to match what's in the editor
+    // This ensures removed tracks stay removed
+    highestTrackSlotNumber = maxSlot;
+  } else {
+    // If there are no tracks, reset to the default
+    highestTrackSlotNumber = 2;
   }
   
   // Flatten all clips from all tracks into a single array of presentation items
   const presentationItems: PresentationItem[] = [];
   
   editorPresentation.tracks.forEach(track => {
-    console.log(`Processing track ${track.id}, slot ${track.slotNumber}, clips: ${track.clips.length}`);
     
     track.clips.forEach(clip => {
       presentationItems.push({
@@ -176,13 +170,10 @@ export function convertEditorPresentationToAppPresentation(editorPresentation: P
     });
   });
   
-  const result = {
+  return {
     id: editorPresentation.id,
     name: editorPresentation.name,
     description: editorPresentation.description,
     presentationItems
   };
-  
-  console.log('Converted to app presentation with items:', presentationItems.length);
-  return result;
 }

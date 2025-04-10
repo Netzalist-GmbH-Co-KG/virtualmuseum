@@ -206,7 +206,6 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
             onPresentationChange={(updatedPresentation) => {
               // Convert the editor presentation back to app presentation format
               const updatedAppPresentation = convertEditorPresentationToAppPresentation(updatedPresentation);
-              console.log('Presentation updated:', updatedAppPresentation);
               
               // Update the state with the converted presentation
               setPresentation(updatedAppPresentation);
