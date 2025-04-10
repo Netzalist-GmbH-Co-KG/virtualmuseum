@@ -2,6 +2,31 @@ import { withDb } from './db';
 import { v4 as uuidv4 } from 'uuid';
 import { TimeSeries, TimeSeriesWithRelations, TopicTimeSeries } from './types';
 
+// Define interfaces for database entities not in types.ts
+interface GeoEventGroup {
+  Id: string;
+  TimeSeriesId: string;
+  Label: string;
+  Description: string | null;
+}
+
+interface GeoEvent {
+  Id: string;
+  GeoEventGroupId: string;
+  Name: string;
+  Description: string | null;
+  DateTime: string;
+  Latitude: number;
+  Longitude: number;
+  MultimediaPresentationId: string | null;
+}
+
+interface Presentation {
+  Id: string;
+  Name: string;
+  Description: string | null;
+}
+
 /**
  * Repository for time series related database operations
  */
@@ -92,6 +117,66 @@ export const timeSeriesRepository = {
       }
       
       return timeSeriesWithRelations;
+    });
+  },
+
+  /**
+   * Get geo event groups for a time series
+   * @param timeSeriesId Time series ID
+   * @returns Array of geo event groups
+   */
+  getGeoEventGroupsByTimeSeriesId(timeSeriesId: string): GeoEventGroup[] {
+    return withDb(db => {
+      return db.prepare(`
+        SELECT * FROM GeoEventGroups WHERE TimeSeriesId = ?
+      `).all(timeSeriesId) as GeoEventGroup[];
+    });
+  },
+
+  /**
+   * Get geo events for a geo event group
+   * @param groupId Geo event group ID
+   * @returns Array of geo events
+   */
+  getGeoEventsByGroupId(groupId: string): GeoEvent[] {
+    return withDb(db => {
+      return db.prepare(`
+        SELECT * FROM GeoEvents WHERE GeoEventGroupId = ?
+      `).all(groupId) as GeoEvent[];
+    });
+  },
+
+  /**
+   * Get available presentations for dropdown
+   * @returns Array of presentations
+   */
+  getAvailablePresentations(): Presentation[] {
+    return withDb(db => {
+      return db.prepare(`
+        SELECT * FROM MultimediaPresentations
+      `).all() as Presentation[];
+    });
+  },
+
+  /**
+   * Update a time series
+   * @param id Time series ID
+   * @param data Updated time series data
+   * @returns Updated time series
+   */
+  updateTimeSeries(id: string, data: { Name: string; Description: string | null }): TimeSeries {
+    return withDb(db => {
+      // Update the time series
+      const stmt = db.prepare(`
+        UPDATE TimeSeries
+        SET Name = ?, Description = ?
+        WHERE Id = ?
+      `);
+      
+      stmt.run(data.Name, data.Description, id);
+      
+      // Return the updated time series
+      return this.getTimeSeriesById(id) as TimeSeries;
     });
   },
 
