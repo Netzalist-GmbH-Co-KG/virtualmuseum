@@ -80,7 +80,7 @@ export function convertAppPresentationToEditorPresentation(appPresentation: AppP
   
   // Add tracks for all slots up to the highest known slot number
   // This ensures we preserve empty tracks that were added previously
-  for (let i = 4; i <= highestTrackSlotNumber; i++) {
+  for (let i = 3; i <= highestTrackSlotNumber; i++) {
     trackMap.set(i, {
       id: `track-${i}`,
       name: getTrackName(i),
