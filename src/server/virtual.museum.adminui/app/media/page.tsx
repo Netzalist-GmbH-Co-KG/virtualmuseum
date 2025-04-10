@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { FileAudio, FileImage, FileVideo, Filter, LayoutGrid, LayoutList, Plus, Search } from "lucide-react"
+import { FileAudio, FileImage, FileVideo, Filter, LayoutGrid, LayoutList, Plus, Search, Globe, HardDrive } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
@@ -62,6 +62,30 @@ const getMediaTypeLabel = (type: string) => {
       return "360° Image"
     default:
       return type
+  }
+}
+
+// Helper function to determine if a media file is stored locally or on the web
+const isLocalFile = (url: string) => {
+  return !url.startsWith('http');
+}
+
+// Helper function to get storage location icon
+const getStorageLocationIcon = (url: string) => {
+  if (isLocalFile(url)) {
+    return (
+      <div className="flex items-center gap-1">
+        <HardDrive className="h-4 w-4 text-green-500" />
+        <span className="text-xs text-green-500">Local</span>
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex items-center gap-1">
+        <Globe className="h-4 w-4 text-blue-500" />
+        <span className="text-xs text-blue-500">Web</span>
+      </div>
+    );
   }
 }
 
@@ -214,11 +238,12 @@ export default function MediaPage() {
           <Table className="text-sm">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="w-[40px] h-8 py-1">Type</TableHead>
-                <TableHead className="h-8 py-1">Name</TableHead>
-                <TableHead className="h-8 py-1">Description</TableHead>
-                <TableHead className="w-[80px] h-8 py-1">Duration</TableHead>
-                <TableHead className="w-[100px] h-8 py-1">Media Type</TableHead>
+                <TableHead className="w-[100px]">Type</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead className="hidden md:table-cell">Description</TableHead>
+                <TableHead className="hidden md:table-cell">Duration</TableHead>
+                <TableHead className="w-[80px]">Media Type</TableHead>
+                <TableHead className="w-[80px]">Storage</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -234,8 +259,8 @@ export default function MediaPage() {
                       {file.name}
                     </Link>
                   </TableCell>
-                  <TableCell className="max-w-[300px] truncate py-1">{file.description}</TableCell>
-                  <TableCell className="py-1">
+                  <TableCell className="hidden md:table-cell py-1">{file.description}</TableCell>
+                  <TableCell className="hidden md:table-cell py-1">
                     {file.durationInSeconds > 0 ? (
                       `${Math.floor(file.durationInSeconds / 60)}:${(file.durationInSeconds % 60).toString().padStart(2, "0")}`
                     ) : (
@@ -244,6 +269,11 @@ export default function MediaPage() {
                   </TableCell>
                   <TableCell className="py-1">
                     <Badge variant="outline" className="text-xs">{getMediaTypeLabel(file.type)}</Badge>
+                  </TableCell>
+                  <TableCell className="py-1">
+                    <div className="flex justify-center">
+                      {getStorageLocationIcon(file.url)}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
