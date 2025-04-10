@@ -261,7 +261,13 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
               mediaFileImage2DUrl: topic.MediaFileImage2DId ? 
                 `/api/media/${topic.MediaFileImage2DId}` : 
                 "/placeholder.svg?height=100&width=100",
-              timeSeries: [] // Will be populated in a separate fetch if needed
+              timeSeries: topic.TimeSeries ? topic.TimeSeries.map(series => ({
+                id: series.Id,
+                name: series.Name,
+                description: series.Description || "",
+                geoEventGroupsCount: series.GeoEventGroupsCount,
+                geoEventsCount: series.GeoEventsCount
+              })) : []
             })) : [],
           } : {
             id: "",

@@ -76,6 +76,13 @@ export const TopographicalTableTopicSchema = z.object({
 export type TopographicalTableTopic = z.infer<typeof TopographicalTableTopicSchema>;
 
 /**
+ * Topographical table topic with related data
+ */
+export interface TopographicalTableTopicWithRelations extends TopographicalTableTopic {
+  TimeSeries?: TimeSeriesWithRelations[];
+}
+
+/**
  * Tenant entity schema
  */
 export const TenantSchema = z.object({
@@ -103,6 +110,42 @@ export interface InventoryItemWithRelations extends InventoryItem {
   Room?: Room;
   TopographicalTable?: TopographicalTableWithRelations;
 }
+
+/**
+ * Time series entity schema
+ */
+export const TimeSeriesSchema = z.object({
+  Id: z.string().uuid(),
+  Name: z.string(),
+  Description: z.string().nullable(),
+});
+
+/**
+ * Time series type with strong typing
+ */
+export type TimeSeries = z.infer<typeof TimeSeriesSchema>;
+
+/**
+ * Time series with additional data
+ */
+export interface TimeSeriesWithRelations extends TimeSeries {
+  GeoEventGroupsCount: number;
+  GeoEventsCount: number;
+}
+
+/**
+ * Topic-TimeSeries relation schema
+ */
+export const TopicTimeSeriesSchema = z.object({
+  Id: z.string().uuid(),
+  TimeSeriesId: z.string().uuid(),
+  TopographicalTableTopicId: z.string().uuid(),
+});
+
+/**
+ * Topic-TimeSeries relation type
+ */
+export type TopicTimeSeries = z.infer<typeof TopicTimeSeriesSchema>;
 
 /**
  * Topographical table with related data

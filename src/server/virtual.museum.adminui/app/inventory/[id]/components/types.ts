@@ -77,12 +77,21 @@ export interface ApiTopographicalTable {
   Id: string
 }
 
+export interface ApiTimeSeries {
+  Id: string
+  Name: string
+  Description: string | null
+  GeoEventGroupsCount: number
+  GeoEventsCount: number
+}
+
 export interface ApiTopic {
   Id: string
   TopographicalTableId: string
   Topic: string
   Description: string
   MediaFileImage2DId: string | null
+  TimeSeries?: ApiTimeSeries[]
 }
 
 export interface ApiInventoryResponse {

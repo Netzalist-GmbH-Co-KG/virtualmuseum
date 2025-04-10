@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { roomsRepository } from '@/lib/roomsRepository';
-import { ErrorResponse } from '@/lib/types';
+import { timeSeriesRepository } from '@/lib/timeSeriesRepository';
+import { ErrorResponse, TopographicalTableTopicWithRelations } from '@/lib/types';
 import { z } from 'zod';
 
 // Validation schema for inventory item updates
@@ -55,13 +56,24 @@ export async function GET(
     
     // Get topographical table if this is a topographical table
     let topographicalTable = null;
-    let topics: any[] = [];
+    let topics: TopographicalTableTopicWithRelations[] = [];
     
     if (inventoryItem.InventoryType === 0) { // Topographical Table
       topographicalTable = roomsRepository.getTopographicalTableByInventoryItemId(id);
       
       if (topographicalTable) {
         topics = roomsRepository.getTopicsByTopographicalTableId(topographicalTable.Id);
+        
+        // Fetch time series for each topic
+        for (const topic of topics) {
+          try {
+            const timeSeries = timeSeriesRepository.getTimeSeriesByTopicId(topic.Id);
+            topic.TimeSeries = timeSeries;
+          } catch (error) {
+            console.warn(`Error fetching time series for topic ${topic.Id}:`, error);
+            topic.TimeSeries = []; // Set empty array if there's an error
+          }
+        }
       }
     }
     
