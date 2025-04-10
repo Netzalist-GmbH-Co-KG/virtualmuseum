@@ -142,9 +142,32 @@ export interface InventoryItemResponse {
 }
 
 /**
+ * Schema for updating an inventory item
+ */
+export const InventoryItemUpdateSchema = z.object({
+  Name: z.string().nullable(),
+  Description: z.string().nullable(),
+  PositionX: z.number(),
+  PositionY: z.number(),
+  PositionZ: z.number(),
+  RotationX: z.number(),
+  RotationY: z.number(),
+  RotationZ: z.number(),
+  ScaleX: z.number(),
+  ScaleY: z.number(),
+  ScaleZ: z.number(),
+});
+
+/**
+ * Type for inventory item update data
+ */
+export type InventoryItemUpdate = z.infer<typeof InventoryItemUpdateSchema>;
+
+/**
  * API error response
  */
 export interface ErrorResponse {
   error: string;
   status: number;
+  validationErrors?: z.ZodIssue[];
 }

@@ -17,7 +17,8 @@ export async function GET(
     const includeTenant = url.searchParams.get('includeTenant') === 'true';
     
     // Get room from repository
-    const room = roomsRepository.getRoomById(params.id, includeInventoryItems, includeTenant);
+    const { id } = await params;
+    const room = roomsRepository.getRoomById(id, includeInventoryItems, includeTenant);
     
     // Return 404 if room not found
     if (!room) {

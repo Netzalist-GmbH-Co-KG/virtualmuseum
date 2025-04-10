@@ -20,13 +20,20 @@ export const roomsRepository = {
       if (!rooms.length) return [];
       
       const roomsWithRelations: RoomWithRelations[] = rooms.map(room => {
-        const result: RoomWithRelations = { ...room };
+        // Create a properly typed RoomWithRelations object
+        const result: RoomWithRelations = { 
+          ...room
+        };
         
         // Include tenant information if requested
         if (includeTenant) {
-          const tenant = db.prepare('SELECT * FROM Tenants WHERE Id = ?').get(room.TenantId);
+          const tenant = db.prepare('SELECT * FROM Tenants WHERE Id = ?').get(room.TenantId) as { Id: string, Name: string };
           if (tenant) {
-            result.Tenant = tenant;
+            // Ensure tenant has the required properties
+            result.Tenant = {
+              Id: tenant.Id,
+              Name: tenant.Name
+            };
           }
         }
         
@@ -61,9 +68,13 @@ export const roomsRepository = {
       
       // Include tenant information if requested
       if (includeTenant) {
-        const tenant = db.prepare('SELECT * FROM Tenants WHERE Id = ?').get(room.TenantId);
+        const tenant = db.prepare('SELECT * FROM Tenants WHERE Id = ?').get(room.TenantId) as { Id: string, Name: string };
         if (tenant) {
-          result.Tenant = tenant;
+          // Ensure tenant has the required properties
+          result.Tenant = {
+            Id: tenant.Id,
+            Name: tenant.Name
+          };
         }
       }
       
@@ -85,6 +96,17 @@ export const roomsRepository = {
   getInventoryItemsByRoomId(roomId: string): InventoryItem[] {
     return withDb(db => {
       return db.prepare('SELECT * FROM InventoryItems WHERE RoomId = ?').all(roomId) as InventoryItem[];
+    });
+  },
+  
+  /**
+   * Get a single inventory item by ID
+   * @param id Inventory item ID
+   * @returns Inventory item or null if not found
+   */
+  getInventoryItemById(id: string): InventoryItem | null {
+    return withDb(db => {
+      return db.prepare('SELECT * FROM InventoryItems WHERE Id = ?').get(id) as InventoryItem | null;
     });
   },
   
@@ -186,6 +208,83 @@ export const roomsRepository = {
    * @param data Item data
    * @returns The created inventory item and topographical table
    */
+  /**
+   * Update an existing inventory item
+   * @param id Inventory item ID
+   * @param data Updated inventory item data
+   * @returns The updated inventory item or null if not found
+   */
+  updateInventoryItem(id: string, data: {
+    Name: string | null;
+    Description: string | null;
+    PositionX: number;
+    PositionY: number;
+    PositionZ: number;
+    RotationX: number;
+    RotationY: number;
+    RotationZ: number;
+    ScaleX: number;
+    ScaleY: number;
+    ScaleZ: number;
+  }): InventoryItem | null {
+    return withDb(db => {
+      // Check if the inventory item exists
+      const existingItem = db.prepare('SELECT * FROM InventoryItems WHERE Id = ?').get(id) as InventoryItem | null;
+      
+      if (!existingItem) {
+        return null;
+      }
+      
+      // Update the inventory item
+      const stmt = db.prepare(`
+        UPDATE InventoryItems SET
+          Name = ?,
+          Description = ?,
+          PositionX = ?,
+          PositionY = ?,
+          PositionZ = ?,
+          RotationX = ?,
+          RotationY = ?,
+          RotationZ = ?,
+          ScaleX = ?,
+          ScaleY = ?,
+          ScaleZ = ?
+        WHERE Id = ?
+      `);
+      
+      stmt.run(
+        data.Name,
+        data.Description,
+        data.PositionX,
+        data.PositionY,
+        data.PositionZ,
+        data.RotationX,
+        data.RotationY,
+        data.RotationZ,
+        data.ScaleX,
+        data.ScaleY,
+        data.ScaleZ,
+        id
+      );
+      
+      // Return the updated item
+      return {
+        ...existingItem,
+        Name: data.Name,
+        Description: data.Description,
+        PositionX: data.PositionX,
+        PositionY: data.PositionY,
+        PositionZ: data.PositionZ,
+        RotationX: data.RotationX,
+        RotationY: data.RotationY,
+        RotationZ: data.RotationZ,
+        ScaleX: data.ScaleX,
+        ScaleY: data.ScaleY,
+        ScaleZ: data.ScaleZ
+      };
+    });
+  },
+
   createInventoryItemWithTopographicalTable(roomId: string, data: {
     name: string;
     description: string;
