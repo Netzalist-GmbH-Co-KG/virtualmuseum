@@ -1,6 +1,39 @@
 // Import the main types from the parent directory
 import { MediaFile as AppMediaFile, PresentationItem, Presentation as AppPresentation } from "../../types"
 
+// Enum for media file types that matches the database integer values
+export enum MediaFileType {
+  Audio = 0,
+  Video2D = 1,
+  Video3D = 2,
+  Video360 = 3,
+  Image2D = 4,
+  Image3D = 5,
+  Image360 = 6
+}
+
+// Helper function to convert numeric media type to string representation
+export const getMediaTypeString = (typeValue: number): string => {
+  switch (typeValue) {
+    case MediaFileType.Audio:
+      return "Audio"
+    case MediaFileType.Video2D:
+      return "Video2D"
+    case MediaFileType.Video3D:
+      return "Video3D"
+    case MediaFileType.Video360:
+      return "Video360"
+    case MediaFileType.Image2D:
+      return "Image2D"
+    case MediaFileType.Image3D:
+      return "Image3D"
+    case MediaFileType.Image360:
+      return "Image360"
+    default:
+      return "Unknown"
+  }
+}
+
 // Re-export the MediaFile type from the main types
 export type MediaFile = AppMediaFile;
 
@@ -57,7 +90,20 @@ export function convertAppPresentationToEditorPresentation(appPresentation: AppP
     
     // Add the item to the appropriate track
     const track = trackMap.get(slotNumber)!;
-    track.clips.push(item);
+    
+    // Create a copy of the item with properly converted media file type
+    const itemWithProperType = {
+      ...item,
+      mediaFile: {
+        ...item.mediaFile,
+        // Ensure the type is a string for UI rendering
+        type: typeof item.mediaFile.type === 'number' 
+          ? getMediaTypeString(item.mediaFile.type as number)
+          : item.mediaFile.type
+      }
+    };
+    
+    track.clips.push(itemWithProperType);
   });
   
   // Sort clips within each track by sequence number

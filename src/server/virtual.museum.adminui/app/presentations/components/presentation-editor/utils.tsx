@@ -1,21 +1,27 @@
 import React from 'react'
 import { FileAudio, FileImage, FileVideo, Film } from "lucide-react"
-import { Track } from './types'
+import { Track, MediaFileType, getMediaTypeString } from './types'
 
 // Constants for timeline
 export const SECONDS_PER_UNIT = 5 // Each unit in the timeline represents 5 seconds
 export const UNIT_WIDTH = 50 // Width in pixels of each unit
 export const TRACK_LABEL_WIDTH = 160 // Width for track labels
 
+// MediaFileType enum and getMediaTypeString function are now imported from types.ts
+
 // Helper function to get media type icon
-export const getMediaTypeIcon = (type: string) => {
-  switch (type) {
+export const getMediaTypeIcon = (type: string | number) => {
+  // Convert numeric type to string if needed
+  const typeString = typeof type === 'number' ? getMediaTypeString(type) : type
+  switch (typeString) {
     case "Audio":
       return <FileAudio className="h-5 w-5" />
     case "Video2D":
+    case "Video3D":
     case "Video360":
       return <FileVideo className="h-5 w-5" />
     case "Image2D":
+    case "Image3D":
     case "Image360":
       return <FileImage className="h-5 w-5" />
     default:
@@ -36,16 +42,22 @@ export const getTrackName = (slotNumber: number) => {
 }
 
 // Helper function to get clip color based on media type
-export const getClipColor = (type: string) => {
-  switch (type) {
+export const getClipColor = (type: string | number) => {
+  // Convert numeric type to string if needed
+  const typeString = typeof type === 'number' ? getMediaTypeString(type) : type
+  switch (typeString) {
     case "Audio":
       return "bg-purple-500"
     case "Video2D":
       return "bg-green-500"
+    case "Video3D":
+      return "bg-teal-500"
     case "Video360":
       return "bg-orange-500"
     case "Image2D":
       return "bg-blue-500"
+    case "Image3D":
+      return "bg-indigo-500"
     case "Image360":
       return "bg-pink-500"
     default:

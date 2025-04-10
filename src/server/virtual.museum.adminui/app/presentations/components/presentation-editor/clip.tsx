@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import type { Clip as ClipType } from "./types"
+import { getMediaTypeString } from "./types"
 import { getClipColor, getClipWidth } from "./utils"
 
 interface ClipProps {
@@ -12,11 +13,15 @@ interface ClipProps {
 }
 
 export function Clip({ clip, position, isSelected, onClick }: ClipProps) {
+  // Ensure we have a string type for the media file
+  const mediaType = typeof clip.mediaFile.type === 'number' 
+    ? getMediaTypeString(clip.mediaFile.type as number)
+    : clip.mediaFile.type;
   return (
     <div
       className={cn(
         "absolute top-2 bottom-2 rounded-md border cursor-pointer transition-all",
-        getClipColor(clip.mediaFile.type),
+        getClipColor(mediaType),
         isSelected ? "ring-2 ring-primary ring-offset-2" : "hover:brightness-90",
       )}
       style={{
