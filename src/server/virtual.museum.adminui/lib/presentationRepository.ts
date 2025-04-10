@@ -8,6 +8,17 @@ export interface MultimediaPresentation {
   Description: string | null;
 }
 
+// Define the MediaFile interface
+export interface MediaFile {
+  Id: string;
+  FileName: string | null;
+  Name: string | null;
+  Description: string | null;
+  DurationInSeconds: number;
+  Type: number;
+  Url: string | null;
+}
+
 // Define the PresentationItem interface
 export interface PresentationItem {
   Id: string;
@@ -16,6 +27,16 @@ export interface PresentationItem {
   SlotNumber: number;
   SequenceNumber: number;
   DurationInSeconds: number;
+}
+
+// Define the PresentationItemWithMedia interface
+export interface PresentationItemWithMedia extends PresentationItem {
+  MediaFile: MediaFile;
+}
+
+// Define the PresentationWithItems interface
+export interface PresentationWithItems extends MultimediaPresentation {
+  PresentationItems: PresentationItemWithMedia[];
 }
 
 // Define the PresentationWithItemCount interface for listing presentations
@@ -56,6 +77,77 @@ export const presentationRepository = {
   getPresentationById(id: string): MultimediaPresentation | null {
     return withDb(db => {
       return db.prepare('SELECT * FROM MultimediaPresentations WHERE Id = ?').get(id) as MultimediaPresentation | null;
+    });
+  },
+  
+  /**
+   * Get a presentation with all its items and media files
+   * @param id Presentation ID
+   * @returns Presentation with items and media files or null if not found
+   */
+  getPresentationWithItems(id: string): PresentationWithItems | null {
+    return withDb(db => {
+      // Get the presentation
+      const presentation = this.getPresentationById(id);
+      
+      if (!presentation) {
+        return null;
+      }
+      
+      // Get the presentation items with media files
+      const items = db.prepare(`
+        SELECT 
+          pi.Id,
+          pi.MultimediaPresentationId,
+          pi.MediaFileId,
+          pi.SlotNumber,
+          pi.SequenceNumber,
+          pi.DurationInSeconds,
+          mf.Id as 'MediaFile.Id',
+          mf.FileName as 'MediaFile.FileName',
+          mf.Name as 'MediaFile.Name',
+          mf.Description as 'MediaFile.Description',
+          mf.DurationInSeconds as 'MediaFile.DurationInSeconds',
+          mf.Type as 'MediaFile.Type',
+          mf.Url as 'MediaFile.Url'
+        FROM PresentationItems pi
+        JOIN MediaFiles mf ON pi.MediaFileId = mf.Id
+        WHERE pi.MultimediaPresentationId = ?
+        ORDER BY pi.SlotNumber, pi.SequenceNumber
+      `).all(id) as any[];
+      
+      // Transform the flat results into nested objects
+      const presentationItems = items.map(item => {
+        const { 
+          'MediaFile.Id': mediaFileId,
+          'MediaFile.FileName': fileName,
+          'MediaFile.Name': mediaName,
+          'MediaFile.Description': mediaDescription,
+          'MediaFile.DurationInSeconds': mediaDuration,
+          'MediaFile.Type': mediaType,
+          'MediaFile.Url': url,
+          ...presentationItem 
+        } = item;
+        
+        return {
+          ...presentationItem,
+          MediaFile: {
+            Id: mediaFileId,
+            FileName: fileName,
+            Name: mediaName,
+            Description: mediaDescription,
+            DurationInSeconds: mediaDuration,
+            Type: mediaType,
+            Url: url
+          }
+        } as PresentationItemWithMedia;
+      });
+      
+      // Return the presentation with items
+      return {
+        ...presentation,
+        PresentationItems: presentationItems
+      } as PresentationWithItems;
     });
   },
 
