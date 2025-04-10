@@ -59,7 +59,8 @@ jobs:
         with:
           targetPlatform: Android
           projectPath: "src/unity/TimeGlideVR"
-          customParameters: "-executeMethod TimeGlideVR.Editor.BuildScript.CommandLineBuild -environments ${{ env.ENVIRONMENTS }}"
+          buildMethod: TimeGlideVR.Editor.BuildScript.CommandLineBuild
+          customParameters: "-environments ${{ env.ENVIRONMENTS }}"
           buildName: "TimeGlideVR"
 
       - name: Archive Android builds
