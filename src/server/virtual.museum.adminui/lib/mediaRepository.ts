@@ -14,13 +14,13 @@ export interface MediaFile {
 
 // Media type enum to match the database values
 export enum MediaType {
-  Audio = 0,
-  Video2D = 1,
-  Video360 = 2,
-  Image2D = 3,
-  Image360 = 4,
-  Document = 5,
-  Other = 6
+  Image2D = 0,
+  Image3D = 1,
+  Image360Degree = 2,
+  Video2D = 3,
+  Video3D = 4,
+  Video360Degree = 5,
+  Audio = 6
 }
 
 /**

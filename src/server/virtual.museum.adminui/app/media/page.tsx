@@ -28,14 +28,12 @@ const getMediaTypeIcon = (type: string) => {
     case "Audio":
       return <FileAudio className="h-5 w-5" />
     case "Video2D":
+    case "Video3D":
     case "Video360":
       return <FileVideo className="h-5 w-5" />
     case "Image2D":
+    case "Image3D":
     case "Image360":
-      return <FileImage className="h-5 w-5" />
-    case "Document":
-      return <FileImage className="h-5 w-5" />
-    case "Other":
       return <FileImage className="h-5 w-5" />
     default:
       return <FileImage className="h-5 w-5" />
@@ -49,16 +47,16 @@ const getMediaTypeLabel = (type: string) => {
       return "Audio"
     case "Video2D":
       return "2D Video"
+    case "Video3D":
+      return "3D Video"
     case "Video360":
       return "360° Video"
     case "Image2D":
       return "2D Image"
+    case "Image3D":
+      return "3D Image"
     case "Image360":
       return "360° Image"
-    case "Document":
-      return "Document"
-    case "Other":
-      return "Other Media"
     default:
       return type
   }
@@ -139,8 +137,7 @@ export default function MediaPage() {
               <SelectItem value="video">Videos</SelectItem>
               <SelectItem value="image">Images</SelectItem>
               <SelectItem value="360">360° Media</SelectItem>
-              <SelectItem value="document">Documents</SelectItem>
-              <SelectItem value="other">Other Media</SelectItem>
+              <SelectItem value="3d">3D Media</SelectItem>
             </SelectContent>
           </Select>
         </div>

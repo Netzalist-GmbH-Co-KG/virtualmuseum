@@ -24,11 +24,10 @@ export async function GET(request: NextRequest) {
     if (typeFilter !== 'all') {
       const typeMapping: Record<string, MediaType[]> = {
         'audio': [MediaType.Audio],
-        'video': [MediaType.Video2D, MediaType.Video360],
-        'image': [MediaType.Image2D, MediaType.Image360],
-        '360': [MediaType.Video360, MediaType.Image360],
-        'document': [MediaType.Document],
-        'other': [MediaType.Other]
+        'video': [MediaType.Video2D, MediaType.Video3D, MediaType.Video360Degree],
+        'image': [MediaType.Image2D, MediaType.Image3D, MediaType.Image360Degree],
+        '360': [MediaType.Image360Degree, MediaType.Video360Degree],
+        '3d': [MediaType.Image3D, MediaType.Video3D]
       };
       
       const types = typeMapping[typeFilter];
@@ -39,13 +38,13 @@ export async function GET(request: NextRequest) {
     
     // Map the database media types to string representations
     const mediaTypeMap: Record<number, string> = {
-      [MediaType.Audio]: 'Audio',
-      [MediaType.Video2D]: 'Video2D',
-      [MediaType.Video360]: 'Video360',
       [MediaType.Image2D]: 'Image2D',
-      [MediaType.Image360]: 'Image360',
-      [MediaType.Document]: 'Document',
-      [MediaType.Other]: 'Other'
+      [MediaType.Image3D]: 'Image3D',
+      [MediaType.Image360Degree]: 'Image360',
+      [MediaType.Video2D]: 'Video2D',
+      [MediaType.Video3D]: 'Video3D',
+      [MediaType.Video360Degree]: 'Video360',
+      [MediaType.Audio]: 'Audio'
     };
     
     // Format the response
