@@ -1,30 +1,21 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Calendar, Edit, Film, MapPin, MoreHorizontal, Plus, Save, Trash2 } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+  TimeSeriesDetailsTab,
+  GeoEventGroupsTab,
+  GeoEventDialog,
+  TimeSeries,
+  GeoEvent,
+  GeoEventGroup
+} from "./components"
 
 // Mock data for a single time series
-const timeSeriesData = {
+const timeSeriesData: TimeSeries = {
   id: "1",
   name: "World War II Timeline",
   description: "Major events during World War II (1939-1945)",
@@ -106,22 +97,63 @@ const timeSeriesData = {
 }
 
 export default function TimeSeriesDetailPage({ params }: { params: { id: string } }) {
-  const [timeSeries, setTimeSeries] = useState(timeSeriesData)
-  const [selectedEvent, setSelectedEvent] = useState<any>(null)
+  const [timeSeries, setTimeSeries] = useState<TimeSeries>(timeSeriesData)
+  const [selectedEvent, setSelectedEvent] = useState<GeoEvent | null>(null)
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false)
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
 
+  // Handler for time series details changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setTimeSeries((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleEventInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setSelectedEvent((prev: any) => ({ ...prev, [name]: value }))
+  // Handler for saving time series details
+  const handleSaveTimeSeries = () => {
+    // Implement API call to save time series
+    console.log("Saving time series:", timeSeries)
+    // TODO: Add toast notification for success/error
   }
 
-  const openNewEventDialog = (groupId: string) => {
+  // Handler for event input changes
+  const handleEventInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setSelectedEvent((prev) => prev ? { ...prev, [name]: value } : null)
+  }
+
+  // Handler for presentation selection
+  const handlePresentationChange = (value: string) => {
+    setSelectedEvent((prev) => {
+      if (!prev) return null
+      return {
+        ...prev,
+        multimediaPresentationId: value === "none" ? null : value,
+        hasMultimediaPresentation: value !== "none",
+      }
+    })
+  }
+
+  // Handlers for event groups
+  const handleAddGroup = () => {
+    // Implement adding a new group
+    console.log("Adding new group")
+    // TODO: Show dialog for adding a group
+  }
+
+  const handleEditGroup = (groupId: string) => {
+    // Implement editing a group
+    console.log("Editing group:", groupId)
+    // TODO: Show dialog for editing a group
+  }
+
+  const handleDeleteGroup = (groupId: string) => {
+    // Implement deleting a group
+    console.log("Deleting group:", groupId)
+    // TODO: Add confirmation dialog
+  }
+
+  // Handlers for events
+  const handleAddEvent = (groupId: string) => {
     setSelectedGroupId(groupId)
     setSelectedEvent({
       id: `new-${Date.now()}`,
@@ -136,12 +168,24 @@ export default function TimeSeriesDetailPage({ params }: { params: { id: string 
     setIsEventDialogOpen(true)
   }
 
-  const openEditEventDialog = (event: any) => {
+  const handleEditEvent = (event: GeoEvent) => {
     setSelectedEvent(event)
     setIsEventDialogOpen(true)
   }
 
-  const saveEvent = () => {
+  const handleDeleteEvent = (eventId: string) => {
+    // Implement deleting an event
+    console.log("Deleting event:", eventId)
+    // TODO: Add confirmation dialog
+  }
+
+  const handleViewPresentation = (presentationId: string) => {
+    // Implement viewing a presentation
+    console.log("Viewing presentation:", presentationId)
+    // TODO: Navigate to presentation page
+  }
+
+  const handleSaveEvent = () => {
     if (!selectedEvent) return
 
     if (selectedEvent.id.startsWith("new-") && selectedGroupId) {
@@ -186,261 +230,38 @@ export default function TimeSeriesDetailPage({ params }: { params: { id: string 
         </TabsList>
 
         <TabsContent value="details" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Time Series Information</CardTitle>
-              <CardDescription>Edit the details of this time series</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={timeSeries.name}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="description" className="text-right">
-                    Description
-                  </Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    value={timeSeries.description}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <Button className="w-full sm:w-auto">
-                <Save className="mr-2 h-4 w-4" /> Save Changes
-              </Button>
-            </CardContent>
-          </Card>
+          <TimeSeriesDetailsTab
+            name={timeSeries.name}
+            description={timeSeries.description}
+            onInputChange={handleInputChange}
+            onSave={handleSaveTimeSeries}
+          />
         </TabsContent>
 
         <TabsContent value="events" className="space-y-4">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium">Geo Event Groups</h3>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Group
-            </Button>
-          </div>
-
-          <Accordion type="multiple" className="w-full">
-            {timeSeries.geoEventGroups.map((group) => (
-              <AccordionItem value={group.id} key={group.id}>
-                <AccordionTrigger className="hover:bg-accent/50 px-4 rounded-md">
-                  <div className="flex items-center justify-between w-full pr-4">
-                    <div className="font-medium">{group.label}</div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground">{group.geoEvents.length} events</span>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="mr-2 h-4 w-4" /> Edit Group
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Trash2 className="mr-2 h-4 w-4" /> Delete Group
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="p-4 space-y-4">
-                    <p className="text-sm text-muted-foreground">{group.description}</p>
-
-                    <div className="flex justify-between items-center">
-                      <h4 className="text-sm font-medium">Geo Events</h4>
-                      <Button size="sm" onClick={() => openNewEventDialog(group.id)}>
-                        <Plus className="mr-2 h-3 w-3" /> Add Event
-                      </Button>
-                    </div>
-
-                    <div className="space-y-2">
-                      {group.geoEvents.map((event) => (
-                        <Card key={event.id} className="hover:bg-accent/50 transition-colors">
-                          <CardContent className="p-4 flex items-start justify-between">
-                            <div className="space-y-1">
-                              <div className="font-medium">{event.name}</div>
-                              <div className="text-sm text-muted-foreground">{event.description}</div>
-                              <div className="text-xs text-muted-foreground">
-                                {new Date(event.dateTime).toLocaleDateString()} | Lat: {event.latitude.toFixed(4)},
-                                Long: {event.longitude.toFixed(4)}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              {event.hasMultimediaPresentation && (
-                                <div className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                                  Has Presentation
-                                </div>
-                              )}
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem onClick={() => openEditEventDialog(event)}>
-                                    <Edit className="mr-2 h-4 w-4" /> Edit Event
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Trash2 className="mr-2 h-4 w-4" /> Delete Event
-                                  </DropdownMenuItem>
-                                  {event.hasMultimediaPresentation && (
-                                    <DropdownMenuItem>
-                                      <Film className="mr-2 h-4 w-4" /> View Presentation
-                                    </DropdownMenuItem>
-                                  )}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <GeoEventGroupsTab
+            groups={timeSeries.geoEventGroups}
+            onAddGroup={handleAddGroup}
+            onEditGroup={handleEditGroup}
+            onDeleteGroup={handleDeleteGroup}
+            onAddEvent={handleAddEvent}
+            onEditEvent={handleEditEvent}
+            onDeleteEvent={handleDeleteEvent}
+            onViewPresentation={handleViewPresentation}
+          />
         </TabsContent>
       </Tabs>
 
       {/* Geo Event Dialog */}
-      <Dialog open={isEventDialogOpen} onOpenChange={setIsEventDialogOpen}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>{selectedEvent?.id.startsWith("new-") ? "Add New Geo Event" : "Edit Geo Event"}</DialogTitle>
-            <DialogDescription>
-              {selectedEvent?.id.startsWith("new-")
-                ? "Create a new geographical event for this time series"
-                : "Edit the details of this geographical event"}
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedEvent && (
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="event-name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="event-name"
-                  name="name"
-                  value={selectedEvent.name}
-                  onChange={handleEventInputChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="event-description" className="text-right">
-                  Description
-                </Label>
-                <Textarea
-                  id="event-description"
-                  name="description"
-                  value={selectedEvent.description}
-                  onChange={handleEventInputChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="event-dateTime" className="text-right">
-                  Date & Time
-                </Label>
-                <div className="col-span-3 flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="event-dateTime"
-                    name="dateTime"
-                    type="datetime-local"
-                    value={new Date(selectedEvent.dateTime).toISOString().slice(0, 16)}
-                    onChange={handleEventInputChange}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Location</Label>
-                <div className="col-span-3 grid grid-cols-2 gap-2">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="event-latitude"
-                      name="latitude"
-                      type="number"
-                      step="0.0001"
-                      placeholder="Latitude"
-                      value={selectedEvent.latitude}
-                      onChange={handleEventInputChange}
-                    />
-                  </div>
-                  <Input
-                    id="event-longitude"
-                    name="longitude"
-                    type="number"
-                    step="0.0001"
-                    placeholder="Longitude"
-                    value={selectedEvent.longitude}
-                    onChange={handleEventInputChange}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="event-presentation" className="text-right">
-                  Presentation
-                </Label>
-                <div className="col-span-3 flex items-center gap-2">
-                  <Film className="h-4 w-4 text-muted-foreground" />
-                  <Select
-                    value={selectedEvent.multimediaPresentationId || "none"}
-                    onValueChange={(value) => {
-                      setSelectedEvent((prev: any) => ({
-                        ...prev,
-                        multimediaPresentationId: value === "none" ? null : value,
-                        hasMultimediaPresentation: value !== "none",
-                      }))
-                    }}
-                  >
-                    <SelectTrigger id="event-presentation" className="w-full">
-                      <SelectValue placeholder="Select a presentation" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      {timeSeries.presentationOptions.map((option) => (
-                        <SelectItem key={option.id} value={option.id}>
-                          {option.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEventDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={saveEvent}>Save Event</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <GeoEventDialog
+        open={isEventDialogOpen}
+        onOpenChange={setIsEventDialogOpen}
+        event={selectedEvent}
+        presentationOptions={timeSeries.presentationOptions}
+        onInputChange={handleEventInputChange}
+        onPresentationChange={handlePresentationChange}
+        onSave={handleSaveEvent}
+      />
     </div>
   )
 }
