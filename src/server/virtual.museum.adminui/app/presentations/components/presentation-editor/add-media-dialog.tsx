@@ -84,6 +84,12 @@ export function AddMediaDialog({
               })
               // Apply search term filter
               .filter(matchesSearchTerm)
+              // Sort by name alphabetically
+              .sort((a, b) => {
+                const nameA = a.name?.toLowerCase() || '';
+                const nameB = b.name?.toLowerCase() || '';
+                return nameA.localeCompare(nameB);
+              })
               .map((file) => (
                 <Card
                   key={file.id}
