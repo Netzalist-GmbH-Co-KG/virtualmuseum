@@ -11,7 +11,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
+import { Search } from "lucide-react"
 import Image from "next/image"
+import { useState } from "react"
 import type { MediaFile, Presentation } from "./types"
 import { getMediaTypeIcon } from "./utils"
 
@@ -32,7 +35,19 @@ export function AddMediaDialog({
   availableMediaFiles,
   onAddClip,
 }: AddMediaDialogProps) {
+  const [searchTerm, setSearchTerm] = useState('')
   const selectedTrack = presentation.tracks.find((t) => t.id === selectedTrackId)
+  
+  // Filter function that checks if a media file matches the search term
+  const matchesSearchTerm = (file: MediaFile) => {
+    if (!searchTerm.trim()) return true
+    
+    const term = searchTerm.toLowerCase()
+    return (
+      (file.name && file.name.toLowerCase().includes(term)) ||
+      (file.description && file.description.toLowerCase().includes(term))
+    )
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -40,6 +55,15 @@ export function AddMediaDialog({
         <DialogHeader>
           <DialogTitle>Add Media to Track</DialogTitle>
           <DialogDescription>Select a media file to add to the {selectedTrack?.name || "track"}</DialogDescription>
+          <div className="relative mt-4">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by name or description..."
+              className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </DialogHeader>
 
         <ScrollArea className="h-[400px] rounded-md border p-4">
@@ -58,6 +82,8 @@ export function AddMediaDialog({
                 // Other displays accept 2D media
                 return file.type === "Image2D" || file.type === "Video2D"
               })
+              // Apply search term filter
+              .filter(matchesSearchTerm)
               .map((file) => (
                 <Card
                   key={file.id}
