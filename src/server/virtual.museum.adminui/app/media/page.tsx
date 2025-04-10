@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/components/ui/use-toast"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { UploadMediaDialog } from "./components/UploadMediaDialog"
 
 // Define media file interface
 interface MediaFile {
@@ -72,10 +73,10 @@ export default function MediaPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<"grid" | "table">("table")
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
-  // Fetch media files from the API
-  useEffect(() => {
-    const fetchMediaFiles = async () => {
+  // Function to fetch media files from the API
+  const fetchMediaFiles = async () => {
       try {
         setIsLoading(true)
         setError(null)
@@ -106,6 +107,8 @@ export default function MediaPage() {
       }
     }
     
+  // Fetch media files when component mounts or dependencies change
+  useEffect(() => {
     fetchMediaFiles()
   }, [searchTerm, mediaTypeFilter, toast])
 
@@ -126,7 +129,7 @@ export default function MediaPage() {
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
-          <Button>
+          <Button onClick={() => setUploadDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Upload Media
           </Button>
         </div>
@@ -248,6 +251,13 @@ export default function MediaPage() {
           </Table>
         </div>
       )}
+      
+      {/* Upload Media Dialog */}
+      <UploadMediaDialog 
+        open={uploadDialogOpen} 
+        onOpenChange={setUploadDialogOpen} 
+        onUploadComplete={fetchMediaFiles} 
+      />
     </div>
   )
 }
