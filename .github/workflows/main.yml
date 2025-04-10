@@ -40,7 +40,7 @@ jobs:
           projectPath: "src/unity/TimeGlideVR"
 
       - name: Archive Android build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AndroidBuild
           path: build/Android/**/*apk
@@ -102,7 +102,7 @@ jobs:
         run: zip -r virtualmuseum-${{ steps.version.outputs.version }}.zip /tmp/publish
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ServerBuild-${{ steps.version.outputs.version }}
           path: virtualmuseum-${{ steps.version.outputs.version }}.zip       
