@@ -135,7 +135,7 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
     setIsSaving(true)
     
     try {
-      const response = await fetch(`/api/presentations/${id}`, {
+      const response = await fetch(`/api/presentations/${id}/update-with-items`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -210,13 +210,18 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center gap-2">
-        <Link href="/presentations">
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <h2 className="text-3xl font-bold tracking-tight">{presentation.name}</h2>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Link href="/presentations">
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <h2 className="text-3xl font-bold tracking-tight">{presentation.name}</h2>
+        </div>
+        <Button onClick={handleSave} disabled={isSaving}>
+          {isSaving ? "Saving..." : "Save Changes"}
+        </Button>
       </div>
 
       <Tabs defaultValue="details">
@@ -230,12 +235,11 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
             name={presentation.name}
             description={presentation.description}
             onInputChange={handleInputChange}
-            onSave={handleSave}
-            isSaving={isSaving}
           />
         </TabsContent>
 
         <TabsContent value="items" className="space-y-4">
+
           <TimelineEditor
             key={`timeline-editor-${Date.now()}`} // Use timestamp to force re-render on every state change
             presentation={convertAppPresentationToEditorPresentation(presentation)}

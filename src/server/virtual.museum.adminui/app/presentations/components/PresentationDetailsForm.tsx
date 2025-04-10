@@ -12,16 +12,12 @@ interface PresentationDetailsFormProps {
   name: string
   description: string
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  onSave: () => void
-  isSaving?: boolean
 }
 
 export function PresentationDetailsForm({
   name,
   description,
-  onInputChange,
-  onSave,
-  isSaving = false
+  onInputChange
 }: PresentationDetailsFormProps) {
   return (
     <Card>
@@ -56,9 +52,6 @@ export function PresentationDetailsForm({
             />
           </div>
         </div>
-        <Button className="w-full sm:w-auto" onClick={onSave} disabled={isSaving}>
-          <Save className="mr-2 h-4 w-4" /> {isSaving ? "Saving..." : "Save Changes"}
-        </Button>
       </CardContent>
     </Card>
   )
