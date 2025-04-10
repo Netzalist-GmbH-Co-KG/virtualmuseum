@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus } from "lucide-react"
+import { Plus, Loader2 } from "lucide-react"
 import Link from "next/link"
 import {
   Dialog,
@@ -19,49 +19,51 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useRouter } from "next/navigation"
+import { RoomWithRelations } from "@/lib/types"
 
-// Mock data for rooms
-const initialRooms = [
-  {
-    id: "1",
-    label: "Main Exhibition Hall",
-    description: "The primary exhibition space with the largest topographical table",
-    inventoryItemsCount: 3,
-  },
-  {
-    id: "2",
-    label: "Historical Gallery",
-    description: "Dedicated to historical events and timelines",
-    inventoryItemsCount: 2,
-  },
-  {
-    id: "3",
-    label: "Science Wing",
-    description: "Interactive exhibits focusing on scientific discoveries",
-    inventoryItemsCount: 4,
-  },
-  {
-    id: "4",
-    label: "Cultural Showcase",
-    description: "Displays cultural artifacts and developments",
-    inventoryItemsCount: 2,
-  },
-  {
-    id: "5",
-    label: "Innovation Space",
-    description: "Modern innovations and future technologies",
-    inventoryItemsCount: 1,
-  },
-]
+interface RoomData {
+  Id: string
+  Label: string | null
+  Description: string | null
+  InventoryItems?: Array<{ Id: string }>
+}
 
 export default function RoomsPage() {
-  const [rooms, setRooms] = useState(initialRooms)
+  const [rooms, setRooms] = useState<RoomData[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [newRoom, setNewRoom] = useState({
     label: "",
     description: "",
   })
   const router = useRouter()
+  
+  // Fetch rooms from the API
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        
+        const response = await fetch('/api/rooms?includeInventoryItems=true')
+        
+        if (!response.ok) {
+          throw new Error(`Error fetching rooms: ${response.status} ${response.statusText}`)
+        }
+        
+        const data = await response.json()
+        setRooms(data.rooms || [])
+      } catch (err) {
+        console.error('Failed to fetch rooms:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load rooms')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    fetchRooms()
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -74,26 +76,13 @@ export default function RoomsPage() {
       return // Don't submit if label is empty
     }
 
-    // Create new room with generated ID
-    const newRoomWithId = {
-      id: `${Date.now()}`, // Generate a unique ID
-      label: newRoom.label,
-      description: newRoom.description,
-      inventoryItemsCount: 0,
-    }
-
-    // Add to rooms list
-    setRooms((prev) => [...prev, newRoomWithId])
-
-    // Reset form and close dialog
+    // This will be implemented in the next phase when we add write operations
+    // For now, we'll just close the dialog
     setNewRoom({
       label: "",
       description: "",
     })
     setIsAddDialogOpen(false)
-
-    // Optionally navigate to the new room
-    // router.push(`/rooms/${newRoomWithId.id}`)
   }
 
   return (
@@ -105,16 +94,40 @@ export default function RoomsPage() {
         </Button>
       </div>
 
+      {isLoading && (
+        <div className="flex justify-center items-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2">Loading rooms...</span>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-destructive/15 text-destructive p-4 rounded-md">
+          <p>Error: {error}</p>
+          <Button variant="outline" className="mt-2" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      )}
+
+      {!isLoading && !error && rooms.length === 0 && (
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">No rooms found. Create your first room to get started.</p>
+        </div>
+      )}
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {rooms.map((room) => (
-          <Link href={`/rooms/${room.id}`} key={room.id}>
+          <Link href={`/rooms/${room.Id}`} key={room.Id}>
             <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
               <CardHeader>
-                <CardTitle>{room.label}</CardTitle>
-                <CardDescription>{room.inventoryItemsCount} inventory items</CardDescription>
+                <CardTitle>{room.Label || 'Unnamed Room'}</CardTitle>
+                <CardDescription>
+                  {room.InventoryItems?.length || 0} inventory items
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">{room.description}</p>
+                <p className="text-sm text-muted-foreground">{room.Description || 'No description'}</p>
               </CardContent>
             </Card>
           </Link>
