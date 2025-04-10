@@ -7,11 +7,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Save } from "lucide-react"
 
+import { InventoryItem } from './types'
+
 interface PositionScaleTabProps {
-  inventoryItem: any
+  inventoryItem: InventoryItem
   handlePositionChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleRotationChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleScaleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleSaveChanges?: () => Promise<void>
 }
 
 export function PositionScaleTab({
@@ -19,6 +22,7 @@ export function PositionScaleTab({
   handlePositionChange,
   handleRotationChange,
   handleScaleChange,
+  handleSaveChanges,
 }: PositionScaleTabProps) {
   return (
     <Card>
@@ -148,7 +152,10 @@ export function PositionScaleTab({
             </div>
           </div>
         </div>
-        <Button className="w-full sm:w-auto">
+        <Button 
+          className="w-full sm:w-auto" 
+          onClick={handleSaveChanges ? () => handleSaveChanges() : undefined}
+        >
           <Save className="mr-2 h-4 w-4" /> Save Changes
         </Button>
       </CardContent>

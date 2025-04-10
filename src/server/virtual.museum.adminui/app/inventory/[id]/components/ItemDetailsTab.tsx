@@ -9,13 +9,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { Save } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+import { InventoryItem } from './types'
+
 interface ItemDetailsTabProps {
-  inventoryItem: any
+  inventoryItem: InventoryItem
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   setInventoryItem: React.Dispatch<React.SetStateAction<any>>
+  handleSaveChanges?: () => Promise<void>
 }
 
-export function ItemDetailsTab({ inventoryItem, handleInputChange, setInventoryItem }: ItemDetailsTabProps) {
+export function ItemDetailsTab({ inventoryItem, handleInputChange, setInventoryItem, handleSaveChanges }: ItemDetailsTabProps) {
   return (
     <Card>
       <CardHeader>
@@ -89,7 +92,10 @@ export function ItemDetailsTab({ inventoryItem, handleInputChange, setInventoryI
             </Select>
           </div>
         </div>
-        <Button className="w-full sm:w-auto">
+        <Button 
+          className="w-full sm:w-auto"
+          onClick={handleSaveChanges ? () => handleSaveChanges() : undefined}
+        >
           <Save className="mr-2 h-4 w-4" /> Save Changes
         </Button>
       </CardContent>

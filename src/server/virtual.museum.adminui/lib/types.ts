@@ -19,9 +19,7 @@ export type Room = z.infer<typeof RoomSchema>;
  * Inventory item type enum
  */
 export enum InventoryType {
-  Generic = 0,
-  TopographicalTable = 1,
-  // Add other inventory types as needed
+  TopographicalTable = 0,
 }
 
 /**

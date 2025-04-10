@@ -47,3 +47,47 @@ export interface InventoryItem {
   roomOptions: Option[]
   inventoryTypeOptions: Option[]
 }
+
+// API response interfaces
+export interface ApiInventoryItem {
+  Id: string
+  RoomId: string
+  Name: string | null
+  Description: string | null
+  InventoryType: number
+  PositionX: number
+  PositionY: number
+  PositionZ: number
+  RotationX: number
+  RotationY: number
+  RotationZ: number
+  ScaleX: number
+  ScaleY: number
+  ScaleZ: number
+}
+
+export interface ApiRoom {
+  Id: string
+  TenantId: string
+  Label: string | null
+  Description: string | null
+}
+
+export interface ApiTopographicalTable {
+  Id: string
+}
+
+export interface ApiTopic {
+  Id: string
+  TopographicalTableId: string
+  Topic: string
+  Description: string
+  MediaFileImage2DId: string | null
+}
+
+export interface ApiInventoryResponse {
+  inventoryItem: ApiInventoryItem
+  room: ApiRoom
+  topographicalTable: ApiTopographicalTable | null
+  topics: ApiTopic[] | null
+}

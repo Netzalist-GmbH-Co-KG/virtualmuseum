@@ -27,9 +27,7 @@ const TOPOGRAPHICAL_TABLE_TYPE = 1;
 
 // Map inventory type enum to display names
 const inventoryTypeNames: Record<number, string> = {
-  0: "Generic",
-  1: "Topographical Table",
-  // Add other inventory types as needed
+  0: "Topographical Table"
 }
 
 interface RoomData {

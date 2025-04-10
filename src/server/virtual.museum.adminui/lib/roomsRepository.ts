@@ -330,5 +330,51 @@ export const roomsRepository = {
         throw error;
       }
     });
+  },
+
+  /**
+   * Update a topographical table topic
+   * @param id Topic ID
+   * @param data Updated topic data
+   * @returns The updated topic or null if not found
+   */
+  updateTopic(id: string, data: {
+    topic: string;
+    description: string;
+    mediaFileImage2DId: string | null;
+    topographicalTableId: string;
+  }): TopographicalTableTopic | null {
+    return withDb(db => {
+      // Check if the topic exists
+      const existingTopic = db.prepare('SELECT * FROM TopographicalTableTopics WHERE Id = ?').get(id) as TopographicalTableTopic | null;
+      
+      if (!existingTopic) {
+        return null;
+      }
+      
+      // Update the topic
+      const stmt = db.prepare(`
+        UPDATE TopographicalTableTopics SET
+          Topic = ?,
+          Description = ?,
+          MediaFileImage2DId = ?
+        WHERE Id = ?
+      `);
+      
+      stmt.run(
+        data.topic,
+        data.description,
+        data.mediaFileImage2DId,
+        id
+      );
+      
+      // Return the updated topic
+      return {
+        ...existingTopic,
+        Topic: data.topic || '',
+        Description: data.description || '',
+        MediaFileImage2DId: data.mediaFileImage2DId
+      };
+    });
   }
 };

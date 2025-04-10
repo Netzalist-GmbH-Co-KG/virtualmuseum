@@ -10,11 +10,14 @@ import { Plus, Save, Trash2, Clock } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
+import { InventoryItem } from './types'
+
 interface TopicsTabProps {
-  inventoryItem: any
+  inventoryItem: InventoryItem
   handleTopicChange: (topicId: string, field: string, value: string) => void
   setIsAddTopicDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
   openLinkTimeSeriesDialog: (topicId: string) => void
+  handleSaveTopics?: (topicId: string) => Promise<void>
 }
 
 export function TopicsTab({
@@ -22,6 +25,7 @@ export function TopicsTab({
   handleTopicChange,
   setIsAddTopicDialogOpen,
   openLinkTimeSeriesDialog,
+  handleSaveTopics,
 }: TopicsTabProps) {
   return (
     <>
@@ -114,7 +118,10 @@ export function TopicsTab({
                   <Button variant="destructive" size="sm">
                     <Trash2 className="mr-2 h-4 w-4" /> Delete Topic
                   </Button>
-                  <Button size="sm">
+                  <Button 
+                    size="sm"
+                    onClick={handleSaveTopics ? () => handleSaveTopics(topic.id) : undefined}
+                  >
                     <Save className="mr-2 h-4 w-4" /> Save Topic
                   </Button>
                 </div>

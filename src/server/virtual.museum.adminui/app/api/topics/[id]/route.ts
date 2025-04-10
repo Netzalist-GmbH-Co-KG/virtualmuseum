@@ -3,79 +3,45 @@ import { roomsRepository } from '@/lib/roomsRepository';
 import { ErrorResponse } from '@/lib/types';
 import { z } from 'zod';
 
-// Validation schema for inventory item updates
-const inventoryItemUpdateSchema = z.object({
+// Validation schema for topic updates
+const topicUpdateSchema = z.object({
   id: z.string(),
-  name: z.string().nullable(),
-  description: z.string().nullable(),
-  inventoryType: z.number(),
-  roomId: z.string(),
-  position: z.object({
-    x: z.number(),
-    y: z.number(),
-    z: z.number()
-  }),
-  rotation: z.object({
-    x: z.number(),
-    y: z.number(),
-    z: z.number()
-  }),
-  scale: z.object({
-    x: z.number(),
-    y: z.number(),
-    z: z.number()
-  })
+  topic: z.string(),
+  description: z.string(),
+  mediaFileImage2DId: z.string().nullable(),
+  topographicalTableId: z.string()
 });
 
 /**
- * GET handler for /api/inventory/[id]
- * Retrieves a single inventory item by ID with its related data
+ * GET handler for /api/topics/[id]
+ * Retrieves a single topic by ID
  */
-
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    // Get inventory item from repository
+    // Get topic from repository
     const { id } = await params;
-    const inventoryItem = roomsRepository.getInventoryItemById(id);
+    const topic = roomsRepository.getTopicsByTopographicalTableId(id);
     
-    // Return 404 if item not found
-    if (!inventoryItem) {
+    // Return 404 if topic not found
+    if (!topic || topic.length === 0) {
       const errorResponse: ErrorResponse = {
-        error: `Inventory item with ID ${id} not found`,
+        error: `Topic with ID ${id} not found`,
         status: 404
       };
       return NextResponse.json(errorResponse, { status: 404 });
     }
     
-    // Get room data
-    const room = roomsRepository.getRoomById(inventoryItem.RoomId);
-    
-    // Get topographical table if this is a topographical table
-    let topographicalTable = null;
-    let topics: any[] = [];
-    
-    if (inventoryItem.InventoryType === 0) { // Topographical Table
-      topographicalTable = roomsRepository.getTopographicalTableByInventoryItemId(id);
-      
-      if (topographicalTable) {
-        topics = roomsRepository.getTopicsByTopographicalTableId(topographicalTable.Id);
-      }
-    }
-    
     // Return response
     return NextResponse.json({
-      inventoryItem,
-      room,
-      topographicalTable,
-      topics
+      topics: topic
     });
   } catch (error) {
     // Get the ID safely for error logging
     const id = params ? (await params).id : 'unknown';
-    console.error(`Error fetching inventory item with ID ${id}:`, error);
+    console.error(`Error fetching topic with ID ${id}:`, error);
     
     // Return error response
     const errorResponse: ErrorResponse = {
@@ -87,8 +53,8 @@ export async function GET(
 }
 
 /**
- * PUT handler for /api/inventory/[id]
- * Updates an inventory item by ID
+ * PUT handler for /api/topics/[id]
+ * Updates a topic by ID
  */
 export async function PUT(
   request: Request,
@@ -102,7 +68,7 @@ export async function PUT(
     const body = await request.json();
     
     // Validate the request body
-    const validationResult = inventoryItemUpdateSchema.safeParse(body);
+    const validationResult = topicUpdateSchema.safeParse(body);
     
     if (!validationResult.success) {
       const errorResponse: ErrorResponse = {
@@ -123,39 +89,32 @@ export async function PUT(
       return NextResponse.json(errorResponse, { status: 400 });
     }
     
-    // Update the inventory item
-    const updatedItem = roomsRepository.updateInventoryItem(id, {
-      Name: data.name,
-      Description: data.description,
-      PositionX: data.position.x,
-      PositionY: data.position.y,
-      PositionZ: data.position.z,
-      RotationX: data.rotation.x,
-      RotationY: data.rotation.y,
-      RotationZ: data.rotation.z,
-      ScaleX: data.scale.x,
-      ScaleY: data.scale.y,
-      ScaleZ: data.scale.z
+    // Update the topic
+    const updatedTopic = roomsRepository.updateTopic(id, {
+      topic: data.topic,
+      description: data.description,
+      mediaFileImage2DId: data.mediaFileImage2DId,
+      topographicalTableId: data.topographicalTableId
     });
     
-    // Return 404 if item not found
-    if (!updatedItem) {
+    // Return 404 if topic not found
+    if (!updatedTopic) {
       const errorResponse: ErrorResponse = {
-        error: `Inventory item with ID ${id} not found`,
+        error: `Topic with ID ${id} not found`,
         status: 404
       };
       return NextResponse.json(errorResponse, { status: 404 });
     }
     
-    // Return the updated item
+    // Return the updated topic
     return NextResponse.json({
       success: true,
-      inventoryItem: updatedItem
+      topic: updatedTopic
     });
   } catch (error) {
     // Get the ID safely for error logging
     const id = params ? (await params).id : 'unknown';
-    console.error(`Error updating inventory item with ID ${id}:`, error);
+    console.error(`Error updating topic with ID ${id}:`, error);
     
     // Return error response
     const errorResponse: ErrorResponse = {
