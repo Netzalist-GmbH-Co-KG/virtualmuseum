@@ -2,14 +2,14 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Package, Plus, Save } from "lucide-react"
+import { ArrowLeft, Package, Plus, Save, Loader2 } from "lucide-react"
 import Link from "next/link"
 import {
   Dialog,
@@ -20,65 +20,97 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-// Mock data for a single room
-const roomData = {
-  id: "1",
-  label: "Main Exhibition Hall",
-  description: "The primary exhibition space with the largest topographical table",
-  inventoryItems: [
-    {
-      id: "1",
-      name: "Central Topographical Table",
-      description: "Large interactive table showing geographical data",
-      inventoryType: "TopographicalTable",
-      position: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      scale: { x: 1, y: 1, z: 1 },
-    },
-    {
-      id: "2",
-      name: "Historical Timeline Display",
-      description: "Interactive timeline showing major historical events",
-      inventoryType: "TopographicalTable",
-      position: { x: 2, y: 0, z: 3 },
-      rotation: { x: 0, y: 45, z: 0 },
-      scale: { x: 0.8, y: 1, z: 0.8 },
-    },
-    {
-      id: "3",
-      name: "Media Station Alpha",
-      description: "Station for viewing multimedia content",
-      inventoryType: "MediaStation",
-      position: { x: -3, y: 0, z: 2 },
-      rotation: { x: 0, y: -30, z: 0 },
-      scale: { x: 1, y: 1, z: 1 },
-    },
-  ],
-}
+import { InventoryItem } from "@/lib/types"
 
 // Inventory type options
 const inventoryTypeOptions = [
-  { id: "TopographicalTable", name: "Topographical Table" },
-  { id: "MediaStation", name: "Media Station" },
-  { id: "InfoPanel", name: "Information Panel" },
+  { id: "1", name: "Topographical Table" },
+  { id: "0", name: "Generic" },
+  // Add other inventory types as needed
 ]
 
+// Map inventory type enum to display names
+const inventoryTypeNames: Record<number, string> = {
+  0: "Generic",
+  1: "Topographical Table",
+  // Add other inventory types as needed
+}
+
+interface RoomData {
+  Id: string
+  Label: string | null
+  Description: string | null
+  InventoryItems?: InventoryItemData[]
+}
+
+interface InventoryItemData {
+  Id: string
+  Name: string | null
+  Description: string | null
+  InventoryType: number
+  PositionX: number
+  PositionY: number
+  PositionZ: number
+  RotationX: number
+  RotationY: number
+  RotationZ: number
+  ScaleX: number
+  ScaleY: number
+  ScaleZ: number
+}
+
 export default function RoomDetailPage({ params }: { params: { id: string } }) {
-  const [room, setRoom] = useState(roomData)
+  const [room, setRoom] = useState<RoomData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [isAddItemDialogOpen, setIsAddItemDialogOpen] = useState(false)
   const [newItem, setNewItem] = useState({
     name: "",
     description: "",
-    inventoryType: "TopographicalTable",
+    inventoryType: "1", // Default to Topographical Table
     position: { x: 0, y: 0, z: 0 },
     rotation: { x: 0, y: 0, z: 0 },
     scale: { x: 1, y: 1, z: 1 },
   })
+  
+  // Fetch room data from API
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        
+        const response = await fetch(`/api/rooms/${params.id}?includeInventoryItems=true`)
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error(`Room with ID ${params.id} not found`)
+          }
+          throw new Error(`Error fetching room: ${response.status} ${response.statusText}`)
+        }
+        
+        const data = await response.json()
+        setRoom(data.room)
+      } catch (err) {
+        console.error('Failed to fetch room:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load room')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    fetchRoom()
+  }, [params.id])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!room) return
+    
     const { name, value } = e.target
-    setRoom((prev) => ({ ...prev, [name]: value }))
+    // Convert the name to match our API field names (e.g., label -> Label)
+    const fieldName = name.charAt(0).toUpperCase() + name.slice(1)
+    setRoom((prev) => prev ? { ...prev, [fieldName]: value } : null)
+    
+    // Note: Update logic will be implemented later
   }
 
   const handleNewItemInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -122,27 +154,18 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
 
   const handleAddItem = () => {
     // Validate form
-    if (!newItem.name.trim()) {
-      return // Don't submit if name is empty
+    if (!newItem.name.trim() || !room) {
+      return // Don't submit if name is empty or room is not loaded
     }
 
-    // Create new item with generated ID
-    const newItemWithId = {
-      id: `${Date.now()}`, // Generate a unique ID
-      ...newItem,
-    }
-
-    // Add to room's inventory items
-    setRoom((prev) => ({
-      ...prev,
-      inventoryItems: [...prev.inventoryItems, newItemWithId],
-    }))
-
-    // Reset form and close dialog
+    // Note: Add item logic will be implemented later
+    console.log('Add item logic will be implemented later', newItem)
+    
+    // For now, just close the dialog
     setNewItem({
       name: "",
       description: "",
-      inventoryType: "TopographicalTable",
+      inventoryType: "1",
       position: { x: 0, y: 0, z: 0 },
       rotation: { x: 0, y: 0, z: 0 },
       scale: { x: 1, y: 1, z: 1 },
@@ -150,6 +173,53 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
     setIsAddItemDialogOpen(false)
   }
 
+  // If loading, show loading state
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex items-center gap-2">
+          <Link href="/rooms">
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <h2 className="text-3xl font-bold tracking-tight">Loading...</h2>
+        </div>
+        <div className="flex justify-center items-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2">Loading room details...</span>
+        </div>
+      </div>
+    )
+  }
+  
+  // If error, show error state
+  if (error || !room) {
+    return (
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex items-center gap-2">
+          <Link href="/rooms">
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <h2 className="text-3xl font-bold tracking-tight">Error</h2>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Error Loading Room</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-destructive">{error || 'Room not found'}</p>
+            <Button className="mt-4" onClick={() => window.location.reload()}>
+              Try Again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+  
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center gap-2">
@@ -158,7 +228,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <h2 className="text-3xl font-bold tracking-tight">{room.label}</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{room.Label || 'Unnamed Room'}</h2>
       </div>
 
       <Tabs defaultValue="details">
@@ -182,7 +252,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
                   <Input
                     id="label"
                     name="label"
-                    value={room.label}
+                    value={room.Label || ''}
                     onChange={handleInputChange}
                     className="col-span-3"
                   />
@@ -194,7 +264,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
                   <Textarea
                     id="description"
                     name="description"
-                    value={room.description}
+                    value={room.Description || ''}
                     onChange={handleInputChange}
                     className="col-span-3"
                   />
@@ -214,36 +284,42 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
               <Plus className="mr-2 h-4 w-4" /> Add Item
             </Button>
           </div>
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {room.inventoryItems.map((item) => (
-              <Link href={`/inventory/${item.id}`} key={item.id}>
-                <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
-                  <CardHeader className="flex flex-row items-center gap-2">
-                    <Package className="h-5 w-5" />
-                    <div>
-                      <CardTitle className="text-base">{item.name}</CardTitle>
-                      <CardDescription>{item.inventoryType}</CardDescription>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-2">{item.description}</p>
-                    <div className="text-xs text-muted-foreground">
+          
+          {!room.InventoryItems || room.InventoryItems.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">No inventory items found. Add your first item to get started.</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {room.InventoryItems.map((item) => (
+                <Link href={`/inventory/${item.Id}`} key={item.Id}>
+                  <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
+                    <CardHeader className="flex flex-row items-center gap-2">
+                      <Package className="h-5 w-5" />
                       <div>
-                        Position: X:{item.position.x} Y:{item.position.y} Z:{item.position.z}
+                        <CardTitle className="text-base">{item.Name || 'Unnamed Item'}</CardTitle>
+                        <CardDescription>{inventoryTypeNames[item.InventoryType] || 'Unknown Type'}</CardDescription>
                       </div>
-                      <div>
-                        Rotation: X:{item.rotation.x}° Y:{item.rotation.y}° Z:{item.rotation.z}°
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-2">{item.Description || 'No description'}</p>
+                      <div className="text-xs text-muted-foreground">
+                        <div>
+                          Position: X:{item.PositionX.toFixed(2)} Y:{item.PositionY.toFixed(2)} Z:{item.PositionZ.toFixed(2)}
+                        </div>
+                        <div>
+                          Rotation: X:{item.RotationX.toFixed(2)}° Y:{item.RotationY.toFixed(2)}° Z:{item.RotationZ.toFixed(2)}°
+                        </div>
+                        <div>
+                          Scale: X:{item.ScaleX.toFixed(2)} Y:{item.ScaleY.toFixed(2)} Z:{item.ScaleZ.toFixed(2)}
+                        </div>
                       </div>
-                      <div>
-                        Scale: X:{item.scale.x} Y:{item.scale.y} Z:{item.scale.z}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
         </TabsContent>
       </Tabs>
 
@@ -253,7 +329,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
           <DialogHeader>
             <DialogTitle>Add Inventory Item</DialogTitle>
             <DialogDescription>
-              Add a new inventory item to {room.label}. The item will be automatically assigned to this room.
+              Add a new inventory item to {room.Label || 'this room'}. The item will be automatically assigned to this room.
             </DialogDescription>
           </DialogHeader>
 
