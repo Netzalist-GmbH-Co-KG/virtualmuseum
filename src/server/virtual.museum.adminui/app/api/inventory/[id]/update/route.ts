@@ -11,13 +11,16 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Get ID from params
+    const { id } = await params;
+    
     // Get inventory item from repository to check if it exists
-    const existingItem = roomsRepository.getInventoryItemById(params.id);
+    const existingItem = roomsRepository.getInventoryItemById(id);
     
     // Return 404 if item not found
     if (!existingItem) {
       const errorResponse: ErrorResponse = {
-        error: `Inventory item with ID ${params.id} not found`,
+        error: `Inventory item with ID ${id} not found`,
         status: 404
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -39,7 +42,7 @@ export async function PUT(
     }
     
     // Update the inventory item
-    const updatedItem = roomsRepository.updateInventoryItem(params.id, validationResult.data);
+    const updatedItem = roomsRepository.updateInventoryItem(id, validationResult.data);
     
     // Return updated item
     return NextResponse.json({
@@ -47,7 +50,9 @@ export async function PUT(
       inventoryItem: updatedItem
     });
   } catch (error) {
-    console.error(`Error updating inventory item with ID ${params.id}:`, error);
+    // Get the ID safely for error logging
+    const id = params ? (await params).id : 'unknown';
+    console.error(`Error updating inventory item with ID ${id}:`, error);
     
     // Return error response
     const errorResponse: ErrorResponse = {

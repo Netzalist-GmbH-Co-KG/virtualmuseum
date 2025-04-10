@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -55,7 +55,9 @@ interface InventoryItemData {
   ScaleZ: number
 }
 
-export default function RoomDetailPage({ params }: { params: { id: string } }) {
+export default function RoomDetailPage({ params }: { params: Promise<{ id: string }> | { id: string } }) {
+  // Unwrap params with React.use()
+  const unwrappedParams = 'then' in params ? React.use(params) : params;
   const [room, setRoom] = useState<RoomData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -75,11 +77,11 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
         setIsLoading(true)
         setError(null)
         
-        const response = await fetch(`/api/rooms/${params.id}?includeInventoryItems=true`)
+        const response = await fetch(`/api/rooms/${unwrappedParams.id}?includeInventoryItems=true`)
         
         if (!response.ok) {
           if (response.status === 404) {
-            throw new Error(`Room with ID ${params.id} not found`)
+            throw new Error(`Room with ID ${unwrappedParams.id} not found`)
           }
           throw new Error(`Error fetching room: ${response.status} ${response.statusText}`)
         }
@@ -95,7 +97,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
     }
     
     fetchRoom()
-  }, [params.id])
+  }, [unwrappedParams.id])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (!room) return
@@ -168,7 +170,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
       }
       
       // Send request to create inventory item with topographical table
-      const response = await fetch(`/api/rooms/${params.id}/inventory/create`, {
+      const response = await fetch(`/api/rooms/${unwrappedParams.id}/inventory/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

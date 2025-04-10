@@ -18,7 +18,7 @@ export async function GET(
     // Return 404 if item not found
     if (!inventoryItem) {
       const errorResponse: ErrorResponse = {
-        error: `Inventory item with ID ${params.id} not found`,
+        error: `Inventory item with ID ${id} not found`,
         status: 404
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -32,7 +32,7 @@ export async function GET(
     let topics: any[] = [];
     
     if (inventoryItem.InventoryType === 1) { // Topographical Table
-      topographicalTable = roomsRepository.getTopographicalTableByInventoryItemId(params.id);
+      topographicalTable = roomsRepository.getTopographicalTableByInventoryItemId(id);
       
       if (topographicalTable) {
         topics = roomsRepository.getTopicsByTopographicalTableId(topographicalTable.Id);
@@ -47,7 +47,9 @@ export async function GET(
       topics
     });
   } catch (error) {
-    console.error(`Error fetching inventory item with ID ${params.id}:`, error);
+    // Get the ID safely for error logging
+    const id = params ? (await params).id : 'unknown';
+    console.error(`Error fetching inventory item with ID ${id}:`, error);
     
     // Return error response
     const errorResponse: ErrorResponse = {

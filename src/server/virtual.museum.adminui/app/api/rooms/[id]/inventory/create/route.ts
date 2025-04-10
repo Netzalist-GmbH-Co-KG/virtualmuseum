@@ -38,13 +38,16 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Get ID from params
+    const { id } = await params;
+    
     // Check if room exists
-    const room = roomsRepository.getRoomById(params.id);
+    const room = roomsRepository.getRoomById(id);
     
     // Return 404 if room not found
     if (!room) {
       const errorResponse: ErrorResponse = {
-        error: `Room with ID ${params.id} not found`,
+        error: `Room with ID ${id} not found`,
         status: 404
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -58,7 +61,7 @@ export async function POST(
       
       // Create inventory item with topographical table
       const result = roomsRepository.createInventoryItemWithTopographicalTable(
-        params.id,
+        id,
         validatedData
       );
       
@@ -81,7 +84,9 @@ export async function POST(
       throw validationError;
     }
   } catch (error) {
-    console.error(`Error creating inventory item for room with ID ${params.id}:`, error);
+    // Get the ID safely for error logging
+    const id = params ? (await params).id : 'unknown';
+    console.error(`Error creating inventory item for room with ID ${id}:`, error);
     
     // Return error response
     const errorResponse: ErrorResponse = {

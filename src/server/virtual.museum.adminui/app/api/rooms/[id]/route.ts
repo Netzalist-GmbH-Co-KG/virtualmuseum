@@ -23,7 +23,7 @@ export async function GET(
     // Return 404 if room not found
     if (!room) {
       const errorResponse: ErrorResponse = {
-        error: `Room with ID ${params.id} not found`,
+        error: `Room with ID ${id} not found`,
         status: 404
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -33,7 +33,9 @@ export async function GET(
     const response: RoomResponse = { room };
     return NextResponse.json(response);
   } catch (error) {
-    console.error(`Error fetching room with ID ${params.id}:`, error);
+    // Get the ID safely for error logging
+    const id = params ? (await params).id : 'unknown';    
+    console.error(`Error fetching room with ID ${id}:`, error);
     
     // Return error response
     const errorResponse: ErrorResponse = {

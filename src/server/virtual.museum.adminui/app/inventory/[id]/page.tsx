@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -134,7 +134,9 @@ const availableTimeSeries = [
   },
 ]
 
-export default function InventoryItemDetailPage({ params }: { params: { id: string } }) {
+export default function InventoryItemDetailPage({ params }: { params: Promise<{ id: string }> | { id: string } }) {
+  // Unwrap params with React.use()
+  const unwrappedParams = 'then' in params ? React.use(params) : params;
   const [inventoryItem, setInventoryItem] = useState(inventoryItemData)
   const [isAddTopicDialogOpen, setIsAddTopicDialogOpen] = useState(false)
   const [isLinkTimeSeriesDialogOpen, setIsLinkTimeSeriesDialogOpen] = useState(false)
