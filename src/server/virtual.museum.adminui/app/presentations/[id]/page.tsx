@@ -9,7 +9,7 @@ import Link from "next/link"
 import { PresentationDetailsForm } from "../components/PresentationDetailsForm"
 import { TimelineEditor } from "../components/presentation-editor/timeline-editor"
 import { Presentation } from "../types"
-import { MediaFile } from "../components/presentation-editor/types"
+import { convertAppPresentationToEditorPresentation, convertEditorPresentationToAppPresentation } from "../components/presentation-editor/types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -200,69 +200,18 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
 
         <TabsContent value="items" className="space-y-4">
           <TimelineEditor
-            presentation={{
-              id: presentation.id,
-              name: presentation.name,
-              description: presentation.description,
-              tracks: [
-                {
-                  id: "track-0",
-                  name: "Audio Track",
-                  slotNumber: 0,
-                  clips: presentation.presentationItems
-                    .filter(item => item.slotNumber === 0)
-                    .map(item => ({
-                      id: item.id,
-                      sequenceNumber: item.sequenceNumber,
-                      durationInSeconds: item.durationInSeconds,
-                      mediaFile: item.mediaFile as MediaFile
-                    }))
-                },
-                {
-                  id: "track-1",
-                  name: "360° Dome",
-                  slotNumber: 1,
-                  clips: presentation.presentationItems
-                    .filter(item => item.slotNumber === 1)
-                    .map(item => ({
-                      id: item.id,
-                      sequenceNumber: item.sequenceNumber,
-                      durationInSeconds: item.durationInSeconds,
-                      mediaFile: item.mediaFile as MediaFile
-                    }))
-                },
-                {
-                  id: "track-2",
-                  name: "Display 2",
-                  slotNumber: 2,
-                  clips: presentation.presentationItems
-                    .filter(item => item.slotNumber === 2)
-                    .map(item => ({
-                      id: item.id,
-                      sequenceNumber: item.sequenceNumber,
-                      durationInSeconds: item.durationInSeconds,
-                      mediaFile: item.mediaFile as MediaFile
-                    }))
-                },
-                {
-                  id: "track-3",
-                  name: "Display 3",
-                  slotNumber: 3,
-                  clips: presentation.presentationItems
-                    .filter(item => item.slotNumber === 3)
-                    .map(item => ({
-                      id: item.id,
-                      sequenceNumber: item.sequenceNumber,
-                      durationInSeconds: item.durationInSeconds,
-                      mediaFile: item.mediaFile as MediaFile
-                    }))
-                }
-              ]
-            }}
+            presentation={convertAppPresentationToEditorPresentation(presentation)}
             availableMediaFiles={[]}
             onPresentationChange={(updatedPresentation) => {
-              console.log('Presentation updated:', updatedPresentation);
-              // For now, we're not implementing real data access
+              // Convert the editor presentation back to app presentation format
+              const updatedAppPresentation = convertEditorPresentationToAppPresentation(updatedPresentation);
+              console.log('Presentation updated:', updatedAppPresentation);
+              
+              // Update the state with the converted presentation
+              setPresentation(updatedAppPresentation);
+              
+              // TODO: Implement saving to database
+              // For now we're just updating the local state
             }}
           />
         </TabsContent>

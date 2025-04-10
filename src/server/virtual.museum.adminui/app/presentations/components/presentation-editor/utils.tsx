@@ -1,5 +1,6 @@
 import React from 'react'
 import { FileAudio, FileImage, FileVideo, Film } from "lucide-react"
+import { Track } from './types'
 
 // Constants for timeline
 export const SECONDS_PER_UNIT = 5 // Each unit in the timeline represents 5 seconds
@@ -53,7 +54,7 @@ export const getClipColor = (type: string) => {
 }
 
 // Function to get the position of a clip in the timeline
-export const getClipPosition = (track: any, clipIndex: number) => {
+export const getClipPosition = (track: Track, clipIndex: number) => {
   let position = 0
 
   // Sum the durations of all clips before this one
