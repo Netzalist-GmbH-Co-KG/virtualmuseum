@@ -1,12 +1,34 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DoorOpen, Clock, Film, FileImage } from "lucide-react"
 import Link from "next/link"
 
 export default function Dashboard() {
+  const [roomCount, setRoomCount] = useState<number | null>(null);
+  
+  // Fetch room count from the API
+  useEffect(() => {
+    const fetchRoomCount = async () => {
+      try {
+        const response = await fetch('/api/rooms');
+        if (response.ok) {
+          const data = await response.json();
+          setRoomCount(data.rooms?.length || 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch room count:', error);
+      }
+    };
+    
+    fetchRoomCount();
+  }, []);
+  
   const stats = [
     {
       title: "Rooms",
-      value: "5",
+      value: roomCount !== null ? roomCount.toString() : "...",
       description: "Museum spaces & inventory",
       icon: DoorOpen,
       href: "/rooms",
