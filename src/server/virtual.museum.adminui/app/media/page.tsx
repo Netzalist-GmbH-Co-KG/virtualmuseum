@@ -4,12 +4,14 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { FileAudio, FileImage, FileVideo, Filter, Plus, Search } from "lucide-react"
+import { FileAudio, FileImage, FileVideo, Filter, LayoutGrid, LayoutList, Plus, Search } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/components/ui/use-toast"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 // Define media file interface
 interface MediaFile {
@@ -69,6 +71,7 @@ export default function MediaPage() {
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<"grid" | "table">("table")
 
   // Fetch media files from the API
   useEffect(() => {
@@ -110,9 +113,23 @@ export default function MediaPage() {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Media Library</h2>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" /> Upload Media
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="border rounded-md p-1 flex">
+            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as "grid" | "table")}>
+              <ToggleGroupItem value="grid" aria-label="Grid View" className="px-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+                <LayoutGrid className="h-4 w-4 mr-2" />
+                <span className="sr-only sm:not-sr-only sm:inline-block text-xs">Grid</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem value="table" aria-label="Table View" className="px-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+                <LayoutList className="h-4 w-4 mr-2" />
+                <span className="sr-only sm:not-sr-only sm:inline-block text-xs">Table</span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" /> Upload Media
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
@@ -159,35 +176,76 @@ export default function MediaPage() {
         <div className="text-center py-8">
           <p className="text-muted-foreground">No media files found</p>
         </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      ) : viewMode === "grid" ? (
+        <div className="grid gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
           {mediaFiles.map((file) => (
             <Link href={`/media/${file.id}`} key={file.id}>
               <Card className="overflow-hidden hover:bg-accent/50 transition-colors cursor-pointer h-full">
                 <div className="relative aspect-square bg-muted">
                   <Image src={file.url || "/placeholder.svg"} alt={file.name} fill className="object-cover" />
-                  <div className="absolute top-2 left-2 bg-background/80 rounded-full p-1">
+                  <div className="absolute top-1 left-1 bg-background/80 rounded-full p-0.5">
                     {getMediaTypeIcon(file.type)}
                   </div>
                   {file.durationInSeconds > 0 && (
-                    <div className="absolute bottom-2 right-2 bg-background/80 rounded-md px-2 py-1 text-xs">
+                    <div className="absolute bottom-1 right-1 bg-background/80 rounded-md px-1.5 py-0.5 text-xs">
                       {Math.floor(file.durationInSeconds / 60)}:
                       {(file.durationInSeconds % 60).toString().padStart(2, "0")}
                     </div>
                   )}
                 </div>
-                <CardContent className="p-4">
-                  <div className="space-y-1">
-                    <div className="font-medium truncate">{file.name}</div>
-                    <div className="text-sm text-muted-foreground line-clamp-2">{file.description}</div>
-                    <div className="pt-2">
-                      <Badge variant="outline">{getMediaTypeLabel(file.type)}</Badge>
+                <CardContent className="p-2">
+                  <div className="space-y-0.5">
+                    <div className="font-medium text-sm truncate">{file.name}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-1">{file.description}</div>
+                    <div className="pt-1">
+                      <Badge variant="outline" className="text-xs">{getMediaTypeLabel(file.type)}</Badge>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </Link>
           ))}
+        </div>
+      ) : (
+        <div className="rounded-md border">
+          <Table className="text-sm">
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-[40px] h-8 py-1">Type</TableHead>
+                <TableHead className="h-8 py-1">Name</TableHead>
+                <TableHead className="h-8 py-1">Description</TableHead>
+                <TableHead className="w-[80px] h-8 py-1">Duration</TableHead>
+                <TableHead className="w-[100px] h-8 py-1">Media Type</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {mediaFiles.map((file) => (
+                <TableRow key={file.id} className="h-10">
+                  <TableCell className="py-1">
+                    <div className="flex justify-center">
+                      {getMediaTypeIcon(file.type)}
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-1">
+                    <Link href={`/media/${file.id}`} className="font-medium hover:underline">
+                      {file.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="max-w-[300px] truncate py-1">{file.description}</TableCell>
+                  <TableCell className="py-1">
+                    {file.durationInSeconds > 0 ? (
+                      `${Math.floor(file.durationInSeconds / 60)}:${(file.durationInSeconds % 60).toString().padStart(2, "0")}`
+                    ) : (
+                      "-"
+                    )}
+                  </TableCell>
+                  <TableCell className="py-1">
+                    <Badge variant="outline" className="text-xs">{getMediaTypeLabel(file.type)}</Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
     </div>

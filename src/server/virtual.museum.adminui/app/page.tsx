@@ -8,6 +8,7 @@ import Link from "next/link"
 export default function Dashboard() {
   const [roomCount, setRoomCount] = useState<number | null>(null);
   const [timeSeriesCount, setTimeSeriesCount] = useState<number | null>(null);
+  const [mediaFilesCount, setMediaFilesCount] = useState<number | null>(null);
   
   // Fetch room count from the API
   useEffect(() => {
@@ -43,6 +44,23 @@ export default function Dashboard() {
     fetchTimeSeriesCount();
   }, []);
   
+  // Fetch media files count from the API
+  useEffect(() => {
+    const fetchMediaFilesCount = async () => {
+      try {
+        const response = await fetch('/api/media');
+        if (response.ok) {
+          const data = await response.json();
+          setMediaFilesCount(data.mediaFiles?.length || 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch media files count:', error);
+      }
+    };
+    
+    fetchMediaFilesCount();
+  }, []);
+  
   const stats = [
     {
       title: "Rooms",
@@ -67,7 +85,7 @@ export default function Dashboard() {
     },
     {
       title: "Media Files",
-      value: "42",
+      value: mediaFilesCount !== null ? mediaFilesCount.toString() : "...",
       description: "Images, videos & audio",
       icon: FileImage,
       href: "/media",
