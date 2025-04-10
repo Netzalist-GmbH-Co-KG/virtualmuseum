@@ -22,12 +22,8 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { InventoryItem } from "@/lib/types"
 
-// Inventory type options
-const inventoryTypeOptions = [
-  { id: "1", name: "Topographical Table" },
-  { id: "0", name: "Generic" },
-  // Add other inventory types as needed
-]
+// Currently only supporting Topographical Tables
+const TOPOGRAPHICAL_TABLE_TYPE = 1;
 
 // Map inventory type enum to display names
 const inventoryTypeNames: Record<number, string> = {
@@ -67,7 +63,6 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
   const [newItem, setNewItem] = useState({
     name: "",
     description: "",
-    inventoryType: "1", // Default to Topographical Table
     position: { x: 0, y: 0, z: 0 },
     rotation: { x: 0, y: 0, z: 0 },
     scale: { x: 1, y: 1, z: 1 },
@@ -118,9 +113,7 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
     setNewItem((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleNewItemTypeChange = (value: string) => {
-    setNewItem((prev) => ({ ...prev, inventoryType: value }))
-  }
+  // Removed handleNewItemTypeChange as we only support Topographical Tables
 
   const handlePositionChange = (axis: string, value: string) => {
     setNewItem((prev) => ({
@@ -152,25 +145,104 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
     }))
   }
 
-  const handleAddItem = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const handleAddItem = async () => {
     // Validate form
     if (!newItem.name.trim() || !room) {
       return // Don't submit if name is empty or room is not loaded
     }
 
-    // Note: Add item logic will be implemented later
-    console.log('Add item logic will be implemented later', newItem)
-    
-    // For now, just close the dialog
-    setNewItem({
-      name: "",
-      description: "",
-      inventoryType: "1",
-      position: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      scale: { x: 1, y: 1, z: 1 },
-    })
-    setIsAddItemDialogOpen(false)
+    try {
+      setIsSubmitting(true)
+      setSubmitError(null)
+      
+      // Prepare data for API request
+      const requestData = {
+        name: newItem.name,
+        description: newItem.description,
+        position: newItem.position,
+        rotation: newItem.rotation,
+        scale: newItem.scale
+      }
+      
+      // Send request to create inventory item with topographical table
+      const response = await fetch(`/api/rooms/${params.id}/inventory/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create inventory item')
+      }
+      
+      // Get the response data
+      const data = await response.json()
+      
+      // Update the room's inventory items list
+      if (room.InventoryItems) {
+        setRoom({
+          ...room,
+          InventoryItems: [
+            ...room.InventoryItems,
+            {
+              Id: data.inventoryItem.Id,
+              Name: data.inventoryItem.Name,
+              Description: data.inventoryItem.Description,
+              InventoryType: data.inventoryItem.InventoryType,
+              PositionX: data.inventoryItem.PositionX,
+              PositionY: data.inventoryItem.PositionY,
+              PositionZ: data.inventoryItem.PositionZ,
+              RotationX: data.inventoryItem.RotationX,
+              RotationY: data.inventoryItem.RotationY,
+              RotationZ: data.inventoryItem.RotationZ,
+              ScaleX: data.inventoryItem.ScaleX,
+              ScaleY: data.inventoryItem.ScaleY,
+              ScaleZ: data.inventoryItem.ScaleZ
+            }
+          ]
+        })
+      } else {
+        setRoom({
+          ...room,
+          InventoryItems: [{
+            Id: data.inventoryItem.Id,
+            Name: data.inventoryItem.Name,
+            Description: data.inventoryItem.Description,
+            InventoryType: data.inventoryItem.InventoryType,
+            PositionX: data.inventoryItem.PositionX,
+            PositionY: data.inventoryItem.PositionY,
+            PositionZ: data.inventoryItem.PositionZ,
+            RotationX: data.inventoryItem.RotationX,
+            RotationY: data.inventoryItem.RotationY,
+            RotationZ: data.inventoryItem.RotationZ,
+            ScaleX: data.inventoryItem.ScaleX,
+            ScaleY: data.inventoryItem.ScaleY,
+            ScaleZ: data.inventoryItem.ScaleZ
+          }]
+        })
+      }
+      
+      // Reset form and close dialog
+      setNewItem({
+        name: "",
+        description: "",
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: { x: 1, y: 1, z: 1 },
+      })
+      setIsAddItemDialogOpen(false)
+    } catch (error) {
+      console.error('Failed to create inventory item:', error)
+      setSubmitError(error instanceof Error ? error.message : 'Failed to create inventory item')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   // If loading, show loading state
@@ -324,7 +396,15 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
       </Tabs>
 
       {/* Add Inventory Item Dialog */}
-      <Dialog open={isAddItemDialogOpen} onOpenChange={setIsAddItemDialogOpen}>
+      <Dialog open={isAddItemDialogOpen} onOpenChange={(open) => {
+        // Only allow closing if not submitting
+        if (!isSubmitting) {
+          setIsAddItemDialogOpen(open)
+          if (!open) {
+            setSubmitError(null)
+          }
+        }
+      }}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Add Inventory Item</DialogTitle>
@@ -332,6 +412,12 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
               Add a new inventory item to {room.Label || 'this room'}. The item will be automatically assigned to this room.
             </DialogDescription>
           </DialogHeader>
+          
+          {submitError && (
+            <div className="bg-destructive/15 text-destructive p-3 rounded-md mb-4">
+              <p className="text-sm">Error: {submitError}</p>
+            </div>
+          )}
 
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -364,18 +450,10 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
               <Label htmlFor="item-type" className="text-right">
                 Item Type
               </Label>
-              <Select value={newItem.inventoryType} onValueChange={handleNewItemTypeChange}>
-                <SelectTrigger id="item-type" className="col-span-3">
-                  <SelectValue placeholder="Select item type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {inventoryTypeOptions.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="col-span-3 flex items-center">
+                <span className="text-muted-foreground">Topographical Table</span>
+                <span className="ml-2 rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">Default</span>
+              </div>
             </div>
 
             <div className="border-t pt-4">
@@ -497,10 +575,19 @@ export default function RoomDetailPage({ params }: { params: { id: string } }) {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddItemDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setIsAddItemDialogOpen(false)} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button onClick={handleAddItem}>Add Item</Button>
+            <Button onClick={handleAddItem} disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                'Add Item'
+              )}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

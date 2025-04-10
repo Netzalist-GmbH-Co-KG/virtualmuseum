@@ -1,5 +1,6 @@
 import { withDb } from './db';
-import { Room, RoomWithRelations, InventoryItem, TopographicalTable, TopographicalTableTopic } from './types';
+import { Room, RoomWithRelations, InventoryItem, TopographicalTable, TopographicalTableTopic, InventoryType } from './types';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Repository for room-related database operations
@@ -106,6 +107,129 @@ export const roomsRepository = {
   getTopicsByTopographicalTableId(topographicalTableId: string): TopographicalTableTopic[] {
     return withDb(db => {
       return db.prepare('SELECT * FROM TopographicalTableTopics WHERE TopographicalTableId = ?').all(topographicalTableId) as TopographicalTableTopic[];
+    });
+  },
+  
+  /**
+   * Create a new inventory item
+   * @param inventoryItem Inventory item data
+   * @returns The created inventory item
+   */
+  createInventoryItem(inventoryItem: Omit<InventoryItem, 'Id'>): InventoryItem {
+    return withDb(db => {
+      // Generate a UUID for the new item
+      const id = uuidv4();
+      
+      // Insert the inventory item
+      const stmt = db.prepare(`
+        INSERT INTO InventoryItems (
+          Id, RoomId, Name, Description, InventoryType,
+          PositionX, PositionY, PositionZ,
+          RotationX, RotationY, RotationZ,
+          ScaleX, ScaleY, ScaleZ
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+      
+      stmt.run(
+        id,
+        inventoryItem.RoomId,
+        inventoryItem.Name,
+        inventoryItem.Description,
+        inventoryItem.InventoryType,
+        inventoryItem.PositionX,
+        inventoryItem.PositionY,
+        inventoryItem.PositionZ,
+        inventoryItem.RotationX,
+        inventoryItem.RotationY,
+        inventoryItem.RotationZ,
+        inventoryItem.ScaleX,
+        inventoryItem.ScaleY,
+        inventoryItem.ScaleZ
+      );
+      
+      // Return the created item
+      return {
+        Id: id,
+        ...inventoryItem
+      };
+    });
+  },
+  
+  /**
+   * Create a topographical table for an inventory item
+   * @param inventoryItemId ID of the inventory item
+   * @returns The created topographical table
+   */
+  createTopographicalTable(inventoryItemId: string): TopographicalTable {
+    return withDb(db => {
+      // Insert the topographical table with the same ID as the inventory item
+      const stmt = db.prepare('INSERT INTO TopographicalTables (Id) VALUES (?)');
+      stmt.run(inventoryItemId);
+      
+      // Return the created table
+      return {
+        Id: inventoryItemId
+      };
+    });
+  },
+  
+  /**
+   * Create an inventory item and a topographical table in a single transaction
+   * @param roomId Room ID
+   * @param data Item data
+   * @returns The created inventory item and topographical table
+   */
+  /**
+   * Create an inventory item and a topographical table in a single transaction
+   * Always creates a Topographical Table (InventoryType.TopographicalTable)
+   * @param roomId Room ID
+   * @param data Item data
+   * @returns The created inventory item and topographical table
+   */
+  createInventoryItemWithTopographicalTable(roomId: string, data: {
+    name: string;
+    description: string;
+    position: { x: number; y: number; z: number };
+    rotation: { x: number; y: number; z: number };
+    scale: { x: number; y: number; z: number };
+  }) {
+    return withDb(db => {
+      // Begin transaction
+      db.prepare('BEGIN').run();
+      
+      try {
+        // Create inventory item
+        const inventoryItem = this.createInventoryItem({
+          RoomId: roomId,
+          Name: data.name,
+          Description: data.description,
+          InventoryType: InventoryType.TopographicalTable,
+          PositionX: data.position.x,
+          PositionY: data.position.y,
+          PositionZ: data.position.z,
+          RotationX: data.rotation.x,
+          RotationY: data.rotation.y,
+          RotationZ: data.rotation.z,
+          ScaleX: data.scale.x,
+          ScaleY: data.scale.y,
+          ScaleZ: data.scale.z
+        });
+        
+        // Create topographical table
+        const topographicalTable = this.createTopographicalTable(inventoryItem.Id);
+        
+        // Commit transaction
+        db.prepare('COMMIT').run();
+        
+        return {
+          inventoryItem,
+          topographicalTable
+        };
+      } catch (error) {
+        // Rollback transaction on error
+        db.prepare('ROLLBACK').run();
+        throw error;
+      }
     });
   }
 };
