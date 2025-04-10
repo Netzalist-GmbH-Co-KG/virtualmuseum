@@ -1,3 +1,4 @@
+import React from 'react'
 import { FileAudio, FileImage, FileVideo, Film } from "lucide-react"
 
 // Constants for timeline
