@@ -29,8 +29,10 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
   const { id } = unwrappedParams;
   
   const [presentation, setPresentation] = useState<Presentation>(emptyPresentation)
+  const [availableMediaFiles, setAvailableMediaFiles] = useState<any[]>([])
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoadingMedia, setIsLoadingMedia] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
 
@@ -61,6 +63,35 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
       fetchPresentation()
     }
   }, [id])
+  
+  // Fetch available media files when component mounts
+  useEffect(() => {
+    const fetchMediaFiles = async () => {
+      setIsLoadingMedia(true)
+      
+      try {
+        const response = await fetch('/api/media')
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch media files: ${response.statusText}`)
+        }
+        
+        const data = await response.json()
+        setAvailableMediaFiles(data.mediaFiles || [])
+      } catch (err) {
+        console.error('Error fetching media files:', err)
+        toast({
+          title: "Failed to load media files",
+          description: err instanceof Error ? err.message : "An unknown error occurred",
+          variant: "destructive"
+        })
+      } finally {
+        setIsLoadingMedia(false)
+      }
+    }
+    
+    fetchMediaFiles()
+  }, [])
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -112,23 +143,29 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
         body: JSON.stringify({
           name: presentation.name,
           description: presentation.description,
+          presentationItems: presentation.presentationItems
         }),
       })
       
       if (!response.ok) {
-        throw new Error(`Failed to update presentation: ${response.statusText}`)
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Failed to save presentation: ${response.statusText}`)
       }
       
+      const updatedPresentation = await response.json()
+      setPresentation(updatedPresentation)
+      
       toast({
-        title: "Presentation updated",
-        description: "The presentation details have been saved successfully.",
+        title: "Success",
+        description: "Presentation saved successfully",
       })
     } catch (err) {
-      console.error('Error updating presentation:', err)
+      console.error('Error saving presentation:', err)
+      setError(err instanceof Error ? err.message : 'Failed to save presentation')
       toast({
-        title: "Update failed",
-        description: err instanceof Error ? err.message : "Failed to update presentation",
-        variant: "destructive",
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to save presentation",
+        variant: "destructive"
       })
     } finally {
       setIsSaving(false)
@@ -202,16 +239,13 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
           <TimelineEditor
             key={`timeline-editor-${Date.now()}`} // Use timestamp to force re-render on every state change
             presentation={convertAppPresentationToEditorPresentation(presentation)}
-            availableMediaFiles={[]}
+            availableMediaFiles={availableMediaFiles}
             onPresentationChange={(updatedPresentation) => {
               // Convert the editor presentation back to app presentation format
               const updatedAppPresentation = convertEditorPresentationToAppPresentation(updatedPresentation);
               
               // Update the state with the converted presentation
               setPresentation(updatedAppPresentation);
-              
-              // TODO: Implement saving to database
-              // For now we're just updating the local state
             }}
           />
         </TabsContent>
