@@ -252,7 +252,6 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
 
         <div>
           <TimelineEditor
-            key={`timeline-editor-${Date.now()}`} // Use timestamp to force re-render on every state change
             presentation={convertAppPresentationToEditorPresentation(presentation)}
             availableMediaFiles={availableMediaFiles}
             onPresentationChange={(updatedPresentation) => {
