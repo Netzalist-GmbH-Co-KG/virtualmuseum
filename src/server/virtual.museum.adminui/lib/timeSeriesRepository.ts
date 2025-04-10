@@ -28,6 +28,36 @@ export const timeSeriesRepository = {
   },
 
   /**
+   * Get counts of geo event groups and events for a time series
+   * @param timeSeriesId Time series ID
+   * @returns Object with counts of geo event groups and events
+   */
+  getTimeSeriesCounts(timeSeriesId: string): { geoEventGroupsCount: number, geoEventsCount: number } {
+    return withDb(db => {
+      // Count geo event groups
+      const geoEventGroups = db.prepare(`
+        SELECT * FROM GeoEventGroups WHERE TimeSeriesId = ?
+      `).all(timeSeriesId) as { Id: string }[];
+      
+      let geoEventsCount = 0;
+      
+      // Count events for each group
+      for (const group of geoEventGroups) {
+        const events = db.prepare(`
+          SELECT COUNT(*) as count FROM GeoEvents WHERE GeoEventGroupId = ?
+        `).get(group.Id) as { count: number };
+        
+        geoEventsCount += events.count;
+      }
+      
+      return {
+        geoEventGroupsCount: geoEventGroups.length,
+        geoEventsCount: geoEventsCount
+      };
+    });
+  },
+
+  /**
    * Get time series for a topic
    * @param topicId Topic ID
    * @returns Array of time series with relation data
@@ -50,24 +80,12 @@ export const timeSeriesRepository = {
         `).get(relation.TimeSeriesId) as TimeSeries | null;
         
         if (timeSeries) {
-          // Count geo event groups and events
-          const geoEventGroups = db.prepare(`
-            SELECT * FROM GeoEventGroups WHERE TimeSeriesId = ?
-          `).all(timeSeries.Id) as { Id: string }[];
-          
-          let geoEventsCount = 0;
-          
-          for (const group of geoEventGroups) {
-            const events = db.prepare(`
-              SELECT COUNT(*) as count FROM GeoEvents WHERE GeoEventGroupId = ?
-            `).get(group.Id) as { count: number };
-            
-            geoEventsCount += events.count;
-          }
+          // Get counts using the dedicated function
+          const { geoEventGroupsCount, geoEventsCount } = this.getTimeSeriesCounts(timeSeries.Id);
           
           timeSeriesWithRelations.push({
             ...timeSeries,
-            GeoEventGroupsCount: geoEventGroups.length,
+            GeoEventGroupsCount: geoEventGroupsCount,
             GeoEventsCount: geoEventsCount
           });
         }
