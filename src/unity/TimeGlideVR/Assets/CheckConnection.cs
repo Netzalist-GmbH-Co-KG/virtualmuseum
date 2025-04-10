@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using TimeGlideVR.Server;
 using TimeGlideVR.Server.WebClient;
+using TMPro;
 
 public class CheckConnection : MonoBehaviour
 {
     private ConfigurationManager _configurationManager;
     [SerializeField]
-    private GameObject _disconnectedSign;
+    private TextMeshPro _disconnectedText;
     
     void OnEnable()
     {
@@ -30,12 +31,12 @@ public class CheckConnection : MonoBehaviour
                 
                 if (_configurationManager == null)
                 {
-                    _disconnectedSign.SetActive(true);
+                    _disconnectedText.text = "No ConfigurationManager found";
                     Debug.Log("No ConfigurationManager - showing disconnected sign");
                 }
                 else
                 {
-                    _disconnectedSign.SetActive(_configurationManager.ConnectionState != ConnectionState.Connected);
+                    _disconnectedText.text = _configurationManager.ConnectionState == ConnectionState.Connected ? $"Connected to: {EnvironmentSettings.CurrentEnvironmentName}" : $"Disconnected from server {EnvironmentSettings.CurrentEnvironmentName}";
                 }
             }
             catch (Exception e)

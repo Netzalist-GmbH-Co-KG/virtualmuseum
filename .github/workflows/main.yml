@@ -7,6 +7,13 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environments:
+        description: 'Comma-separated list of environments to build (e.g., Default,Wilhelmsburg,TWLocal)'
+        required: false
+        default: 'Default,Wilhelmsburg'
+        type: string
 
 jobs:
   unity-build:
@@ -29,6 +36,20 @@ jobs:
       - name: Free disk space for Android build
         uses: jlumbroso/free-disk-space@v1.3.1
 
+      # Define environments to build
+      - name: Set up environments
+        id: environments
+        run: |
+          # Use input environments if provided, otherwise use default
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.environments }}" ]; then
+            ENVS="${{ github.event.inputs.environments }}"
+          else
+            ENVS="Default,Wilhelmsburg"
+          fi
+          echo "ENVIRONMENTS=$ENVS" >> $GITHUB_ENV
+          echo "Using environments: $ENVS"
+      
+      # Build for all environments
       - name: Build Unity project
         uses: game-ci/unity-builder@v4
         env:
@@ -38,11 +59,13 @@ jobs:
         with:
           targetPlatform: Android
           projectPath: "src/unity/TimeGlideVR"
+          customParameters: "-executeMethod TimeGlideVR.Editor.BuildScript.CommandLineBuild -environments ${{ env.ENVIRONMENTS }}"
+          buildName: "TimeGlideVR"
 
-      - name: Archive Android build
+      - name: Archive Android builds
         uses: actions/upload-artifact@v3
         with:
-          name: AndroidBuild
+          name: AndroidBuilds
           path: build/Android/**/*apk
 
       - name: Generate a version number
@@ -60,15 +83,20 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/Android/Android.apk
-          asset_name: VirtualMuseum-${{ steps.version.outputs.version }}.apk
-          asset_content_type: application/vnd.android.package-archive
+      # Upload all environment builds using a script
+      - name: Upload Release Assets
+        run: |
+          # Loop through all environments and upload each build
+          IFS=',' read -ra ENVS <<< "$ENVIRONMENTS"
+          for env in "${ENVS[@]}"; do
+            echo "Uploading build for environment: $env"
+            curl \
+              -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/vnd.android.package-archive" \
+              --data-binary @"./build/Android/TimeGlideVR_${env}.apk" \
+              "${{ steps.create_release.outputs.upload_url }}?name=VirtualMuseum-${env}-${{ steps.version.outputs.version }}.apk&label=VirtualMuseum-${env}-${{ steps.version.outputs.version }}.apk"
+          done
 
       - name: Push tag
         run: |

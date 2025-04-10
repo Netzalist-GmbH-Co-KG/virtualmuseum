@@ -44,5 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656b97ddc82710e41b1dec58eb6dfdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiUrl: http://timeglide.xr-ai.de:5000/api/
-  apiToken: your-api-token
+  defaultApiUrl: http://timeglide.xr-ai.de:5001/api/
+  defaultApiToken: your-api-token
+  customerEnvironments:
+  - name: Local
+    apiUrl: http://192.168.178.63:3000
+    apiToken: your-api-token
+  currentEnvironmentName: Local
