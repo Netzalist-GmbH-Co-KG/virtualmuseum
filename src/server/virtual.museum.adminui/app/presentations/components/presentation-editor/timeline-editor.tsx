@@ -120,6 +120,7 @@ export function TimelineEditor({ presentation, availableMediaFiles, onPresentati
     // Create a new clip
     const newClip: Clip = {
       id: `clip-${Date.now()}`,
+      slotNumber: track.slotNumber, // Add the slotNumber property from the track
       sequenceNumber: track.clips.length + 1,
       durationInSeconds: mediaFile.durationInSeconds || 5, // Default to 5 seconds for images
       mediaFile,
@@ -170,6 +171,7 @@ export function TimelineEditor({ presentation, availableMediaFiles, onPresentati
       tracks: [...presentation.tracks, newTrack],
     }
 
+    console.log('Adding new track:', newTrack);
     onPresentationChange(updatedPresentation)
   }
 
@@ -193,12 +195,16 @@ export function TimelineEditor({ presentation, availableMediaFiles, onPresentati
 
     // Only update if we actually removed tracks
     if (filteredTracks.length < presentation.tracks.length) {
+      console.log('Removing empty tracks. Before:', presentation.tracks.length, 'After:', filteredTracks.length);
+      
       const updatedPresentation = {
         ...presentation,
         tracks: filteredTracks,
       }
 
       onPresentationChange(updatedPresentation)
+    } else {
+      console.log('No empty tracks to remove');
     }
   }
 

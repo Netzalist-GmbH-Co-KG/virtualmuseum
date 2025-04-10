@@ -1,5 +1,6 @@
 // Import the main types from the parent directory
 import { MediaFile as AppMediaFile, PresentationItem, Presentation as AppPresentation } from "../../types"
+import { getTrackName } from "./utils"
 
 // Enum for media file types that matches the database integer values
 export enum MediaFileType {
@@ -57,7 +58,12 @@ export type Presentation = {
 }
 
 // Helper functions to convert between the two presentation formats
+// We need to store the highest track number to preserve empty tracks
+let highestTrackSlotNumber = 3; // Start with the default 4 tracks (0-3)
+
 export function convertAppPresentationToEditorPresentation(appPresentation: AppPresentation): Presentation {
+  console.log('Converting app presentation to editor presentation:', appPresentation);
+  
   // Group presentation items by slot number
   const trackMap = new Map<number, Track>();
   
@@ -74,18 +80,36 @@ export function convertAppPresentationToEditorPresentation(appPresentation: AppP
     trackMap.set(track.slotNumber, { ...track, clips: [] });
   });
   
+  // Add tracks for all slots up to the highest known slot number
+  // This ensures we preserve empty tracks that were added previously
+  for (let i = 4; i <= highestTrackSlotNumber; i++) {
+    trackMap.set(i, {
+      id: `track-${i}`,
+      name: getTrackName(i),
+      slotNumber: i,
+      clips: []
+    });
+  }
+  
   // Group presentation items by slot number
   appPresentation.presentationItems.forEach(item => {
     const slotNumber = item.slotNumber;
     
     if (!trackMap.has(slotNumber)) {
       // Create a new track if it doesn't exist
-      trackMap.set(slotNumber, {
+      const newTrack = {
         id: `track-${slotNumber}`,
-        name: `Track ${slotNumber}`,
+        name: getTrackName(slotNumber),
         slotNumber,
         clips: []
-      });
+      };
+      console.log(`Creating new track for slot ${slotNumber}:`, newTrack);
+      trackMap.set(slotNumber, newTrack);
+      
+      // Update the highest slot number if needed
+      if (slotNumber > highestTrackSlotNumber) {
+        highestTrackSlotNumber = slotNumber;
+      }
     }
     
     // Add the item to the appropriate track
@@ -111,22 +135,39 @@ export function convertAppPresentationToEditorPresentation(appPresentation: AppP
     track.clips.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
   });
   
-  // Convert the map to an array of tracks
-  const tracks = Array.from(trackMap.values());
+  // Convert the map to an array of tracks and sort by slot number
+  const tracks = Array.from(trackMap.values())
+    .sort((a, b) => a.slotNumber - b.slotNumber);
   
-  return {
+  const result = {
     id: appPresentation.id,
     name: appPresentation.name,
     description: appPresentation.description,
     tracks
   };
+  
+  console.log('Converted to editor presentation with tracks:', tracks.length);
+  return result;
 }
 
 export function convertEditorPresentationToAppPresentation(editorPresentation: Presentation): AppPresentation {
+  console.log('Converting editor presentation to app presentation. Tracks:', editorPresentation.tracks.length);
+  
+  // Update the highest track slot number to preserve empty tracks
+  if (editorPresentation.tracks.length > 0) {
+    const maxSlot = Math.max(...editorPresentation.tracks.map(t => t.slotNumber));
+    if (maxSlot > highestTrackSlotNumber) {
+      console.log(`Updating highest track slot number from ${highestTrackSlotNumber} to ${maxSlot}`);
+      highestTrackSlotNumber = maxSlot;
+    }
+  }
+  
   // Flatten all clips from all tracks into a single array of presentation items
   const presentationItems: PresentationItem[] = [];
   
   editorPresentation.tracks.forEach(track => {
+    console.log(`Processing track ${track.id}, slot ${track.slotNumber}, clips: ${track.clips.length}`);
+    
     track.clips.forEach(clip => {
       presentationItems.push({
         ...clip,
@@ -135,10 +176,13 @@ export function convertEditorPresentationToAppPresentation(editorPresentation: P
     });
   });
   
-  return {
+  const result = {
     id: editorPresentation.id,
     name: editorPresentation.name,
     description: editorPresentation.description,
     presentationItems
   };
+  
+  console.log('Converted to app presentation with items:', presentationItems.length);
+  return result;
 }
