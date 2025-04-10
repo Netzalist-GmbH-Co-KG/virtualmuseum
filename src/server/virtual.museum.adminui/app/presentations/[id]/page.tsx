@@ -3,15 +3,16 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, AlertCircle } from "lucide-react"
 import Link from "next/link"
-import { PresentationDetailsForm } from "../components/PresentationDetailsForm"
 import { TimelineEditor } from "../components/presentation-editor/timeline-editor"
 import { Presentation } from "../types"
 import { convertAppPresentationToEditorPresentation, convertEditorPresentationToAppPresentation } from "../components/presentation-editor/types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/components/ui/use-toast"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 // Empty presentation template for loading state
 const emptyPresentation: Presentation = {
@@ -209,8 +210,8 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
   }
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between">
+    <div className="flex-1 space-y-4 p-6">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Link href="/presentations">
             <Button variant="outline" size="icon">
@@ -224,22 +225,32 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
         </Button>
       </div>
 
-      <Tabs defaultValue="details">
-        <TabsList>
-          <TabsTrigger value="details">Presentation Details</TabsTrigger>
-          <TabsTrigger value="items">Presentation Items</TabsTrigger>
-        </TabsList>
+      <div className="space-y-6 w-full">
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              name="name"
+              value={presentation.name}
+              onChange={handleInputChange}
+              className="mt-1 w-full"
+            />
+          </div>
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              name="description"
+              value={presentation.description}
+              onChange={handleInputChange}
+              className="mt-1 w-full"
+              rows={3}
+            />
+          </div>
+        </div>
 
-        <TabsContent value="details" className="space-y-4">
-          <PresentationDetailsForm
-            name={presentation.name}
-            description={presentation.description}
-            onInputChange={handleInputChange}
-          />
-        </TabsContent>
-
-        <TabsContent value="items" className="space-y-4">
-
+        <div>
           <TimelineEditor
             key={`timeline-editor-${Date.now()}`} // Use timestamp to force re-render on every state change
             presentation={convertAppPresentationToEditorPresentation(presentation)}
@@ -252,8 +263,8 @@ export default function PresentationDetailPage({ params }: { params: Promise<{ i
               setPresentation(updatedAppPresentation);
             }}
           />
-        </TabsContent>
-      </Tabs>
+        </div>
+      </div>
     </div>
   )
 }

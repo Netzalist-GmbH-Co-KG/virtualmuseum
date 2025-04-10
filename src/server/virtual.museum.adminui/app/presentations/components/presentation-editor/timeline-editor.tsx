@@ -221,13 +221,13 @@ export function TimelineEditor({ presentation, availableMediaFiles, onPresentati
   }
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="w-full overflow-hidden">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <CardTitle>Timeline Editor</CardTitle>
           <CardDescription>Arrange media clips in the timeline to create your presentation</CardDescription>
         </div>
-        <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+        <div className="flex flex-wrap gap-2">
           <Button size="sm" onClick={handleAddTrack}>
             <Plus className="mr-2 h-4 w-4" /> Add Track
           </Button>
@@ -236,7 +236,7 @@ export function TimelineEditor({ presentation, availableMediaFiles, onPresentati
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 overflow-x-auto">
         {/* Selected Clip Preview */}
         <div className="border-b p-4">
           <ClipPreview
@@ -249,12 +249,14 @@ export function TimelineEditor({ presentation, availableMediaFiles, onPresentati
         </div>
 
         {/* Timeline */}
-        <Timeline
-          presentation={presentation}
-          selectedClip={selectedClip}
-          onClipSelect={setSelectedClip}
-          onAddClick={handleAddClick}
-        />
+        <div className="min-w-full">
+          <Timeline
+            presentation={presentation}
+            selectedClip={selectedClip}
+            onClipSelect={setSelectedClip}
+            onAddClick={handleAddClick}
+          />
+        </div>
 
         {/* Add Media Dialog */}
         <AddMediaDialog
