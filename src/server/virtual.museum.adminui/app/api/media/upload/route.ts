@@ -7,7 +7,6 @@ import { join, dirname, extname } from 'path';
 import { existsSync } from 'fs';
 
 // Configuration for media upload directory
-// This should be moved to a config file in a real application
 const MEDIA_UPLOAD_DIR = process.env.MEDIA_UPLOAD_DIR || 'E:\\Media';
 
 /**
