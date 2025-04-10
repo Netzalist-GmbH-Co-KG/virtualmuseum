@@ -177,3 +177,60 @@ export async function PUT(
     return NextResponse.json(errorResponse, { status: 500 });
   }
 }
+
+/**
+ * DELETE handler for /api/inventory/[id]
+ * Deletes an inventory item and all its related data (topographical table, topics)
+ */
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    // Get the ID from params
+    const { id } = await params;
+    
+    // Check if the inventory item exists
+    const inventoryItem = roomsRepository.getInventoryItemById(id);
+    
+    if (!inventoryItem) {
+      const errorResponse: ErrorResponse = {
+        error: `Inventory item with ID ${id} not found`,
+        status: 404
+      };
+      return NextResponse.json(errorResponse, { status: 404 });
+    }
+    
+    // Store the room ID before deleting the item (for redirection)
+    const roomId = inventoryItem.RoomId;
+    
+    // Delete the inventory item and all related data
+    const deleted = roomsRepository.deleteInventoryItem(id);
+    
+    if (!deleted) {
+      const errorResponse: ErrorResponse = {
+        error: `Failed to delete inventory item with ID ${id}`,
+        status: 500
+      };
+      return NextResponse.json(errorResponse, { status: 500 });
+    }
+    
+    // Return success response with the room ID for redirection
+    return NextResponse.json({
+      success: true,
+      message: 'Inventory item and all related data deleted successfully',
+      roomId
+    });
+  } catch (error) {
+    // Get the ID safely for error logging
+    const id = params ? (await params).id : 'unknown';
+    console.error(`Error deleting inventory item with ID ${id}:`, error);
+    
+    // Return error response
+    const errorResponse: ErrorResponse = {
+      error: error instanceof Error ? error.message : 'An unknown error occurred',
+      status: 500
+    };
+    return NextResponse.json(errorResponse, { status: 500 });
+  }
+}

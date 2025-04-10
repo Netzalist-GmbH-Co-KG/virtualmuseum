@@ -376,5 +376,85 @@ export const roomsRepository = {
         MediaFileImage2DId: data.mediaFileImage2DId
       };
     });
+  },
+
+  /**
+   * Delete a topic
+   * @param id Topic ID
+   * @returns True if the topic was deleted, false otherwise
+   */
+  deleteTopic(id: string): boolean {
+    return withDb(db => {
+      const result = db.prepare('DELETE FROM TopographicalTableTopics WHERE Id = ?').run(id);
+      return result.changes > 0;
+    });
+  },
+
+  /**
+   * Delete all topics for a topographical table
+   * @param topographicalTableId Topographical table ID
+   * @returns Number of topics deleted
+   */
+  deleteTopicsByTopographicalTableId(topographicalTableId: string): number {
+    return withDb(db => {
+      const result = db.prepare('DELETE FROM TopographicalTableTopics WHERE TopographicalTableId = ?').run(topographicalTableId);
+      return result.changes;
+    });
+  },
+
+  /**
+   * Delete a topographical table
+   * @param id Topographical table ID
+   * @returns True if the table was deleted, false otherwise
+   */
+  deleteTopographicalTable(id: string): boolean {
+    return withDb(db => {
+      // First delete all topics associated with this table
+      this.deleteTopicsByTopographicalTableId(id);
+      
+      // Then delete the table itself
+      const result = db.prepare('DELETE FROM TopographicalTables WHERE Id = ?').run(id);
+      return result.changes > 0;
+    });
+  },
+
+  /**
+   * Delete a topographical table by inventory item ID
+   * @param inventoryItemId Inventory item ID
+   * @returns True if the table was deleted, false otherwise
+   */
+  deleteTopographicalTableByInventoryItemId(inventoryItemId: string): boolean {
+    return withDb(db => {
+      // Get the topographical table
+      const table = this.getTopographicalTableByInventoryItemId(inventoryItemId);
+      
+      if (!table) return false;
+      
+      // Delete the table and its topics
+      return this.deleteTopographicalTable(table.Id);
+    });
+  },
+
+  /**
+   * Delete an inventory item and all its related data
+   * @param id Inventory item ID
+   * @returns True if the item was deleted, false otherwise
+   */
+  deleteInventoryItem(id: string): boolean {
+    return withDb(db => {
+      // Get the inventory item to check its type
+      const item = this.getInventoryItemById(id);
+      
+      if (!item) return false;
+      
+      // If it's a topographical table, delete the table and its topics
+      if (item.InventoryType === InventoryType.TopographicalTable) {
+        this.deleteTopographicalTableByInventoryItemId(id);
+      }
+      
+      // Finally delete the inventory item itself
+      const result = db.prepare('DELETE FROM InventoryItems WHERE Id = ?').run(id);
+      return result.changes > 0;
+    });
   }
 };

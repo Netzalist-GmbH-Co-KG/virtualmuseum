@@ -5,8 +5,19 @@ import { useState, useEffect } from "react"
 import { InventoryItem, ApiInventoryResponse, Option } from "./components/types"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Trash2 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 // Import our new components
 import {
@@ -102,6 +113,9 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTimeSeries, setSelectedTimeSeries] = useState<string[]>([])
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const router = useRouter()
 
   // New topic state
   const [newTopic, setNewTopic] = useState({
@@ -467,6 +481,35 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
     setSelectedTimeSeries([])
   }
 
+  // Function to handle deleting the inventory item
+  const handleDeleteInventoryItem = async () => {
+    setIsDeleting(true)
+    
+    try {
+      // Send the delete request
+      const response = await fetch(`/api/inventory/${inventoryItem.id}`, {
+        method: 'DELETE',
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Failed to delete inventory item: ${response.statusText}`)
+      }
+      
+      const data = await response.json()
+      
+      // Close the dialog
+      setIsDeleteDialogOpen(false)
+      
+      // Navigate back to the room page
+      router.push(`/rooms/${inventoryItem.roomId}`)
+    } catch (err) {
+      console.error('Error deleting inventory item:', err)
+      setSaveError(err instanceof Error ? err.message : 'Failed to delete inventory item')
+      setIsDeleting(false)
+    }
+  }
+
   // Filter time series based on search term
   const filteredTimeSeries = availableTimeSeries.filter((series) => {
     return (
@@ -474,8 +517,6 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
       series.description.toLowerCase().includes(searchTerm.toLowerCase())
     )
   })
-
-  // Filter time series based on search term (moved from below)
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -500,13 +541,23 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
             itemName={inventoryItem.name} 
           />
 
-          <div className="flex items-center gap-2">
-            <Link href={`/rooms/${inventoryItem.roomId}`}>
-              <Button variant="outline" size="icon">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
-            <h2 className="text-3xl font-bold tracking-tight">{inventoryItem.name || 'Unnamed Item'}</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Link href={`/rooms/${inventoryItem.roomId}`}>
+                <Button variant="outline" size="icon">
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+              </Link>
+              <h2 className="text-3xl font-bold tracking-tight">{inventoryItem.name || 'Unnamed Item'}</h2>
+            </div>
+            <Button 
+              variant="destructive" 
+              onClick={() => setIsDeleteDialogOpen(true)}
+              disabled={isDeleting}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              {isDeleting ? "Deleting..." : "Delete Item"}
+            </Button>
           </div>
         </>
       )}
@@ -585,6 +636,38 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
         handleLinkTimeSeries={handleLinkTimeSeries}
         filteredTimeSeries={filteredTimeSeries}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the inventory item "{inventoryItem.name}" and all its related data, including:
+              {inventoryItem.inventoryType === "0" && (
+                <ul className="list-disc pl-5 mt-2">
+                  <li>The topographical table</li>
+                  <li>All {inventoryItem.topographicalTable.topics.length} topics</li>
+                  <li>All time series links</li>
+                </ul>
+              )}
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async (e) => {
+                e.preventDefault();
+                await handleDeleteInventoryItem();
+              }}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
