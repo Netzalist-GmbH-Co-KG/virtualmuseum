@@ -7,6 +7,7 @@ import Link from "next/link"
 
 export default function Dashboard() {
   const [roomCount, setRoomCount] = useState<number | null>(null);
+  const [timeSeriesCount, setTimeSeriesCount] = useState<number | null>(null);
   
   // Fetch room count from the API
   useEffect(() => {
@@ -25,6 +26,23 @@ export default function Dashboard() {
     fetchRoomCount();
   }, []);
   
+  // Fetch time series count from the API
+  useEffect(() => {
+    const fetchTimeSeriesCount = async () => {
+      try {
+        const response = await fetch('/api/time-series');
+        if (response.ok) {
+          const data = await response.json();
+          setTimeSeriesCount(data.timeSeries?.length || 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch time series count:', error);
+      }
+    };
+    
+    fetchTimeSeriesCount();
+  }, []);
+  
   const stats = [
     {
       title: "Rooms",
@@ -35,7 +53,7 @@ export default function Dashboard() {
     },
     {
       title: "Time Series",
-      value: "8",
+      value: timeSeriesCount !== null ? timeSeriesCount.toString() : "...",
       description: "Historical sequences",
       icon: Clock,
       href: "/time-series",
