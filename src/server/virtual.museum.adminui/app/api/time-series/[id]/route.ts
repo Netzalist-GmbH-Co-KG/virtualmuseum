@@ -38,14 +38,7 @@ export async function GET(
     const formattedGroups = await Promise.all(
       geoEventGroups.map(async (group) => {
         const events = timeSeriesRepository.getGeoEventsByGroupId(group.Id);
-        
-        // Log raw events for debugging
-        console.log(`Events for group ${group.Id}:`, events.map(e => ({
-          Id: e.Id,
-          Name: e.Name,
-          MultiMediaPresentationId: e.MultiMediaPresentationId,
-          hasPresentation: !!e.MultiMediaPresentationId
-        })));
+       
         
         // Format events
         const formattedEvents = events.map(event => {
@@ -59,13 +52,6 @@ export async function GET(
             hasMultimediaPresentation: !!event.MultiMediaPresentationId,
             multimediaPresentationId: event.MultiMediaPresentationId
           };
-          
-          // Log each formatted event for debugging
-          console.log(`Formatted event ${event.Id}:`, {
-            hasMultimediaPresentation: formattedEvent.hasMultimediaPresentation,
-            multimediaPresentationId: formattedEvent.multimediaPresentationId,
-            rawMultiMediaPresentationId: event.MultiMediaPresentationId
-          });
           
           return formattedEvent;
         });

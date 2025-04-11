@@ -51,17 +51,6 @@ export function GeoEventDialog({
 }: GeoEventDialogProps) {
   if (!event) return null;
 
-  // Debug event data
-  console.log('GeoEventDialog - Event data:', {
-    id: event.id,
-    name: event.name,
-    multimediaPresentationId: event.multimediaPresentationId,
-    hasMultimediaPresentation: event.hasMultimediaPresentation
-  });
-  
-  // Debug presentation options
-  console.log('GeoEventDialog - Presentation options:', presentationOptions);
-
   const isNewEvent = event.id.startsWith("new-");
 
   return (
@@ -151,7 +140,6 @@ export function GeoEventDialog({
               <Select
                 value={event.multimediaPresentationId ? event.multimediaPresentationId : "none"}
                 onValueChange={(value) => {
-                  console.log('GeoEventDialog - Presentation selected:', value);
                   onPresentationChange(value);
                 }}
                 defaultValue="none"

@@ -131,8 +131,6 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
       const multimediaPresentationId = value === "none" ? null : value
       const hasMultimediaPresentation = !!multimediaPresentationId
       
-      console.log('Presentation changed:', { value, multimediaPresentationId, hasMultimediaPresentation })
-      
       return {
         ...prev,
         multimediaPresentationId,

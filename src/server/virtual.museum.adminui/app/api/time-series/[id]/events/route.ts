@@ -109,12 +109,6 @@ export async function POST(
       multimediaPresentationId: result.MultiMediaPresentationId
     };
     
-    console.log('Saved event with presentation:', {
-      hasMultimediaPresentation: response.hasMultimediaPresentation,
-      multimediaPresentationId: response.multimediaPresentationId,
-      rawMultiMediaPresentationId: result.MultiMediaPresentationId
-    });
-    
     return NextResponse.json(response);
   } catch (error) {
     console.error('Error saving geo event:', error);
