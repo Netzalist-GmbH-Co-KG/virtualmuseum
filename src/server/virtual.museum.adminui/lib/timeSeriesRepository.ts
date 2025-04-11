@@ -341,5 +341,30 @@ export const timeSeriesRepository = {
         MultiMediaPresentationId: eventData.multimediaPresentationId
       };
     });
+  },
+
+  /**
+   * Delete a geo event
+   * @param eventId Geo event ID
+   * @returns Boolean indicating success
+   */
+  deleteGeoEvent(eventId: string): boolean {
+    return withDb(db => {
+      // Check if the event exists
+      const existingEvent = db.prepare(`
+        SELECT * FROM GeoEvents WHERE Id = ?
+      `).get(eventId) as GeoEvent | null;
+      
+      if (!existingEvent) {
+        return false; // Event doesn't exist, nothing to delete
+      }
+      
+      // Delete the event
+      const result = db.prepare(`
+        DELETE FROM GeoEvents WHERE Id = ?
+      `).run(eventId);
+      
+      return result.changes > 0;
+    });
   }
 };

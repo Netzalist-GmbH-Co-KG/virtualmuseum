@@ -181,16 +181,59 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
     setIsEventDialogOpen(true)
   }
 
-  const handleDeleteEvent = (eventId: string) => {
-    // Implement deleting an event
-    console.log("Deleting event:", eventId)
-    // TODO: Add confirmation dialog
+  const handleDeleteEvent = async (eventId: string) => {
+    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      // Show loading state
+      toast({
+        title: "Deleting event",
+        description: "Please wait..."
+      });
+      
+      // Send the delete request to the API
+      const response = await fetch(`/api/time-series/${unwrappedParams.id}/events/${eventId}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to delete event: ${response.statusText}`);
+      }
+      
+      // Update the UI by removing the deleted event
+      setTimeSeries((prev) => {
+        const updatedGroups = prev.geoEventGroups.map((group) => ({
+          ...group,
+          geoEvents: group.geoEvents.filter((event) => event.id !== eventId)
+        }));
+        
+        return {
+          ...prev,
+          geoEventGroups: updatedGroups
+        };
+      });
+      
+      // Show success message
+      toast({
+        title: "Success",
+        description: "Event deleted successfully"
+      });
+    } catch (err) {
+      console.error('Error deleting event:', err);
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to delete event",
+        variant: "destructive"
+      });
+    }
   }
 
   const handleViewPresentation = (presentationId: string) => {
-    // Implement viewing a presentation
-    console.log("Viewing presentation:", presentationId)
-    // TODO: Navigate to presentation page
+    // Navigate to the presentation detail page
+    router.push(`/presentations/${presentationId}`);
   }
 
   const handleSaveEvent = async () => {
