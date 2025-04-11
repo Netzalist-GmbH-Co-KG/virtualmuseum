@@ -8,6 +8,7 @@ import Link from "next/link"
 export default function Dashboard() {
   const [roomCount, setRoomCount] = useState<number | null>(null);
   const [timeSeriesCount, setTimeSeriesCount] = useState<number | null>(null);
+  const [presentationsCount, setPresentationsCount] = useState<number | null>(null);
   const [mediaFilesCount, setMediaFilesCount] = useState<number | null>(null);
   
   // Fetch room count from the API
@@ -61,6 +62,23 @@ export default function Dashboard() {
     fetchMediaFilesCount();
   }, []);
   
+  // Fetch presentations count from the API
+  useEffect(() => {
+    const fetchPresentationsCount = async () => {
+      try {
+        const response = await fetch('/api/presentations');
+        if (response.ok) {
+          const data = await response.json();
+          setPresentationsCount(Array.isArray(data) ? data.length : 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch presentations count:', error);
+      }
+    };
+    
+    fetchPresentationsCount();
+  }, []);
+  
   const stats = [
     {
       title: "Rooms",
@@ -78,7 +96,7 @@ export default function Dashboard() {
     },
     {
       title: "Presentations",
-      value: "15",
+      value: presentationsCount !== null ? presentationsCount.toString() : "...",
       description: "Multimedia shows",
       icon: Film,
       href: "/presentations",

@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { toast } from "@/components/ui/use-toast"
 
 // Import our new components
 import {
@@ -34,44 +35,14 @@ const inventoryTypeOptions = [
   { id: "0", name: "Topographical Table" }
 ]
 
-// Mock data for available time series
-const availableTimeSeries = [
-  {
-    id: "1",
-    name: "World War II Timeline",
-    description: "Major events during World War II (1939-1945)",
-    geoEventGroupsCount: 5,
-    geoEventsCount: 18,
-  },
-  {
-    id: "2",
-    name: "Industrial Revolution",
-    description: "Key developments during the Industrial Revolution (1760-1840)",
-    geoEventGroupsCount: 3,
-    geoEventsCount: 12,
-  },
-  {
-    id: "3",
-    name: "Space Exploration",
-    description: "Major milestones in human space exploration (1957-Present)",
-    geoEventGroupsCount: 4,
-    geoEventsCount: 15,
-  },
-  {
-    id: "4",
-    name: "Ancient Civilizations",
-    description: "Rise and fall of major ancient civilizations",
-    geoEventGroupsCount: 6,
-    geoEventsCount: 24,
-  },
-  {
-    id: "5",
-    name: "Climate Change",
-    description: "Significant climate events and policy developments",
-    geoEventGroupsCount: 3,
-    geoEventsCount: 9,
-  },
-]
+// Type definition for time series data
+interface TimeSeries {
+  id: string;
+  name: string;
+  description: string;
+  geoEventGroupsCount: number;
+  geoEventsCount: number;
+}
 
 // Default empty inventory item structure
 const emptyInventoryItem: InventoryItem = {
@@ -115,6 +86,8 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
   const [selectedTimeSeries, setSelectedTimeSeries] = useState<string[]>([])
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [availableTimeSeries, setAvailableTimeSeries] = useState<TimeSeries[]>([])
+  const [isLinkingTimeSeries, setIsLinkingTimeSeries] = useState(false)
   const router = useRouter()
 
   // New topic state
@@ -234,83 +207,77 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
         const response = await fetch(`/api/inventory/${unwrappedParams.id}`)
         
         if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error(`Inventory item with ID ${unwrappedParams.id} not found`)
-          }
-          throw new Error(`Error fetching inventory item: ${response.status} ${response.statusText}`)
+          throw new Error(`Failed to fetch inventory item: ${response.statusText}`)
         }
         
-        const data = await response.json() as ApiInventoryResponse
+        const data = await response.json()
         
-        // Transform the data to match our component's expected structure
-        const transformedItem: InventoryItem = {
+        // Convert the API response to our InventoryItem type
+        const item: InventoryItem = {
           id: data.inventoryItem.Id,
-          name: data.inventoryItem.Name || "",
-          description: data.inventoryItem.Description || "",
+          name: data.inventoryItem.Name || '',
+          description: data.inventoryItem.Description || '',
           inventoryType: data.inventoryItem.InventoryType.toString(),
           roomId: data.inventoryItem.RoomId,
-          roomName: data.room?.Label || "Unknown Room",
-          position: { 
-            x: data.inventoryItem.PositionX, 
-            y: data.inventoryItem.PositionY, 
-            z: data.inventoryItem.PositionZ 
+          roomName: data.room ? data.room.Name : 'Unknown Room',
+          position: {
+            x: data.inventoryItem.PositionX,
+            y: data.inventoryItem.PositionY,
+            z: data.inventoryItem.PositionZ
           },
-          rotation: { 
-            x: data.inventoryItem.RotationX, 
-            y: data.inventoryItem.RotationY, 
-            z: data.inventoryItem.RotationZ 
+          rotation: {
+            x: data.inventoryItem.RotationX,
+            y: data.inventoryItem.RotationY,
+            z: data.inventoryItem.RotationZ
           },
-          scale: { 
-            x: data.inventoryItem.ScaleX, 
-            y: data.inventoryItem.ScaleY, 
-            z: data.inventoryItem.ScaleZ 
+          scale: {
+            x: data.inventoryItem.ScaleX,
+            y: data.inventoryItem.ScaleY,
+            z: data.inventoryItem.ScaleZ
           },
-          topographicalTable: data.topographicalTable ? {
-            id: data.topographicalTable.Id,
-            topics: data.topics ? data.topics.map((topic) => ({
+          topographicalTable: {
+            id: data.topographicalTable ? data.topographicalTable.Id : '',
+            topics: data.topics ? data.topics.map((topic: any) => ({
               id: topic.Id,
-              topic: topic.Topic,
-              description: topic.Description,
-              mediaFileImage2DId: topic.MediaFileImage2DId || "",
-              mediaFileImage2DUrl: topic.MediaFileImage2DId ? 
-                `/api/media/${topic.MediaFileImage2DId}` : 
-                "/placeholder.svg?height=100&width=100",
-              timeSeries: topic.TimeSeries ? topic.TimeSeries.map(series => ({
-                id: series.Id,
-                name: series.Name,
-                description: series.Description || "",
-                geoEventGroupsCount: series.GeoEventGroupsCount,
-                geoEventsCount: series.GeoEventsCount
+              topic: topic.Topic || '',
+              description: topic.Description || '',
+              mediaFileImage2DId: topic.MediaFileImage2DId,
+              mediaFileImage2DUrl: topic.MediaFileImage2DId ? `/api/media/file/${topic.MediaFileImage2DId}` : '/placeholder.svg?height=100&width=100',
+              timeSeries: topic.TimeSeries ? topic.TimeSeries.map((ts: any) => ({
+                id: ts.Id,
+                name: ts.Name || '',
+                description: ts.Description || '',
+                geoEventGroupsCount: 0, // We don't have this data from the API yet
+                geoEventsCount: 0 // We don't have this data from the API yet
               })) : []
-            })) : [],
-          } : {
-            id: "",
-            topics: [],
+            })) : []
           },
-          roomOptions: roomOptions,
-          inventoryTypeOptions: inventoryTypeOptions,
+          roomOptions: [],
+          inventoryTypeOptions
         }
         
-        setInventoryItem(transformedItem)
+        setInventoryItem(item)
       } catch (err) {
-        console.error('Failed to fetch inventory item:', err)
+        console.error('Error fetching inventory item:', err)
         setError(err instanceof Error ? err.message : 'Failed to load inventory item')
       } finally {
         setIsLoading(false)
       }
     }
     
-    // Fetch rooms for the dropdown
     const fetchRooms = async () => {
       try {
         const response = await fetch('/api/rooms')
+        
         if (response.ok) {
           const data = await response.json()
-          const rooms: Option[] = data.rooms.map((room: any) => ({
+          
+          const options = data.rooms.map((room: any) => ({
             id: room.Id,
-            name: room.Label || `Room ${room.Id}`
+            name: room.Name
           }))
-          setRoomOptions(rooms)
+          
+          setRoomOptions(options)
         }
       } catch (err) {
         console.error('Failed to fetch rooms:', err)
@@ -320,6 +287,34 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
     fetchInventoryItem()
     fetchRooms()
   }, [unwrappedParams.id])
+  
+  // Fetch available time series when component mounts
+  useEffect(() => {
+    const fetchTimeSeries = async () => {
+      try {
+        const response = await fetch('/api/time-series')
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch time series: ${response.statusText}`)
+        }
+        
+        const data = await response.json()
+        
+        if (data.timeSeries && Array.isArray(data.timeSeries)) {
+          setAvailableTimeSeries(data.timeSeries)
+        }
+      } catch (err) {
+        console.error('Error fetching time series:', err)
+        toast({
+          title: "Error",
+          description: "Failed to load time series data",
+          variant: "destructive"
+        })
+      }
+    }
+    
+    fetchTimeSeries()
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -443,42 +438,77 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
     })
   }
 
-  const handleLinkTimeSeries = () => {
+  const handleLinkTimeSeries = async () => {
     if (!selectedTopicId || selectedTimeSeries.length === 0) return
 
-    // Find the selected time series objects
-    const timeSeriesObjects = availableTimeSeries.filter((series) => selectedTimeSeries.includes(series.id))
-
-    // Update the inventory item with the linked time series
-    setInventoryItem((prev) => {
-      // Create a deep copy of the previous state
-      const updatedItem = { ...prev }
-      
-      // Update the topics array with the linked time series
-      updatedItem.topographicalTable = {
-        ...prev.topographicalTable,
-        topics: prev.topographicalTable.topics.map((topic) => {
-          if (topic.id === selectedTopicId) {
-            // Filter out any time series that are already linked
-            const existingIds = topic.timeSeries.map((series) => series.id)
-            const newTimeSeries = timeSeriesObjects.filter((series) => !existingIds.includes(series.id))
-
-            return {
-              ...topic,
-              timeSeries: [...topic.timeSeries, ...newTimeSeries],
-            }
-          }
-          return topic
+    setIsLinkingTimeSeries(true)
+    
+    try {
+      // Send the request to link time series to the topic
+      const response = await fetch(`/api/topics/${selectedTopicId}/link-time-series`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timeSeriesIds: selectedTimeSeries
         }),
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Failed to link time series: ${response.statusText}`)
       }
       
-      return updatedItem
-    })
+      // Find the selected time series objects
+      const timeSeriesObjects = availableTimeSeries.filter((series) => selectedTimeSeries.includes(series.id))
 
-    // Close dialog and reset state
-    setIsLinkTimeSeriesDialogOpen(false)
-    setSelectedTopicId(null)
-    setSelectedTimeSeries([])
+      // Update the inventory item with the linked time series
+      setInventoryItem((prev) => {
+        // Create a deep copy of the previous state
+        const updatedItem = { ...prev }
+        
+        // Update the topics array with the linked time series
+        updatedItem.topographicalTable = {
+          ...prev.topographicalTable,
+          topics: prev.topographicalTable.topics.map((topic) => {
+            if (topic.id === selectedTopicId) {
+              // Filter out any time series that are already linked
+              const existingIds = topic.timeSeries.map((series) => series.id)
+              const newTimeSeries = timeSeriesObjects.filter((series) => !existingIds.includes(series.id))
+
+              return {
+                ...topic,
+                timeSeries: [...topic.timeSeries, ...newTimeSeries],
+              }
+            }
+            return topic
+          }),
+        }
+        
+        return updatedItem
+      })
+
+      // Show success message
+      toast({
+        title: "Success",
+        description: "Time series linked successfully",
+      })
+    } catch (err) {
+      console.error('Error linking time series:', err)
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to link time series",
+        variant: "destructive"
+      })
+    } finally {
+      setIsLinkingTimeSeries(false)
+      
+      // Close dialog and reset state
+      setIsLinkTimeSeriesDialogOpen(false)
+      setSelectedTopicId(null)
+      setSelectedTimeSeries([])
+    }
   }
 
   // Function to handle deleting the inventory item
@@ -635,6 +665,7 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
         handleTimeSeriesCheckboxChange={handleTimeSeriesCheckboxChange}
         handleLinkTimeSeries={handleLinkTimeSeries}
         filteredTimeSeries={filteredTimeSeries}
+        isLoading={isLinkingTimeSeries}
       />
 
       {/* Delete Confirmation Dialog */}

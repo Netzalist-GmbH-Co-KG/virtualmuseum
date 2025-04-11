@@ -24,6 +24,7 @@ interface LinkTimeSeriesDialogProps {
   handleTimeSeriesCheckboxChange: (timeSeriesId: string) => void
   handleLinkTimeSeries: () => void
   filteredTimeSeries: any[]
+  isLoading?: boolean
 }
 
 export function LinkTimeSeriesDialog({
@@ -35,6 +36,7 @@ export function LinkTimeSeriesDialog({
   handleTimeSeriesCheckboxChange,
   handleLinkTimeSeries,
   filteredTimeSeries,
+  isLoading = false,
 }: LinkTimeSeriesDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -89,11 +91,14 @@ export function LinkTimeSeriesDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isLoading}>
             Cancel
           </Button>
-          <Button onClick={handleLinkTimeSeries} disabled={selectedTimeSeries.length === 0}>
-            Link Selected Time Series
+          <Button 
+            onClick={handleLinkTimeSeries} 
+            disabled={selectedTimeSeries.length === 0 || isLoading}
+          >
+            {isLoading ? "Linking..." : "Link Selected Time Series"}
           </Button>
         </DialogFooter>
       </DialogContent>
