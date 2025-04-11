@@ -179,31 +179,112 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
     // TODO: Navigate to presentation page
   }
 
-  const handleSaveEvent = () => {
+  const handleSaveEvent = async () => {
     if (!selectedEvent) return
 
-    if (selectedEvent.id.startsWith("new-") && selectedGroupId) {
-      // Add new event
-      setTimeSeries((prev) => ({
-        ...prev,
-        geoEventGroups: prev.geoEventGroups.map((group) =>
-          group.id === selectedGroupId
-            ? { ...group, geoEvents: [...group.geoEvents, { ...selectedEvent, id: `${Date.now()}` }] }
-            : group,
-        ),
-      }))
-    } else {
-      // Update existing event
-      setTimeSeries((prev) => ({
-        ...prev,
-        geoEventGroups: prev.geoEventGroups.map((group) => ({
-          ...group,
-          geoEvents: group.geoEvents.map((event) => (event.id === selectedEvent.id ? selectedEvent : event)),
-        })),
-      }))
-    }
+    try {
+      // Show loading state
+      toast({
+        title: "Saving event",
+        description: "Please wait..."
+      })
 
-    setIsEventDialogOpen(false)
+      // Prepare the event data for the API
+      const eventData = {
+        id: selectedEvent.id.startsWith("new-") ? undefined : selectedEvent.id,
+        groupId: selectedGroupId || selectedEvent.id.startsWith("new-") ? 
+          selectedGroupId! : // For new events, use the selected group ID
+          timeSeries.geoEventGroups.find(group => 
+            group.geoEvents.some(event => event.id === selectedEvent.id)
+          )?.id || '', // For existing events, find the group ID
+        name: selectedEvent.name,
+        description: selectedEvent.description,
+        dateTime: selectedEvent.dateTime,
+        latitude: selectedEvent.latitude,
+        longitude: selectedEvent.longitude,
+        multimediaPresentationId: selectedEvent.multimediaPresentationId
+      }
+
+      // Send the request to the API
+      const response = await fetch(`/api/time-series/${unwrappedParams.id}/events`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Failed to save event: ${response.statusText}`)
+      }
+
+      // Get the saved event from the response
+      const savedEvent = await response.json()
+
+      // Update the UI with the saved event
+      setTimeSeries((prev) => {
+        // Find the group that contains this event
+        const updatedGroups = prev.geoEventGroups.map((group) => {
+          // For new events
+          if (selectedEvent.id.startsWith("new-") && group.id === eventData.groupId) {
+            return {
+              ...group,
+              geoEvents: [...group.geoEvents, {
+                id: savedEvent.id,
+                name: savedEvent.name,
+                description: savedEvent.description,
+                dateTime: savedEvent.dateTime,
+                latitude: savedEvent.latitude,
+                longitude: savedEvent.longitude,
+                hasMultimediaPresentation: savedEvent.hasMultimediaPresentation,
+                multimediaPresentationId: savedEvent.multimediaPresentationId
+              }]
+            }
+          }
+          
+          // For existing events
+          return {
+            ...group,
+            geoEvents: group.geoEvents.map((event) => 
+              event.id === selectedEvent.id ? {
+                id: savedEvent.id,
+                name: savedEvent.name,
+                description: savedEvent.description,
+                dateTime: savedEvent.dateTime,
+                latitude: savedEvent.latitude,
+                longitude: savedEvent.longitude,
+                hasMultimediaPresentation: savedEvent.hasMultimediaPresentation,
+                multimediaPresentationId: savedEvent.multimediaPresentationId
+              } : event
+            )
+          }
+        })
+
+        return {
+          ...prev,
+          geoEventGroups: updatedGroups
+        }
+      })
+
+      // Show success message
+      toast({
+        title: "Success",
+        description: selectedEvent.id.startsWith("new-") ? 
+          "Event created successfully" : 
+          "Event updated successfully"
+      })
+
+      // Close the dialog
+      setIsEventDialogOpen(false)
+    } catch (err) {
+      console.error('Error saving event:', err)
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to save event",
+        variant: "destructive"
+      })
+    }
   }
 
   return (

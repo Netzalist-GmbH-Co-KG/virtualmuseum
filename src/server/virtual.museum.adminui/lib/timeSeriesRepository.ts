@@ -238,5 +238,108 @@ export const timeSeriesRepository = {
       
       return result.changes > 0;
     });
+  },
+
+  /**
+   * Create a new geo event
+   * @param groupId Geo event group ID
+   * @param eventData Event data
+   * @returns The created geo event
+   */
+  createGeoEvent(groupId: string, eventData: {
+    name: string;
+    description: string | null;
+    dateTime: string;
+    latitude: number;
+    longitude: number;
+    multimediaPresentationId: string | null;
+  }): GeoEvent {
+    return withDb(db => {
+      const id = uuidv4();
+      
+      db.prepare(`
+        INSERT INTO GeoEvents (
+          Id, GeoEventGroupId, Name, Description, DateTime, 
+          Latitude, Longitude, MultimediaPresentationId
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        id,
+        groupId,
+        eventData.name,
+        eventData.description,
+        eventData.dateTime,
+        eventData.latitude,
+        eventData.longitude,
+        eventData.multimediaPresentationId
+      );
+      
+      return {
+        Id: id,
+        GeoEventGroupId: groupId,
+        Name: eventData.name,
+        Description: eventData.description,
+        DateTime: eventData.dateTime,
+        Latitude: eventData.latitude,
+        Longitude: eventData.longitude,
+        MultimediaPresentationId: eventData.multimediaPresentationId
+      };
+    });
+  },
+
+  /**
+   * Update an existing geo event
+   * @param eventId Geo event ID
+   * @param eventData Updated event data
+   * @returns The updated geo event or null if not found
+   */
+  updateGeoEvent(eventId: string, eventData: {
+    name: string;
+    description: string | null;
+    dateTime: string;
+    latitude: number;
+    longitude: number;
+    multimediaPresentationId: string | null;
+  }): GeoEvent | null {
+    return withDb(db => {
+      // Check if the event exists
+      const existingEvent = db.prepare(`
+        SELECT * FROM GeoEvents WHERE Id = ?
+      `).get(eventId) as GeoEvent | null;
+      
+      if (!existingEvent) {
+        return null;
+      }
+      
+      // Update the event
+      db.prepare(`
+        UPDATE GeoEvents SET
+          Name = ?,
+          Description = ?,
+          DateTime = ?,
+          Latitude = ?,
+          Longitude = ?,
+          MultimediaPresentationId = ?
+        WHERE Id = ?
+      `).run(
+        eventData.name,
+        eventData.description,
+        eventData.dateTime,
+        eventData.latitude,
+        eventData.longitude,
+        eventData.multimediaPresentationId,
+        eventId
+      );
+      
+      return {
+        Id: eventId,
+        GeoEventGroupId: existingEvent.GeoEventGroupId,
+        Name: eventData.name,
+        Description: eventData.description,
+        DateTime: eventData.dateTime,
+        Latitude: eventData.latitude,
+        Longitude: eventData.longitude,
+        MultimediaPresentationId: eventData.multimediaPresentationId
+      };
+    });
   }
 };
