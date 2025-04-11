@@ -6,9 +6,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, Save, Trash2, Clock } from "lucide-react"
+import { Plus, Save, Trash2, Clock, Unlink } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 import { InventoryItem } from './types'
 
@@ -18,6 +19,7 @@ interface TopicsTabProps {
   setIsAddTopicDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
   openLinkTimeSeriesDialog: (topicId: string) => void
   handleSaveTopics?: (topicId: string) => Promise<void>
+  handleUnlinkTimeSeries?: (topicId: string, timeSeriesId: string) => Promise<void>
 }
 
 export function TopicsTab({
@@ -26,6 +28,7 @@ export function TopicsTab({
   setIsAddTopicDialogOpen,
   openLinkTimeSeriesDialog,
   handleSaveTopics,
+  handleUnlinkTimeSeries,
 }: TopicsTabProps) {
   return (
     <>
@@ -97,19 +100,44 @@ export function TopicsTab({
 
                   <div className="space-y-2">
                     {topic.timeSeries.map((series: any) => (
-                      <Link href={`/time-series/${series.id}`} key={series.id}>
-                        <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
-                          <CardContent className="p-4">
-                            <div className="space-y-1">
-                              <div className="font-medium">{series.name}</div>
-                              <div className="text-sm text-muted-foreground">{series.description}</div>
-                              <div className="text-xs text-muted-foreground">
-                                {series.geoEventGroupsCount} groups, {series.geoEventsCount} events
+                      <Card className="hover:bg-accent/50 transition-colors" key={series.id}>
+                        <CardContent className="p-4">
+                          <div className="flex justify-between items-start">
+                            <Link href={`/time-series/${series.id}`} className="flex-1">
+                              <div className="space-y-1">
+                                <div className="font-medium">{series.name}</div>
+                                <div className="text-sm text-muted-foreground">{series.description}</div>
+                                <div className="text-xs text-muted-foreground">
+                                  {series.geoEventGroupsCount} groups, {series.geoEventsCount} events
+                                </div>
                               </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
+                            </Link>
+                            {handleUnlinkTimeSeries && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleUnlinkTimeSeries(topic.id, series.id);
+                                      }}
+                                    >
+                                      <Unlink className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Unlink this time series</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
                 </div>

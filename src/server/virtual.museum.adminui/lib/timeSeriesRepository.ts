@@ -211,5 +211,32 @@ export const timeSeriesRepository = {
         TimeSeriesId: timeSeriesId
       };
     });
+  },
+
+  /**
+   * Unlink a time series from a topic
+   * @param topicId Topic ID
+   * @param timeSeriesId Time series ID
+   * @returns Boolean indicating success
+   */
+  unlinkTimeSeriesFromTopic(topicId: string, timeSeriesId: string): boolean {
+    return withDb(db => {
+      // Check if the link exists
+      const existingLink = db.prepare(`
+        SELECT * FROM TopographicalTableTopicTimeSeries WHERE TopographicalTableTopicId = ? AND TimeSeriesId = ?
+      `).get(topicId, timeSeriesId) as TopicTimeSeries | null;
+      
+      if (!existingLink) {
+        return false; // Link doesn't exist, nothing to delete
+      }
+      
+      // Delete the link
+      const result = db.prepare(`
+        DELETE FROM TopographicalTableTopicTimeSeries 
+        WHERE TopographicalTableTopicId = ? AND TimeSeriesId = ?
+      `).run(topicId, timeSeriesId);
+      
+      return result.changes > 0;
+    });
   }
 };

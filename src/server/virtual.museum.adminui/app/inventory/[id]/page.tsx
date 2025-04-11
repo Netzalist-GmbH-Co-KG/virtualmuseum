@@ -88,6 +88,7 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
   const [isDeleting, setIsDeleting] = useState(false)
   const [availableTimeSeries, setAvailableTimeSeries] = useState<TimeSeries[]>([])
   const [isLinkingTimeSeries, setIsLinkingTimeSeries] = useState(false)
+  const [isUnlinkingTimeSeries, setIsUnlinkingTimeSeries] = useState(false)
   const router = useRouter()
 
   // New topic state
@@ -511,6 +512,66 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
     }
   }
 
+  // Function to handle unlinking a time series from a topic
+  const handleUnlinkTimeSeries = async (topicId: string, timeSeriesId: string) => {
+    setIsUnlinkingTimeSeries(true)
+    
+    try {
+      // Send the request to unlink the time series from the topic
+      const response = await fetch(`/api/topics/${topicId}/unlink-time-series`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timeSeriesId
+        }),
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Failed to unlink time series: ${response.statusText}`)
+      }
+      
+      // Update the inventory item by removing the unlinked time series
+      setInventoryItem((prev) => {
+        // Create a deep copy of the previous state
+        const updatedItem = { ...prev }
+        
+        // Update the topics array by removing the unlinked time series
+        updatedItem.topographicalTable = {
+          ...prev.topographicalTable,
+          topics: prev.topographicalTable.topics.map((topic) => {
+            if (topic.id === topicId) {
+              return {
+                ...topic,
+                timeSeries: topic.timeSeries.filter((series) => series.id !== timeSeriesId),
+              }
+            }
+            return topic
+          }),
+        }
+        
+        return updatedItem
+      })
+
+      // Show success message
+      toast({
+        title: "Success",
+        description: "Time series unlinked successfully",
+      })
+    } catch (err) {
+      console.error('Error unlinking time series:', err)
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to unlink time series",
+        variant: "destructive"
+      })
+    } finally {
+      setIsUnlinkingTimeSeries(false)
+    }
+  }
+
   // Function to handle deleting the inventory item
   const handleDeleteInventoryItem = async () => {
     setIsDeleting(true)
@@ -641,6 +702,7 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
             setIsAddTopicDialogOpen={setIsAddTopicDialogOpen}
             openLinkTimeSeriesDialog={openLinkTimeSeriesDialog}
             handleSaveTopics={handleSaveTopics}
+            handleUnlinkTimeSeries={handleUnlinkTimeSeries}
           />
         </TabsContent>
       )}
