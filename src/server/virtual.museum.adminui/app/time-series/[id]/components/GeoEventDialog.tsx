@@ -51,6 +51,17 @@ export function GeoEventDialog({
 }: GeoEventDialogProps) {
   if (!event) return null;
 
+  // Debug event data
+  console.log('GeoEventDialog - Event data:', {
+    id: event.id,
+    name: event.name,
+    multimediaPresentationId: event.multimediaPresentationId,
+    hasMultimediaPresentation: event.hasMultimediaPresentation
+  });
+  
+  // Debug presentation options
+  console.log('GeoEventDialog - Presentation options:', presentationOptions);
+
   const isNewEvent = event.id.startsWith("new-");
 
   return (
@@ -138,8 +149,12 @@ export function GeoEventDialog({
             <div className="col-span-3 flex items-center gap-2">
               <Film className="h-4 w-4 text-muted-foreground" />
               <Select
-                value={event.multimediaPresentationId || "none"}
-                onValueChange={onPresentationChange}
+                value={event.multimediaPresentationId ? event.multimediaPresentationId : "none"}
+                onValueChange={(value) => {
+                  console.log('GeoEventDialog - Presentation selected:', value);
+                  onPresentationChange(value);
+                }}
+                defaultValue="none"
               >
                 <SelectTrigger id="event-presentation" className="w-full">
                   <SelectValue placeholder="Select a presentation" />

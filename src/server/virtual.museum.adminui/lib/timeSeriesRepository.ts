@@ -18,7 +18,7 @@ interface GeoEvent {
   DateTime: string;
   Latitude: number;
   Longitude: number;
-  MultimediaPresentationId: string | null;
+  MultiMediaPresentationId: string | null; // Corrected casing to match database schema
 }
 
 interface Presentation {
@@ -260,7 +260,7 @@ export const timeSeriesRepository = {
       db.prepare(`
         INSERT INTO GeoEvents (
           Id, GeoEventGroupId, Name, Description, DateTime, 
-          Latitude, Longitude, MultimediaPresentationId
+          Latitude, Longitude, MultiMediaPresentationId
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
         id,
@@ -281,7 +281,7 @@ export const timeSeriesRepository = {
         DateTime: eventData.dateTime,
         Latitude: eventData.latitude,
         Longitude: eventData.longitude,
-        MultimediaPresentationId: eventData.multimediaPresentationId
+        MultiMediaPresentationId: eventData.multimediaPresentationId
       };
     });
   },
@@ -318,7 +318,7 @@ export const timeSeriesRepository = {
           DateTime = ?,
           Latitude = ?,
           Longitude = ?,
-          MultimediaPresentationId = ?
+          MultiMediaPresentationId = ?
         WHERE Id = ?
       `).run(
         eventData.name,
@@ -338,7 +338,7 @@ export const timeSeriesRepository = {
         DateTime: eventData.dateTime,
         Latitude: eventData.latitude,
         Longitude: eventData.longitude,
-        MultimediaPresentationId: eventData.multimediaPresentationId
+        MultiMediaPresentationId: eventData.multimediaPresentationId
       };
     });
   }

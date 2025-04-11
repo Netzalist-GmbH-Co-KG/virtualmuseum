@@ -112,6 +112,14 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
   // Handler for event input changes
   const handleEventInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
+    
+    // Handle numeric values
+    if (name === "latitude" || name === "longitude") {
+      const numValue = parseFloat(value)
+      setSelectedEvent((prev) => prev ? { ...prev, [name]: numValue } : null)
+      return
+    }
+    
     setSelectedEvent((prev) => prev ? { ...prev, [name]: value } : null)
   }
 
@@ -119,10 +127,16 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
   const handlePresentationChange = (value: string) => {
     setSelectedEvent((prev) => {
       if (!prev) return null
+      
+      const multimediaPresentationId = value === "none" ? null : value
+      const hasMultimediaPresentation = !!multimediaPresentationId
+      
+      console.log('Presentation changed:', { value, multimediaPresentationId, hasMultimediaPresentation })
+      
       return {
         ...prev,
-        multimediaPresentationId: value === "none" ? null : value,
-        hasMultimediaPresentation: value !== "none",
+        multimediaPresentationId,
+        hasMultimediaPresentation,
       }
     })
   }
@@ -204,6 +218,16 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
         longitude: selectedEvent.longitude,
         multimediaPresentationId: selectedEvent.multimediaPresentationId
       }
+      
+      // Debug the event data being sent to the API
+      console.log('Saving event - Selected event data:', {
+        id: selectedEvent.id,
+        name: selectedEvent.name,
+        hasMultimediaPresentation: selectedEvent.hasMultimediaPresentation,
+        multimediaPresentationId: selectedEvent.multimediaPresentationId
+      });
+      
+      console.log('Saving event - API request data:', eventData);
 
       // Send the request to the API
       const response = await fetch(`/api/time-series/${unwrappedParams.id}/events`, {
@@ -221,6 +245,9 @@ export default function TimeSeriesDetailPage({ params }: { params: Promise<{ id:
 
       // Get the saved event from the response
       const savedEvent = await response.json()
+      
+      // Debug the response from the API
+      console.log('Saving event - API response:', savedEvent);
 
       // Update the UI with the saved event
       setTimeSeries((prev) => {

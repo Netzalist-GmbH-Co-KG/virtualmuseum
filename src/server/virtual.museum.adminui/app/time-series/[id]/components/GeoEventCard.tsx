@@ -40,8 +40,9 @@ export function GeoEventCard({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {event.hasMultimediaPresentation && (
-            <div className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+          {(event.hasMultimediaPresentation || event.multimediaPresentationId) && (
+            <div className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+              <Film className="h-3 w-3" />
               Has Presentation
             </div>
           )}

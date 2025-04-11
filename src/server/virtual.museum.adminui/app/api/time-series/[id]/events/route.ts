@@ -105,9 +105,15 @@ export async function POST(
       dateTime: result.DateTime,
       latitude: result.Latitude,
       longitude: result.Longitude,
-      hasMultimediaPresentation: !!result.MultimediaPresentationId,
-      multimediaPresentationId: result.MultimediaPresentationId
+      hasMultimediaPresentation: !!result.MultiMediaPresentationId, // Convert to boolean
+      multimediaPresentationId: result.MultiMediaPresentationId
     };
+    
+    console.log('Saved event with presentation:', {
+      hasMultimediaPresentation: response.hasMultimediaPresentation,
+      multimediaPresentationId: response.multimediaPresentationId,
+      rawMultiMediaPresentationId: result.MultiMediaPresentationId
+    });
     
     return NextResponse.json(response);
   } catch (error) {

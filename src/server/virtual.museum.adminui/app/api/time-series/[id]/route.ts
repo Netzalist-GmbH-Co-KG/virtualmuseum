@@ -39,17 +39,36 @@ export async function GET(
       geoEventGroups.map(async (group) => {
         const events = timeSeriesRepository.getGeoEventsByGroupId(group.Id);
         
+        // Log raw events for debugging
+        console.log(`Events for group ${group.Id}:`, events.map(e => ({
+          Id: e.Id,
+          Name: e.Name,
+          MultiMediaPresentationId: e.MultiMediaPresentationId,
+          hasPresentation: !!e.MultiMediaPresentationId
+        })));
+        
         // Format events
-        const formattedEvents = events.map(event => ({
-          id: event.Id,
-          name: event.Name,
-          description: event.Description || '',
-          dateTime: event.DateTime,
-          latitude: event.Latitude,
-          longitude: event.Longitude,
-          hasMultimediaPresentation: !!event.MultimediaPresentationId,
-          multimediaPresentationId: event.MultimediaPresentationId
-        }));
+        const formattedEvents = events.map(event => {
+          const formattedEvent = {
+            id: event.Id,
+            name: event.Name,
+            description: event.Description || '',
+            dateTime: event.DateTime,
+            latitude: event.Latitude,
+            longitude: event.Longitude,
+            hasMultimediaPresentation: !!event.MultiMediaPresentationId,
+            multimediaPresentationId: event.MultiMediaPresentationId
+          };
+          
+          // Log each formatted event for debugging
+          console.log(`Formatted event ${event.Id}:`, {
+            hasMultimediaPresentation: formattedEvent.hasMultimediaPresentation,
+            multimediaPresentationId: formattedEvent.multimediaPresentationId,
+            rawMultiMediaPresentationId: event.MultiMediaPresentationId
+          });
+          
+          return formattedEvent;
+        });
         
         return {
           id: group.Id,
