@@ -248,8 +248,8 @@ export default function InventoryItemDetailPage({ params }: { params: Promise<{ 
                 id: ts.Id,
                 name: ts.Name || '',
                 description: ts.Description || '',
-                geoEventGroupsCount: 0, // We don't have this data from the API yet
-                geoEventsCount: 0 // We don't have this data from the API yet
+                geoEventGroupsCount: ts.GeoEventGroupsCount || 0,
+                geoEventsCount: ts.GeoEventsCount || 0
               })) : []
             })) : []
           },
