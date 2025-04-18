@@ -12,6 +12,8 @@ using virtualmuseum.web.api.Components;
 using virtualmuseum.web.api.Services;
 using virtualmuseum.web.api.Services.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Net.Http.Headers;
 using virtualmuseum.web.api;
 using virtualmuseum.web.api.Services.Admin;
 using virtualmuseum.web.api.Services.ConfigurationRepository;
@@ -28,6 +30,31 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    var certificateName = Environment.GetEnvironmentVariable("CertificateName");
+    var certificatePassword = Environment.GetEnvironmentVariable("CertificatePassword");
+
+    if (string.IsNullOrEmpty(certificatePassword)) certificatePassword = null;
+    if (string.IsNullOrEmpty(certificateName))
+    {
+        throw new Exception("CertificateName environment variable must be set");
+    }
+
+    // serverOptions.ListenAnyIP(3000); // HTTP port
+    //
+    serverOptions.ListenAnyIP(3001, listenOptions =>
+    {
+        // Path to your PFX file
+        listenOptions.UseHttps(certificateName, certificatePassword);
+    });
+    serverOptions.ListenAnyIP(443, listenOptions =>
+    {
+        // Path to your PFX file
+        listenOptions.UseHttps(certificateName, certificatePassword);
+    });
+});
+
 builder.Services.Configure<ReleaseServiceConfig>(builder.Configuration.GetSection("ReleaseService"));
 
 builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
@@ -36,7 +63,6 @@ var bunnyStorageConfig = builder.Configuration.GetSection("BunnyStorage").Get<Bu
 if(bunnyStorageConfig == null) throw new Exception("BunnyStorage configuration is missing");
 var bunnyStorage = new BunnyCDNStorage(bunnyStorageConfig.StorageZoneName, bunnyStorageConfig.ApiAccessKey);
 builder.Services.AddSingleton<IBunnyCDNStorage>(bunnyStorage);
-builder.Services.AddTransient<IMediaService, BunnyMediaService>();
 builder.Services.AddSingleton<IReleaseService, ReleaseService>();
 builder.Services.AddTransient<ICustomRoleService, CustomRoleService>();
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>(); 
@@ -125,9 +151,8 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
-
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=db/virtualmuseum.db";
+var databasePath = Environment.GetEnvironmentVariable("DatabasePath");
+var connectionString = $"Data Source={databasePath}";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
@@ -142,8 +167,27 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+var mediaPath = Environment.GetEnvironmentVariable("MediaPath") ?? throw new Exception("MediaPath environment variable is not set");
 
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(mediaPath),
+    RequestPath = "/api/media/file",
+    ServeUnknownFileTypes = true,
+    
+    DefaultContentType = "application/octet-stream",
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append(
+            HeaderNames.CacheControl, $"public, max-age=3600");
+        ctx.Context.Response.Headers.Append(
+            HeaderNames.AccessControlAllowHeaders, $"Server, x-goog-meta-frames, Content-Length, Content-Type, Range, X-Requested-With, If-Modified-Since, If-None-Match");
+        ctx.Context.Response.Headers.Append(
+            HeaderNames.AccessControlExposeHeaders, $"Server, x-goog-meta-frames, Content-Length, Content-Type, Range, X-Requested-With, If-Modified-Since, If-None-Match");
+        ctx.Context.Response.Headers.Append(
+            HeaderNames.AccessControlAllowOrigin, $"*");
+    }
+});
 
 app.MapControllers();
 

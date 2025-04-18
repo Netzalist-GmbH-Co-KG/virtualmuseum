@@ -1,25 +1,25 @@
-﻿# https://hub.docker.com/_/microsoft-dotnet
+﻿# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /source
+WORKDIR /src
 
-# copy csproj and restore as distinct layers
-COPY *.sln .
-COPY virtualmuseum.web.api/*.csproj ./virtualmuseum.web.api/
-COPY virtualmuseum.web.data/*.csproj ./virtualmuseum.web.data/
-RUN dotnet restore
+# Copy solution and all projects
+COPY ./virtualmuseum.web.sln .
+COPY ./BunnyCDN.Net.Storage ./BunnyCDN.Net.Storage
+COPY ./virtualmuseum.web.data ./virtualmuseum.web.data
+COPY ./virtualmuseum.web.api ./virtualmuseum.web.api
 
-# copy everything else and build app
-COPY virtualmuseum.web.data/. ./virtualmuseum.web.data/
-COPY virtualmuseum.web.api/. ./virtualmuseum.web.api/
+WORKDIR /src/virtualmuseum.web.api
 
-WORKDIR /source/virtualmuseum.web.api
-RUN dotnet build -c release 
+# Restore and publish
+RUN dotnet restore ../virtualmuseum.web.sln
+RUN dotnet publish virtualmuseum.web.api.csproj -c Release -o /app/publish /p:UseAppHost=false
 
-WORKDIR /source/virtualmuseum.web.api
-RUN dotnet publish -c release -o /app
-
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app ./
-CMD ["dotnet", "virtualmuseum.web.api.dll"]
+COPY --from=build /app/publish .
+
+EXPOSE 3001
+EXPOSE 443
+# EXPOSE 3000
+ENTRYPOINT ["dotnet", "virtualmuseum.web.api.dll"]

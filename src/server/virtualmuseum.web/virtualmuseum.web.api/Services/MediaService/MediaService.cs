@@ -6,30 +6,30 @@ using virtualmuseum.web.data.Model.Media;
 namespace virtualmuseum.web.api.Services.MediaService;
 
 public class MediaService : IMediaService
-{    private readonly List<MediaFile> _mediaFiles = [];
-
+{ 
+    private string _mediaPath;
     public MediaService()
     {
-        InitializeMediaFiles();
-        
+        _mediaPath = Environment.GetEnvironmentVariable("MediaPath") ?? throw new ApplicationException("MediaPath enivronment variable missing");
     }
+
     public byte[] GetMedia(string id)
     {
-        var file = _mediaFiles.FirstOrDefault(f => f.Id == id);
-        if (file == null) return Array.Empty<byte>();
-        
-        var path = Path.Combine("InputData/Media", file.FileName!);
-        return File.ReadAllBytes( Path.GetFullPath(path));
+
+        var fileName = Path.Combine(_mediaPath, id);
+        // throw 404 if file not found
+        return !File.Exists(fileName) 
+            ? Array.Empty<byte>() 
+            : File.ReadAllBytes( Path.GetFullPath(fileName));
     }
     
     public ActionResult GetMediaAsFile(string id)
     {
-        var file = _mediaFiles.FirstOrDefault(f => f.Id == id);
+        var fileName = Path.Combine(_mediaPath, id);
         // throw 404 if file not found
-        if (file == null) return new NotFoundResult();
+        if (!File.Exists(fileName)) return new NotFoundResult();
 
-        var path = Path.Combine("InputData/Media", file.FileName!);
-        var mimetype = Path.GetExtension(file.FileName) switch
+        var mimetype = Path.GetExtension(fileName) switch
         {
             ".jpg" => "image/jpeg",
             ".jpeg" => "image/jpeg",
@@ -42,16 +42,8 @@ public class MediaService : IMediaService
             ".pdf" => "application/pdf",
             _ => "application/octet-stream"
         };
-        
-        return new PhysicalFileResult(Path.GetFullPath(path), mimetype);
+
+        return new PhysicalFileResult(fileName, mimetype) { EnableRangeProcessing = true };
     }
-    
-    private void InitializeMediaFiles()
-    {
-        using var file = new StreamReader("InputData/Media/MediaInventory.json", Encoding.UTF8);
-        var config = JsonConvert.DeserializeObject<MediaInventory>(file.ReadToEnd());
-        if (config == null) return;
-        
-        _mediaFiles.AddRange(config.Files);
-    }
+
 }

@@ -21,7 +21,7 @@ public class MediaController
     }
     
     // Return file as a mime type
-    [HttpGet("media/{id}/display")]
+    [HttpGet("media/fileold/{id}")]
     public ActionResult GetDisplay(string id)
     {
         return _mediaService.GetMediaAsFile(id);

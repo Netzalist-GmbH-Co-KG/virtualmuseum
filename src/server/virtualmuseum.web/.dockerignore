@@ -1,0 +1,17 @@
+bin/
+obj/
+*.user
+*.vs
+*.suo
+*.vscode/
+Dockerfile
+.dockerignore
+*.md
+.git
+.gitignore
+.env
+.env.example
+node_modules/
+*.db
+*.sqlite
+TestResults/

@@ -1,0 +1,27 @@
+# docker-compose.dnsmasq.yml
+version: "3.8"
+services:
+  dnsmasq:
+    image: andyshinn/dnsmasq
+    container_name: dnsmasq
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    restart: unless-stopped
+
+  virtualmuseum:
+    image: tobiaswaggoner/timeglidevr:0.2.0-beta-2
+    container_name: virtualmuseum
+    volumes:
+      - ./.env:/app/.env:ro
+      - ./timeglidevr.xr-ai.de.pfx:/app/timeglidevr.xr-ai.de.pfx:ro
+      - //e/db/virtualmuseum.db:/app/virtualmuseum.db
+      - //e/media:/app/media
+    ports:
+      - "3001:3001"
+      - "443:443"
+    depends_on:
+      - dnsmasq
+    restart: unless-stopped

@@ -83,7 +83,7 @@ public class ConfigurationRepository : IConfigurationRepository
             .FirstOrDefault(t => t.Id.ToString() == topographicalTableId.ToString());
         if (table == null) throw new FileNotFoundException();
 
-        table.Topics = _applicationDbContext.TopographicalTableTopics
+        table.Topics = _applicationDbContext.TopographicalTableTopics.ToList()
             .Where(g => g.TopographicalTableId.ToString() == topographicalTableId.ToString())
             .ToList();
 
