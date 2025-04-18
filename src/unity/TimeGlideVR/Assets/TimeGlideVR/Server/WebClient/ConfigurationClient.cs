@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TimeGlideVR.Server.Data.Inventory;
@@ -15,6 +16,13 @@ namespace TimeGlideVR.Server.WebClient
         Connected,
         Disconnected
     }
+    
+    // public class CustomCertHandler : CertificateHandler
+    // {
+    //     protected override bool ValidateCertificate(byte[] certificateData) {
+    //         return true; // Accept all certificates (security risk!)
+    //     }
+    // }
     
     public class ConfigurationClient : IConfigurationClient
     {
@@ -49,6 +57,7 @@ namespace TimeGlideVR.Server.WebClient
             try
             {
                 using var request = UnityWebRequest.Get(url);
+//                request.certificateHandler = new CustomCertHandler();
                 request.SetRequestHeader("Authorization", $"Bearer {_apiToken}");
 
                 var operation = request.SendWebRequest();

@@ -28,7 +28,7 @@ namespace TimeGlideVR.Server
             { 
                 "TWLocal", new CustomerEnvironmentConfig 
                 { 
-                    ApiUrl = "http://192.168.178.63:3000/api/",
+                    ApiUrl = "https://timeglidevr.xr-ai.de/api/",
                     ApiToken = "tw-token" 
                 }
             },

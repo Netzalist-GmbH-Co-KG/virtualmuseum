@@ -1,16 +1,14 @@
-using TimeGlideVR.Server.Cache;
 using TimeGlideVR.Server.WebClient;
 using UnityEngine;
 using System.IO;
-using System.Collections.Generic;
 
 namespace TimeGlideVR.Server
 {
     public class ConfigurationManager : MonoBehaviour
     {
         // Default values if environment is not found
-        private string defaultApiUrl = "http://timeglide.xr-ai.de:5001/api/";
-        private string defaultApiToken = "your-api-token";
+        private static string defaultApiUrl = "https://timeglidevr.xr-ai.de/api/";
+        private static string defaultApiToken = "your-api-token";
         
         // The current environment name is set in EnvironmentSettings.cs
         private string currentEnvironmentName;
@@ -36,7 +34,7 @@ namespace TimeGlideVR.Server
         /// <summary>
         /// Gets the API URL for the specified environment name
         /// </summary>
-        private string GetApiUrlForEnvironment(string environmentName)
+        public static string GetApiUrlForEnvironment(string environmentName)
         {
             // Look up the environment in our static dictionary
             if (EnvironmentSettings.Environments.TryGetValue(environmentName, out var config))

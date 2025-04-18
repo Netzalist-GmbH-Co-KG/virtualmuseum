@@ -74,17 +74,29 @@ namespace TimeGlideVR.TableInstallation.ItemDropper
         
         public void HideSpawnedItems()
         {
+            if(_spawnedItems == null || _spawnedItems.Count == 0) return;
             foreach (var item in _spawnedItems.Values)
             {
-                item.ForEach(t => t.gameObject.SetActive(false));
+                if(item == null || item.Count == 0) continue;
+                item.ForEach(t =>
+                {
+                    if(t.gameObject == null) return;                    
+                    t.gameObject.SetActive(false);
+                });
             }
         }
         
         public void ShowSpawnedItems()
         {
+            if(_spawnedItems == null || _spawnedItems.Count == 0) return;
             foreach (var item in _spawnedItems.Values)
             {
-                item.ForEach(t => t.gameObject.SetActive(true));
+                if(item == null || item.Count == 0) continue;
+                item.ForEach(t =>
+                {
+                    if(t.gameObject == null) return;
+                    t.gameObject.SetActive(true);
+                });
             }
         }
         

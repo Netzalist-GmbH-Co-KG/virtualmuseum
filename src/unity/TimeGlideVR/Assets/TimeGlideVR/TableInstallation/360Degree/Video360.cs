@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Oculus.Assistant.VoiceCommand.Listeners;
+using TimeGlideVR.Server;
 using TimeGlideVR.Server.Data.Media;
 using TMPro;
 using UnityEngine;
@@ -197,6 +198,9 @@ namespace TimeGlideVR.TableInstallation._360Degree
                 ClearScreen();
                 return;
             }
+
+            var baseUrl = ConfigurationManager.GetApiUrlForEnvironment(EnvironmentSettings.CurrentEnvironmentName);
+
             switch (_currentMediaFile.Type)
             {
                 case MediaType.Image2D:
@@ -204,13 +208,13 @@ namespace TimeGlideVR.TableInstallation._360Degree
                     // LoadImageFromUrl(_currentMediaFile.Url);
                     break;
                 case MediaType.Image360Degree:
-                    LoadImageFromUrl(_currentMediaFile.Url);
+                    LoadImageFromUrl(baseUrl + "media/file" + _currentMediaFile.Url);
                     break;
                 case MediaType.Video360Degree:
-                    LoadVideoFromUrl(_currentMediaFile.Url);
+                    LoadVideoFromUrl(baseUrl + "media/file" + _currentMediaFile.Url);
                     break;
                 case MediaType.Audio:
-                    LoadAudioFromUrl(_currentMediaFile.Url);
+                    LoadAudioFromUrl(baseUrl + "media/file" + _currentMediaFile.Url);
                     break;
                 default:
                     return;

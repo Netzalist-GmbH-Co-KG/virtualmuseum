@@ -36,7 +36,7 @@ public class CheckConnection : MonoBehaviour
                 }
                 else
                 {
-                    _disconnectedText.text = _configurationManager.ConnectionState == ConnectionState.Connected ? $"Connected to: {EnvironmentSettings.CurrentEnvironmentName}" : $"Disconnected from server {EnvironmentSettings.CurrentEnvironmentName}";
+                    _disconnectedText.text = _configurationManager.ConnectionState == ConnectionState.Connected ? $"Connected to: {ConfigurationManager.GetApiUrlForEnvironment(EnvironmentSettings.CurrentEnvironmentName)}" : $"Disconnected from server {ConfigurationManager.GetApiUrlForEnvironment(EnvironmentSettings.CurrentEnvironmentName)}";
                 }
             }
             catch (Exception e)
