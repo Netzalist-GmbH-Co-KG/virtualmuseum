@@ -17,11 +17,28 @@ services:
     volumes:
       - ./.env:/app/.env:ro
       - ./timeglidevr.xr-ai.de.pfx:/app/timeglidevr.xr-ai.de.pfx:ro
-      - //e/db/virtualmuseum.db:/app/virtualmuseum.db
-      - //e/media:/app/media
+      - //d/db/virtualmuseum.db:/app/virtualmuseum.db
+      - //d/media:/app/media
     ports:
       - "3001:3001"
       - "443:443"
     depends_on:
       - dnsmasq
+    restart: unless-stopped
+    
+  virtualmuseumadmin:
+    build:
+      context: ../src/server/virtual.museum.adminui
+      dockerfile: Dockerfile
+    image: tobiaswaggoner/timeglidevrui:0.2.0-beta-3
+    pull_policy: always
+    container_name: virtualmuseumadmin
+    volumes:
+      - //d/db/virtualmuseum.db:/app/virtualmuseum.db
+      - //d/media:/app/media
+    environment:
+      - MEDIA_UPLOAD_DIR=/app/media
+      - DB_PATH=/app/virtualmuseum.db
+    ports:
+      - "80:3000"
     restart: unless-stopped

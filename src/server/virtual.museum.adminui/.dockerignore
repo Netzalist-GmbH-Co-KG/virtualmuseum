@@ -1,0 +1,42 @@
+# Entwicklungs-DB ausschließen
+db/
+*.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime Daten
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Verzeichnisse für Tests und Caches
+coverage/
+.nyc_output/
+.eslintcache
+
+# Build-Verzeichnisse die bereits im Container erstellt werden
+node_modules/
+.next/
+
+# Temporäre Dateien
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE-Konfigurationen
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Git-Verzeichnis
+.git/
+.github/
